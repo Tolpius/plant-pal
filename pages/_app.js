@@ -6,7 +6,7 @@ export default function App({ Component, pageProps }) {
       value={{
         refreshInterval: 3000,
         fetcher: (resource, init) =>
-          fetch(resource, init).then((res) => res.json()),
+          fetch(resource, init).then((response) => response.json()),
       }}
     >
       <GlobalStyle />
