@@ -1,21 +1,18 @@
-// import useSWR from "swr";
+import useSWR from "swr";
 import Card from "@/components/Card";
-import { plants } from "@/db/setTheData";
 import styled from "styled-components";
 
 export default function HomePage() {
-  // const { data } = useSWR("/api/plants");
+  const { data } = useSWR("/api/plants");
 
-  // if (!data) {
-  //   return <p>Loading...</p>;
-  // }
+  if (!data) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div>
-      <h1>Plant Pal</h1>
-
       <StyledPlantsList>
-        {plants.map((plant) => {
+        {data.map((plant) => {
           return (
             <li key={plant._id}>
               <Card plant={plant} />
@@ -29,6 +26,8 @@ export default function HomePage() {
 
 const StyledPlantsList = styled.ul`
   display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
   list-style: none;
   padding: 0;
 `;

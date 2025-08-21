@@ -1,3 +1,4 @@
+import Layout from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { SWRConfig } from "swr";
 export default function App({ Component, pageProps }) {
@@ -9,8 +10,10 @@ export default function App({ Component, pageProps }) {
           fetch(resource, init).then((response) => response.json()),
       }}
     >
-      <GlobalStyle />
-      <Component {...pageProps} />
+      <Layout>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </Layout>
     </SWRConfig>
   );
 }
