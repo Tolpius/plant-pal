@@ -6,7 +6,7 @@ export default async function handler(request, response) {
 
   if (request.method === "GET") {
     try {
-      const plants = await Plant.find({});
+      const plants = await Plant.find();
       response.status(200).json(plants);
     } catch (error) {
       response.status(500).json({ success: false, error: error.message });
