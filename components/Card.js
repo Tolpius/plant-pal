@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Card({ plant, id }) {
   return (
-    <Link href={`plants/${id}`}>
+    <StyledLink href={`plants/${id}`}>
       <CardWrapper>
         <ImageWrapper>
           <StyledImage
@@ -19,9 +19,14 @@ export default function Card({ plant, id }) {
           <p>{plant.botanicalName}</p>
         </TextWrapper>
       </CardWrapper>
-    </Link>
+    </StyledLink>
   );
 }
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
 
 const CardWrapper = styled.div`
   display: flex;
