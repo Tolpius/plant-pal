@@ -15,7 +15,7 @@ export default function HomePage() {
         {data.map((plant) => {
           return (
             <li key={plant._id}>
-              <Card plant={plant} id={plant.id} />
+              <Card plant={plant} id={plant._id} />
             </li>
           );
         })}
