@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
+import styled from "styled-components";
 import useSWR from "swr";
 
 export default function DetailsPage() {
@@ -15,21 +16,59 @@ export default function DetailsPage() {
 
   return (
     <>
-      <p>{plant.name}</p>
+      <button>Back</button>
+
+      <Image src={plant.imageUrl} alt={plant.name} width={300} height={330} />
+      <h3>{plant.name}</h3>
       <p>{plant.botanicalName}</p>
-      <Image src={plant.imageUrl} alt={plant.name} width={300} height={0} />
       <p>{plant.description}</p>
-      <p>{plant.lightNeed}</p>
-      <p>{plant.waterNeed}</p>
-      <ul>
+      <p>Recommended place for this plant:</p>
+      <p>
+        {plant.lightNeed === "Partial Shade"
+          ? "⛅ Partial Shade"
+          : plant.lightNeed === "Bright Indirect Light"
+          ? "🌤️ Bright Indirect Light"
+          : plant.lightNeed === "Full Sun"
+          ? "☀️ Full Sun"
+          : plant.lightNeed}
+      </p>
+      <p>Recommended water amount:</p>
+      <p>
+        {plant.waterNeed === "Low"
+          ? "💧 Low"
+          : plant.waterNeed === "Medium"
+          ? "💧💧 Medium"
+          : plant.waterNeed === "High"
+          ? "💧💧💧 High"
+          : plant.waterNeed}
+      </p>
+      <p>Recommended season to fertalise this plant:</p>
+      <SeasonList>
         {seasons.map((season) => {
           return (
             <li key={season}>
-              <p>{season}</p>
+              <p>
+                {season === "Spring"
+                  ? "🌸 Spring"
+                  : season === "Summer"
+                  ? "☀️ Summer"
+                  : season === "Autumn"
+                  ? "🍂 Autumn"
+                  : season === "Winter"
+                  ? "❄️ Winter"
+                  : season}
+              </p>
             </li>
           );
         })}
-      </ul>
+      </SeasonList>
     </>
   );
 }
+
+const SeasonList = styled.ul`
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0;
+`;
