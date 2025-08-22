@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import Head from "next/head";
-import TitleBar from "./TitleBar";
+import { Headline } from "./Headline";
 
 const Main = styled.main`
   display: grid;
   gap: 0.5rem;
-  margin-top: 3rem;
   padding: 1.5rem;
+  padding-top: 0;
   position: relative;
-  width: 100%;
 `;
 
 export default function Layout({ children }) {
@@ -17,7 +16,7 @@ export default function Layout({ children }) {
       <Head>
         <title>Plant Pal</title>
       </Head>
-      <TitleBar />
+      <Headline>Plant Pal</Headline>
       <Main>{children}</Main>
     </>
   );
