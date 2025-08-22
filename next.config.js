@@ -13,6 +13,25 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "unsplash.com",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "console-minio.bonindev.com",
+        port: "",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
