@@ -15,13 +15,11 @@ export default function HomePage() {
 
   return (
     <StyledPlantsList>
-      {data.map((plant) => {
-        return (
-          <li key={plant._id}>
-            <Card plant={plant} />
-          </li>
-        );
-      })}
+      {data.map((plant) => (
+        <li key={plant._id}>
+          <Card plant={plant} />
+        </li>
+      ))}
     </StyledPlantsList>
   );
 }

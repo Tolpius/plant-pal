@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Headline = styled.h1`
+const Headline = styled.h1`
   position: sticky;
   background-color: white;
   margin: 0;
@@ -8,3 +8,5 @@ export const Headline = styled.h1`
   text-align: center;
   z-index: 1;
 `;
+
+export default Headline;

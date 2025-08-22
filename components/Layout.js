@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Head from "next/head";
-import { Headline } from "./Headline";
+import Headline from "./Headline";
 
 const Main = styled.main`
   display: grid;
