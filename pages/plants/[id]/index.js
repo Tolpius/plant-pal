@@ -1,3 +1,4 @@
+import BackButton from "@/components/Backbutton";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -16,7 +17,7 @@ export default function DetailsPage() {
 
   return (
     <>
-      <button>Back</button>
+      <BackButton />
 
       <Image src={plant.imageUrl} alt={plant.name} width={300} height={330} />
       <h3>{plant.name}</h3>
