@@ -1,22 +1,25 @@
 import Image from "next/image";
 import styled from "styled-components";
+import Link from "next/link";
 
-export default function Card({ plant }) {
+export default function Card({ plant, id }) {
   return (
-    <CardWrapper>
-      <ImageWrapper>
-        <StyledImage
-          src={plant.imageUrl}
-          alt={plant.name}
-          width={300}
-          height={0}
-        />
-      </ImageWrapper>
-      <TextWrapper>
-        <h3>{plant.name}</h3>
-        <p>{plant.botanicalName}</p>
-      </TextWrapper>
-    </CardWrapper>
+    <Link href={`plants/${id}`}>
+      <CardWrapper>
+        <ImageWrapper>
+          <StyledImage
+            src={plant.imageUrl}
+            alt={plant.name}
+            width={300}
+            height={0}
+          />
+        </ImageWrapper>
+        <TextWrapper>
+          <h3>{plant.name}</h3>
+          <p>{plant.botanicalName}</p>
+        </TextWrapper>
+      </CardWrapper>
+    </Link>
   );
 }
 
