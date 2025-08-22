@@ -1,23 +1,67 @@
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 export default function AddForm() {
+  const router = useRouter();
+
+  async function addPlant(plant) {
+    try {
+      console.log(JSON.stringify(plant, null, 2));
+      const response = await fetch("/api/plants", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(plant),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to add plant: ${response.statusText}`);
+      }
+
+      const newPlant = await response.json();
+      console.log("Plant added successfully:", newPlant);
+
+      router.push(`/`);
+    } catch (error) {
+      console.error("Error adding plant:", error);
+      alert("Failed to add plant. Please try again.");
+    }
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+    const fertiliserSeasons = formData.getAll("fertiliserSeason");
+    const dataWithSeasons = { ...data, fertiliserSeason: fertiliserSeasons };
+    console.log(dataWithSeasons);
+
+    // ONLY IMAGES FROM UNSPLASH FOR NOW
+    if (!data.imageUrl.startsWith("https://images.unsplash.com")) {
+      alert("Image URL must start with https://images.unsplash.com/");
+      return;
+    }
+    addPlant(dataWithSeasons);
+  }
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <h2>Add a new plant</h2>
 
       <Label>
         Name
-        <Input name="name" type="text" />
+        <Input name="name" type="text" required />
       </Label>
 
       <Label>
         Botanical Name
-        <Input name="botanicalName" type="text" />
+        <Input name="botanicalName" type="text" required />
       </Label>
 
       <Label>
         Image URL
-        <Input name="imageURL" type="url" />
+        <Input name="imageUrl" type="text" />
       </Label>
 
       <Fieldset>
@@ -77,7 +121,7 @@ const Form = styled.form`
     margin-bottom: 1rem;
     text-align: center;
   }
-    width: 100%
+  width: 100%;
 `;
 
 const Label = styled.label`
