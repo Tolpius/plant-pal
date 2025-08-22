@@ -13,6 +13,24 @@ export default function HomePage() {
     return <p>Failed to load plants!</p>;
   }
 
+  if (data.length === 0) {
+    return (
+      <StyledMessage>
+        There are no plants to admire. <br />
+        <br />
+        Why are there no plants?? <br />
+        Who murdered them? 🥲
+        <br />
+        <br />
+        <br />
+        You can add plants <br />
+        via the + button. <br />
+        Why don&apos;t you go ahead <br />
+        and try it out?
+      </StyledMessage>
+    );
+  }
+
   return (
     <StyledPlantsList>
       {data.map((plant) => (
@@ -31,3 +49,8 @@ const StyledPlantsList = styled.ul`
   list-style: none;
   padding: 0;
 `;
+
+const StyledMessage = styled.p`
+
+text-align: center;
+`

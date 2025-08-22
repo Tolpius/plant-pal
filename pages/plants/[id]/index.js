@@ -28,74 +28,71 @@ export default function DetailsPage() {
 
   return (
     <>
-      
-        <BackButton />
-        <StyledImage
-          src={plant.imageUrl}
-          alt={plant.name}
-          width={300}
-          height={0}
-        />
-        <NameWrapper>
-          <StyledPlantName>{plant.name}</StyledPlantName>
-          <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
-        </NameWrapper>
-        <p>{plant.description}</p>
-        <h4>Care</h4>
-        <StyledInfoRow>
-          <StyledCareInfo>Plant likes:</StyledCareInfo>
-          <StyledCareInfo>
-            {plant.lightNeed === "1"
-              ? "⛅ "
-              : plant.lightNeed === "2"
-              ? "🌤️  "
-              : plant.lightNeed === "3"
-              ? "☀️ "
-              : plant.lightNeed}
-          </StyledCareInfo>
-        </StyledInfoRow>
-        <StyledInfoRow>
-          <StyledCareInfo>Water need:</StyledCareInfo>
-          <StyledCareInfo>
-            {plant.waterNeed === "1"
-              ? "💧 "
-              : plant.waterNeed === "2"
-              ? "💧💧 "
-              : plant.waterNeed === "3"
-              ? "💧💧💧 "
-              : plant.waterNeed}
-          </StyledCareInfo>
-        </StyledInfoRow>
-        <StyledInfoRow>
-          <StyledCareInfo>Fertilise in:</StyledCareInfo>
+      <BackButton />
+      <StyledImage
+        src={plant.imageUrl}
+        alt={plant.name}
+        width={300}
+        height={0}
+      />
+      <NameWrapper>
+        <StyledPlantName>{plant.name}</StyledPlantName>
+        <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
+      </NameWrapper>
+      <p>{plant.description}</p>
+      <h4>Care</h4>
+      <StyledInfoRow>
+        <StyledCareInfo>Plant likes:</StyledCareInfo>
+        <StyledCareInfo>
+          {plant.lightNeed === "1"
+            ? "⛅ "
+            : plant.lightNeed === "2"
+            ? "🌤️  "
+            : plant.lightNeed === "3"
+            ? "☀️ "
+            : plant.lightNeed}
+        </StyledCareInfo>
+      </StyledInfoRow>
+      <StyledInfoRow>
+        <StyledCareInfo>Water need:</StyledCareInfo>
+        <StyledCareInfo>
+          {plant.waterNeed === "1"
+            ? "💧 "
+            : plant.waterNeed === "2"
+            ? "💧💧 "
+            : plant.waterNeed === "3"
+            ? "💧💧💧 "
+            : plant.waterNeed}
+        </StyledCareInfo>
+      </StyledInfoRow>
+      <StyledInfoRow>
+        <StyledCareInfo>Fertilise in:</StyledCareInfo>
 
-          {seasons.map((season) => {
-            return (
-              <li key={season}>
-                <StyledCareInfo>
-                  {season === "spring"
-                    ? "🌸 Spring"
-                    : season === "summer"
-                    ? "☀️ Summer"
-                    : season === "autumn"
-                    ? "🍂 Autumn"
-                    : season === "winter"
-                    ? "❄️ Winter"
-                    : season}
-                </StyledCareInfo>
-              </li>
-            );
-          })}
-        </StyledInfoRow>
-        <StyledDeleteButton
-          onClick={() => {
-            setShowPopUp(true);
-          }}
-        >
-          Delete
-        </StyledDeleteButton>{" "}
-      
-
+        {seasons.map((season) => {
+          return (
+            <li key={season}>
+              <StyledCareInfo>
+                {season === "spring"
+                  ? "🌸 Spring"
+                  : season === "summer"
+                  ? "☀️ Summer"
+                  : season === "autumn"
+                  ? "🍂 Autumn"
+                  : season === "winter"
+                  ? "❄️ Winter"
+                  : season}
+              </StyledCareInfo>
+            </li>
+          );
+        })}
+      </StyledInfoRow>
+      <StyledDeleteButton
+        onClick={() => {
+          setShowPopUp(true);
+        }}
+      >
+        Delete
+      </StyledDeleteButton>{" "}
       {showPopUp && (
         <TestOverlay>
           <DeletePopUp deletePlant={deletePlant} setShowPopUp={setShowPopUp} />
@@ -118,15 +115,13 @@ const TestOverlay = styled.div`
   z-index: 1;
 `;
 
-
 const StyledDeleteButton = styled.button`
-background-color: red;
-color: white;
-border-radius: 5px;
-height: 30px;
-margin-top: 30px;
-
-`
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+  height: 30px;
+  margin-top: 30px;
+`;
 const StyledImage = styled(Image)`
   width: 100%;
   height: auto;
