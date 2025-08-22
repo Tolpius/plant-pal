@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Head from "next/head";
 import Headline from "./Headline";
-
+import Footer from "./Footer.js";
 const Main = styled.main`
   display: grid;
   gap: 0.5rem;
@@ -18,6 +18,7 @@ export default function Layout({ children }) {
       </Head>
       <Headline>Plant Pal</Headline>
       <Main>{children}</Main>
+      <Footer/>
     </>
   );
 }
