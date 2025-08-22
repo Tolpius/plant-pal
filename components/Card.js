@@ -1,12 +1,22 @@
 import Image from "next/image";
 import styled from "styled-components";
 import useLocalStorage from "use-local-storage";
+import HeartButton from "./HeartButton";
 
 export default function Card({ plant }) {
-  const { ownedPlantIds, setOwnedPlantIds } = useLocalStorage(
+  const [ownedPlantIds, setOwnedPlantIds] = useLocalStorage(
     "ownedPlantIds",
     []
   );
+  const isOwned = ownedPlantIds.includes(plant._id);
+
+  function handleToggleOwned() {
+    if (isOwned) {
+      setOwnedPlantIds(ownedPlantIds.filter((id) => id !== plant._id));
+    } else {
+      setOwnedPlantIds([...ownedPlantIds, plant._id]);
+    }
+  }
 
   return (
     <CardWrapper>
@@ -18,7 +28,9 @@ export default function Card({ plant }) {
           height={0}
         />
       </ImageWrapper>
+
       <TextWrapper>
+        <HeartButton isOwned={isOwned} handleToggleOwned={handleToggleOwned} aria-label={("Toggle owned for ", plant.name)} />
         <h3>{plant.name}</h3>
         <p>{plant.botanicalName}</p>
       </TextWrapper>
