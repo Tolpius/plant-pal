@@ -1,4 +1,4 @@
-import BackButton from "@/components/Backbutton";
+import BackButton from "@/components/BackButton";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -11,7 +11,7 @@ export default function DetailsPage() {
 
   const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
 
-  if (!isReady || isLoading || error) return <h2>Loading...</h2>;
+  if (!isReady || isLoading || error || !plant) return <h2>Loading...</h2>;
 
   const seasons = plant.fertiliserSeason;
 
