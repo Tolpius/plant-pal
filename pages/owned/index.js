@@ -2,7 +2,7 @@ import useSWR from "swr";
 import Card from "@/components/Card";
 import styled from "styled-components";
 
-export default function HomePage() {
+export default function Owned() {
   const { data, isLoading } = useSWR("/api/plants");
 
   if (isLoading) {

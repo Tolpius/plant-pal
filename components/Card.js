@@ -1,7 +1,13 @@
 import Image from "next/image";
 import styled from "styled-components";
+import useLocalStorage from "use-local-storage";
 
 export default function Card({ plant }) {
+  const { ownedPlantIds, setOwnedPlantIds } = useLocalStorage(
+    "ownedPlantIds",
+    []
+  );
+
   return (
     <CardWrapper>
       <ImageWrapper>
