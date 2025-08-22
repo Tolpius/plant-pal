@@ -4,7 +4,10 @@ import Link from "next/link";
 
 export default function Card({ plant, id }) {
   return (
-    <StyledLink href={`plants/${id}`}>
+    <StyledLink
+      href={`/plants/${id}`}
+      aria-label={`View details for ${plant.name}`}
+    >
       <CardWrapper>
         <ImageWrapper>
           <StyledImage
