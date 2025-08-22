@@ -4,12 +4,14 @@ import styled from "styled-components";
 export default function Card({ plant }) {
   return (
     <CardWrapper>
-      <StyledImage
-        src={plant.imageUrl}
-        alt={plant.name}
-        width={300}
-        height={0}
-      />
+      <ImageWrapper>
+        <StyledImage
+          src={plant.imageUrl}
+          alt={plant.name}
+          width={300}
+          height={0}
+        />
+      </ImageWrapper>
       <p>{plant.name}</p>
       <p>{plant.botanicalName}</p>
     </CardWrapper>
@@ -19,12 +21,25 @@ export default function Card({ plant }) {
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   text-align: center;
+  border: 1px black solid;
+  border-radius: 25px;
+  overflow: hidden;
+  height: 320px;
+`;
+
+const ImageWrapper = styled.div`
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
 `;
 
 const StyledImage = styled(Image)`
   height: auto;
   width: 100%;
-  object-fit: contain;
+  object-fit: cover;
 `;

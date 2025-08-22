@@ -5,7 +5,7 @@ import TitleBar from "./TitleBar";
 const Main = styled.main`
   display: grid;
   gap: 0.5rem;
-  margin-top: 2rem;
+  margin-top: 3rem;
   padding: 1.5rem;
   position: relative;
   width: 100%;
