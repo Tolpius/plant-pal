@@ -17,7 +17,7 @@ export default function HomePage() {
     <StyledPlantsList>
       {data.map((plant) => (
         <li key={plant._id}>
-          <Card plant={plant} id={plant._id} />
+          <Card plant={plant} />
         </li>
       ))}
     </StyledPlantsList>
