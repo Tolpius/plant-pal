@@ -1,10 +1,7 @@
 import styled from "styled-components";
 
 const Headline = styled.h1`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+  position: sticky;
   background-color: white;
   margin: 0;
   padding: 20px;
@@ -12,6 +9,4 @@ const Headline = styled.h1`
   z-index: 1;
 `;
 
-export default function TitleBar() {
-  return <Headline>Plant Pal</Headline>;
-}
+export default Headline;
