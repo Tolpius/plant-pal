@@ -1,9 +1,14 @@
 import useSWR from "swr";
 import Card from "@/components/Card";
 import styled from "styled-components";
+import useLocalStorage from "use-local-storage";
 
 export default function Owned() {
   const { data, isLoading } = useSWR("/api/plants");
+    const [ownedPlantIds] = useLocalStorage(
+    "ownedPlantIds",
+    []
+  );
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -12,10 +17,11 @@ export default function Owned() {
   if (!data) {
     return <p>Failed to load plants!</p>;
   }
-console.log(data);
+  console.log(data);
+const ownedData = data.filter((plant) => ownedPlantIds.includes(plant._id))
   return (
     <StyledPlantsList>
-      {data.map((plant) => (
+      {ownedData.map((plant) => (
         <li key={plant._id}>
           <Card plant={plant} />
         </li>
