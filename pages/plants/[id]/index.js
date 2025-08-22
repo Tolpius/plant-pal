@@ -35,11 +35,11 @@ export default function DetailsPage() {
       <StyledInfoRow>
         <StyledCareInfo>Plant likes:</StyledCareInfo>
         <StyledCareInfo>
-          {plant.lightNeed === "Partial Shade"
+          {plant.lightNeed === "1"
             ? "⛅ "
-            : plant.lightNeed === "Bright Indirect Light"
+            : plant.lightNeed === "2"
             ? "🌤️  "
-            : plant.lightNeed === "Full Sun"
+            : plant.lightNeed === "3"
             ? "☀️ "
             : plant.lightNeed}
         </StyledCareInfo>
@@ -47,11 +47,11 @@ export default function DetailsPage() {
       <StyledInfoRow>
         <StyledCareInfo>Water need:</StyledCareInfo>
         <StyledCareInfo>
-          {plant.waterNeed === "Low"
+          {plant.waterNeed === "1"
             ? "💧 "
-            : plant.waterNeed === "Medium"
+            : plant.waterNeed === "2"
             ? "💧💧 "
-            : plant.waterNeed === "High"
+            : plant.waterNeed === "3"
             ? "💧💧💧 "
             : plant.waterNeed}
         </StyledCareInfo>
@@ -63,13 +63,13 @@ export default function DetailsPage() {
           return (
             <li key={season}>
               <StyledCareInfo>
-                {season === "Spring"
+                {season === "spring"
                   ? "🌸 Spring"
-                  : season === "Summer"
+                  : season === "summer"
                   ? "☀️ Summer"
-                  : season === "Autumn"
+                  : season === "autumn"
                   ? "🍂 Autumn"
-                  : season === "Winter"
+                  : season === "winter"
                   ? "❄️ Winter"
                   : season}
               </StyledCareInfo>
