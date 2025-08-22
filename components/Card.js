@@ -12,8 +12,10 @@ export default function Card({ plant }) {
           height={0}
         />
       </ImageWrapper>
-      <p>{plant.name}</p>
-      <p>{plant.botanicalName}</p>
+      <TextWrapper>
+        <h3>{plant.name}</h3>
+        <p>{plant.botanicalName}</p>
+      </TextWrapper>
     </CardWrapper>
   );
 }
@@ -27,17 +29,25 @@ const CardWrapper = styled.div`
   border: 1px black solid;
   border-radius: 25px;
   overflow: hidden;
-  height: 320px;
+  height: 300px;
 `;
 
 const ImageWrapper = styled.div`
   width: 100%;
-  height: 200px;
+  height: 160px;
   overflow: hidden;
 `;
 
 const StyledImage = styled(Image)`
-  height: auto;
+  height: 100%;
   width: 100%;
   object-fit: cover;
+`;
+
+const TextWrapper = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 80px;
 `;
