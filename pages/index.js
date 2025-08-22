@@ -3,24 +3,24 @@ import Card from "@/components/Card";
 import styled from "styled-components";
 
 export default function HomePage() {
-  const { data } = useSWR("/api/plants");
+  const { data, isLoading } = useSWR("/api/plants");
 
-  if (!data) {
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 
+  if (!data) {
+    return <p>Failed to load plants!</p>;
+  }
+
   return (
-    <div>
-      <StyledPlantsList>
-        {data.map((plant) => {
-          return (
-            <li key={plant._id}>
-              <Card plant={plant} id={plant._id} />
-            </li>
-          );
-        })}
-      </StyledPlantsList>
-    </div>
+    <StyledPlantsList>
+      {data.map((plant) => (
+        <li key={plant._id}>
+          <Card plant={plant} />
+        </li>
+      ))}
+    </StyledPlantsList>
   );
 }
 

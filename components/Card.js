@@ -32,7 +32,6 @@ const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   text-align: center;
   border: 1px black solid;
   border-radius: 25px;
@@ -57,5 +56,6 @@ const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   min-height: 80px;
 `;
