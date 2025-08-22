@@ -24,9 +24,9 @@ export default function AddForm() {
         <legend>Water Need</legend>
         <Slider name="waterNeed" type="range" min="1" max="3" step="1" />
         <Scale>
-          <span>Low</span>
-          <span>Medium</span>
-          <span>High</span>
+          <span>💧</span>
+          <span>💧💧</span>
+          <span>💧💧💧</span>
         </Scale>
       </Fieldset>
 
@@ -34,9 +34,9 @@ export default function AddForm() {
         <legend>Light Need</legend>
         <Slider name="lightNeed" type="range" min="1" max="3" step="1" />
         <Scale>
-          <span>Low</span>
-          <span>Medium</span>
-          <span>High</span>
+          <span>☁️</span>
+          <span>🌥️</span>
+          <span>☀️</span>
         </Scale>
       </Fieldset>
 
@@ -44,19 +44,19 @@ export default function AddForm() {
         <legend>Fertiliser Season</legend>
         <CheckboxLabel>
           <input type="checkbox" name="fertiliserSeason" value="spring" />
-          Spring
+          🌸
         </CheckboxLabel>
         <CheckboxLabel>
           <input type="checkbox" name="fertiliserSeason" value="summer" />
-          Summer
+          ☀️
         </CheckboxLabel>
         <CheckboxLabel>
           <input type="checkbox" name="fertiliserSeason" value="autumn" />
-          Autumn
+          🍁
         </CheckboxLabel>
         <CheckboxLabel>
           <input type="checkbox" name="fertiliserSeason" value="winter" />
-          Winter
+          ❄️
         </CheckboxLabel>
       </Fieldset>
 
@@ -72,11 +72,12 @@ export default function AddForm() {
 
 /* styled-components */
 const Form = styled.form`
-  margin: 2rem auto;
-  padding: 2rem;
+  padding: 1.5rem;
   h2 {
     margin-bottom: 1rem;
+    text-align: center;
   }
+    width: 100%
 `;
 
 const Label = styled.label`
@@ -89,7 +90,6 @@ const Input = styled.input`
   display: block;
   width: 100%;
   padding: 0.5rem;
-  margin-top: 0.3rem;
   border: 1px solid #ccc;
   border-radius: 10px;
 `;
@@ -109,29 +109,28 @@ const Slider = styled.input`
 `;
 
 const Scale = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  color: #555;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: center;
+
+  span:first-child {
+    text-align: left;
+  }
+
+  span:last-child {
+    text-align: right;
+  }
 `;
 
 const Fieldset = styled.fieldset`
   border: none;
   margin-bottom: 1rem;
-
-  legend {
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
+  padding: 0;
 `;
 
 const CheckboxLabel = styled.label`
   margin-right: 1rem;
   font-size: 0.9rem;
-
-  input {
-    margin-right: 0.3rem;
-  }
 `;
 
 const Button = styled.button`
