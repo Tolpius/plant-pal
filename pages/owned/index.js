@@ -5,10 +5,7 @@ import useLocalStorage from "use-local-storage";
 
 export default function Owned() {
   const { data, isLoading } = useSWR("/api/plants");
-    const [ownedPlantIds] = useLocalStorage(
-    "ownedPlantIds",
-    []
-  );
+  const [ownedPlantIds] = useLocalStorage("ownedPlantIds", []);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -18,7 +15,19 @@ export default function Owned() {
     return <p>Failed to load plants!</p>;
   }
   console.log(data);
-const ownedData = data.filter((plant) => ownedPlantIds.includes(plant._id))
+  const ownedData = data.filter((plant) => ownedPlantIds.includes(plant._id));
+  if (ownedData.length == 0) {
+    return (
+      <p>
+        You dont own any plants. <br />
+        Are you okay?
+        <br />
+        Go get some Plants!
+        <br />
+        They are good for you.
+      </p>
+    );
+  }
   return (
     <StyledPlantsList>
       {ownedData.map((plant) => (
