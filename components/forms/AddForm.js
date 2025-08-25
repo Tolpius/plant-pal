@@ -96,7 +96,6 @@ export default function AddForm({ defaultData }) {
           name="botanicalName"
           type="text"
           required
-          data={defaultData}
           defaultValue={isEdit ? defaultData.botanicalName : ""}
         />
       </Label>
