@@ -1,24 +1,35 @@
 import Image from "next/image";
 import styled from "styled-components";
+import Link from "next/link";
 
 export default function Card({ plant }) {
   return (
-    <CardWrapper>
-      <ImageWrapper>
-        <StyledImage
-          src={plant.imageUrl}
-          alt={plant.name}
-          width={300}
-          height={0}
-        />
-      </ImageWrapper>
-      <TextWrapper>
-        <h3>{plant.name}</h3>
-        <p>{plant.botanicalName}</p>
-      </TextWrapper>
-    </CardWrapper>
+    <StyledLink
+      href={`/plants/${plant._id}`}
+      aria-label={`View details for ${plant.name}`}
+    >
+      <CardWrapper>
+        <ImageWrapper>
+          <StyledImage
+            src={plant.imageUrl}
+            alt={plant.name}
+            width={300}
+            height={0}
+          />
+        </ImageWrapper>
+        <TextWrapper>
+          <h3>{plant.name}</h3>
+          <p>{plant.botanicalName}</p>
+        </TextWrapper>
+      </CardWrapper>
+    </StyledLink>
   );
 }
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
 
 const CardWrapper = styled.div`
   display: flex;
