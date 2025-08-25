@@ -46,10 +46,10 @@ export default function HomePage() {
 
   return (
     <>
-      <FilterContainer showFilter={showFilter}>
+      <FilterContainer $showFilter={showFilter}>
         <ButtonContainer>
           <FilterButton
-            showFilter={showFilter}
+            $showFilter={showFilter}
             onClick={() => {
               setShowFilter(!showFilter);
             }}
