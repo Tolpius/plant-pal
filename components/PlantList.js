@@ -7,25 +7,29 @@ export default function PlantList({ plants }) {
     "ownedPlantIds",
     []
   );
-  
-  function handleToggleOwned() {
-      if (isOwned) {
-          setOwnedPlantIds(ownedPlantIds.filter((id) => id !== plant._id));
-        } else {
-            setOwnedPlantIds([...ownedPlantIds, plant._id]);
-        }
+
+  function handleToggleOwned(plantId, isOwned) {
+    if (isOwned) {
+      setOwnedPlantIds(ownedPlantIds.filter((id) => id !== plantId));
+    } else {
+      setOwnedPlantIds([...ownedPlantIds,plantId]);
     }
-    
-    return (
-        <StyledPlantsList>
-      {plants.map((plant) => (
-        
+  }
+
+  return (
+    <StyledPlantsList>
+      {plants.map((plant) => {
         const isOwned = ownedPlantIds.includes(plant._id);
-    return (
-        <li key={plant._id}>
-          <Card plant={plant} handleToggleOwned={handleToggleOwned}/>
-        </li>
-    )  ))}
+        return (
+          <li key={plant._id}>
+            <Card
+              plant={plant}
+              isOwned={isOwned}
+              handleToggleOwned={() => handleToggleOwned(plant._id, isOwned)}
+            />
+          </li>
+        );
+      })}
     </StyledPlantsList>
   );
 }

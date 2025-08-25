@@ -4,8 +4,7 @@ import styled from "styled-components";
 import HeartButton from "./HeartButton";
 import Link from "next/link";
 
-export default function Card({ plant, handleToggleOwned }) {
-  const isOwned = ownedPlantIds.includes(plant._id);
+export default function Card({ plant, handleToggleOwned, isOwned }) {
   return (
     <StyledLink
       href={`/plants/${plant._id}`}
