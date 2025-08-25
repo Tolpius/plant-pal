@@ -20,30 +20,30 @@ export default function Card({ plant }) {
   }
 
   return (
-    <StyledLink
-      href={`/plants/${plant._id}`}
-      aria-label={`View details for ${plant.name}`}
-    >
-      <CardWrapper>
-        <ImageWrapper>
-          <StyledImage
-            src={plant.imageUrl}
-            alt={plant.name}
-            width={300}
-            height={0}
-          />
-        </ImageWrapper>
-        <TextWrapper>
-          <HeartButton
-            isOwned={isOwned}
-            handleToggleOwned={handleToggleOwned}
-            aria-label={("Toggle owned for ", plant.name)}
-          />
-          <h3>{plant.name}</h3>
-          <p>{plant.botanicalName}</p>
-        </TextWrapper>
-      </CardWrapper>
-    </StyledLink>
+      <StyledLink
+        href={`/plants/${plant._id}`}
+        aria-label={`View details for ${plant.name}`}
+      >
+        <CardWrapper>
+          <ImageWrapper>
+            <StyledImage
+              src={plant.imageUrl}
+              alt={plant.name}
+              width={300}
+              height={0}
+            />
+          </ImageWrapper>
+          <TextWrapper>
+            <HeartButton
+              isOwned={isOwned}
+              handleToggleOwned={handleToggleOwned}
+              aria-label={`Toggle owned for ${plant.name}`}
+            />
+            <h3>{plant.name}</h3>
+            <p>{plant.botanicalName}</p>
+          </TextWrapper>
+        </CardWrapper>
+      </StyledLink>
   );
 }
 
