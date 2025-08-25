@@ -1,11 +1,15 @@
 import BackButton from "@/components/BackButton";
+
 import { GearIcon } from "@phosphor-icons/react";
+
+import DeletePopUp from "@/components/DeletePopUp";
 
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import useSWR from "swr";
+import { useState } from "react";
 
 const lightNeedMap = {
   1: "⛅",
@@ -32,6 +36,7 @@ export default function DetailsPage() {
   const { id } = router.query;
 
   const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
+  const [showPopUp, setShowPopUp] = useState(false);
 
   if (isLoading || !isReady) {
     return <h2>Loading...</h2>;
@@ -42,6 +47,13 @@ export default function DetailsPage() {
 
   const seasons = plant.fertiliserSeasons;
 
+  async function deletePlant() {
+    const response = await fetch(`/api/plants/${id}`, { method: "DELETE" });
+    if (response.ok) {
+      router.push("/");
+    }
+  }
+
   return (
     <>
       <StyledHeadline>
@@ -50,7 +62,6 @@ export default function DetailsPage() {
           <GearIcon size={32} />
         </Link>
       </StyledHeadline>
-
       <StyledImage
         src={plant.imageUrl || "/defaultImage.png"}
         alt={plant.name}
@@ -77,12 +88,25 @@ export default function DetailsPage() {
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {plant.fertiliserSeasons.map((season) => (
+        {seasons.map((season) => (
           <li key={season}>
             <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
           </li>
         ))}
       </StyledInfoRow>
+      <StyledDeleteButton
+        onClick={() => {
+          setShowPopUp(true);
+        }}
+      >
+        Delete
+      </StyledDeleteButton>{" "}
+      {showPopUp && (
+        <DeletePopUp
+          onDelete={deletePlant}
+          onCancel={() => setShowPopUp(false)}
+        />
+      )}
     </>
   );
 }
@@ -90,6 +114,14 @@ export default function DetailsPage() {
 const StyledHeadline = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const StyledDeleteButton = styled.button`
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+  height: 30px;
+  margin-top: 30px;
 `;
 
 const StyledImage = styled(Image)`
