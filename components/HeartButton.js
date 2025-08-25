@@ -8,17 +8,17 @@ export default function HeartButton({ handleToggleOwned, isOwned }) {
   }
 
   return (
-    <HerzButton type="button" onClick={onClick}>
+    <StyledHeartButton type="button" onClick={onClick}>
       {isOwned ? (
         <HeartStraightIcon weight="fill" color="red" />
       ) : (
         <HeartStraightIcon color="red" />
       )}
-    </HerzButton>
+    </StyledHeartButton>
   );
 }
 
-const HerzButton = styled.button`
+const StyledHeartButton = styled.button`
   font-size: 1.25rem;
   border-style: none;
   width: 2em;
