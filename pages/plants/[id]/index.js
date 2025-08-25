@@ -58,7 +58,7 @@ export default function DetailsPage() {
     <>
       <StyledHeadline>
         <BackButton />
-        <Link href={`/plants/${id}/edit`}>
+        <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
           <GearIcon size={32} />
         </Link>
       </StyledHeadline>

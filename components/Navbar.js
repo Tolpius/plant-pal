@@ -13,18 +13,21 @@ export default function Navbar() {
         <HouseIcon
           size={28}
           weight={currentPath === "/" ? "fill" : "regular"}
+          aria-label="Homepage"
         />
       </NavItem>
       <NavItem href="/add">
         <PlusCircleIcon
           size={28}
           weight={currentPath === "/add" ? "fill" : "regular"}
+          aria-label="Add plant"
         />
       </NavItem>
       <NavItem href="/owned">
         <HeartIcon
           size={28}
           weight={currentPath === "/owned" ? "fill" : "regular"}
+          aria-label="Owned plant list"
         />
       </NavItem>
     </StyledNavbar>
