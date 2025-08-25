@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { HeartStraightIcon } from "@phosphor-icons/react";
-export default function HeartButton({ handleToggleOwned, isOwned }) {
+export default function HeartButton({ onToggleOwned, isOwned }) {
   function onClick(event) {
     event.preventDefault();
     event.stopPropagation();
-    handleToggleOwned();
+    onToggleOwned();
   }
 
   return (

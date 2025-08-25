@@ -25,7 +25,7 @@ export default function PlantList({ plants }) {
             <Card
               plant={plant}
               isOwned={isOwned}
-              handleToggleOwned={() => handleToggleOwned(plant._id, isOwned)}
+              onToggleOwned={() => handleToggleOwned(plant._id, isOwned)}
             />
           </li>
         );
