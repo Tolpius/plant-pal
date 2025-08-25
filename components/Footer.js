@@ -26,7 +26,7 @@ export default function Footer() {
 }
 
 const StyledNavbar = styled.nav`
-  position: fixed;
+  position: sticky;
   bottom: 0;
   left: 0;
   width: 100%;
