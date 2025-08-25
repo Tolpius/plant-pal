@@ -41,7 +41,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
           name="name"
           type="text"
           required
-          defaultValue={isEdit? defaultData.name : ""}
+          defaultValue={isEdit ? defaultData.name : ""}
         />
       </Label>
 
