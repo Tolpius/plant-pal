@@ -42,7 +42,7 @@ export default function DetailsPage() {
 
   return (
     <>
-      <BackButton href="/" />
+      <BackButton/>
 
       <StyledImage
         src={plant.imageUrl}
