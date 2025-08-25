@@ -44,8 +44,6 @@ export default function HomePage() {
 
   const filteredPlantList = filteredPlants ?? data;
 
-  const props = "Filter ⬇️";
-
   return (
     <>
       <FilterContainer showFilter={showFilter}>

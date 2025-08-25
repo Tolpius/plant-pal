@@ -1,7 +1,14 @@
 import styled from "styled-components";
 
 export default function PlantCounter({ length }) {
-  return <StyledCounter> {length} plants are shown.</StyledCounter>;
+  return (
+    <StyledCounter>
+      {" "}
+      {length === 0
+        ? `Sorry, we couldn't find any plants with this filter.`
+        : `${length} plants are shown.`}
+    </StyledCounter>
+  );
 }
 
 const StyledCounter = styled.p`
