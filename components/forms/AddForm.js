@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
-export default function AddForm() {
+export default function AddForm({ defaultData }) {
   const router = useRouter();
 
   async function addPlant(plant) {
@@ -43,7 +43,7 @@ export default function AddForm() {
       return;
     }
     if (fertiliserSeasons.length === 0) {
-      alert("Please choose at least one Fertiliser Season!")
+      alert("Please choose at least one Fertiliser Season!");
       return;
     }
     addPlant(dataWithSeasons);
