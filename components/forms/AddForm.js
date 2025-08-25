@@ -42,6 +42,10 @@ export default function AddForm() {
       alert("Image URL must start with https://images.unsplash.com/");
       return;
     }
+    if (fertiliserSeasons.length === 0) {
+      alert("Please choose at least one Fertiliser Season!")
+      return;
+    }
     addPlant(dataWithSeasons);
   }
 
@@ -61,7 +65,7 @@ export default function AddForm() {
 
       <Label>
         Image URL
-        <Input name="imageUrl" type="text" />
+        <Input name="imageUrl" type="text" required />
       </Label>
 
       <Fieldset>
@@ -106,7 +110,7 @@ export default function AddForm() {
 
       <Label>
         Description
-        <Textarea name="description" rows="4" />
+        <Textarea name="description" rows="4" required />
       </Label>
 
       <Button type="submit">Save Plant</Button>
