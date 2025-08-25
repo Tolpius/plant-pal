@@ -1,32 +1,14 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
-export default function AddForm() {
+export default function PlantForm({ defaultData, onSubmit }) {
+  const isEdit = !!defaultData;
+
   const router = useRouter();
+  const { id } = router.query;
 
-  async function addPlant(plant) {
-    try {
-      const response = await fetch("/api/plants", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(plant),
-      });
 
-      if (!response.ok) {
-        throw new Error(`Failed to add plant: ${response.statusText}`);
-      }
 
-      const newPlant = await response.json();
-      console.log("Plant added successfully:", newPlant);
-
-      router.push(`/`);
-    } catch (error) {
-      console.error("Error adding plant:", error);
-      alert("Failed to add plant. Please try again.");
-    }
-  }
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -34,7 +16,6 @@ export default function AddForm() {
     const data = Object.fromEntries(formData.entries());
     const fertiliserSeasons = formData.getAll("fertiliserSeason");
     const dataWithSeasons = { ...data, fertiliserSeasons };
-    
 
     // ONLY IMAGES FROM UNSPLASH FOR NOW
     if (!data.imageUrl.startsWith("https://images.unsplash.com")) {
@@ -45,31 +26,55 @@ export default function AddForm() {
       alert("Please choose at least one Fertiliser Season!");
       return;
     }
-    addPlant(dataWithSeasons);
+   onSubmit(dataWithSeasons);
   }
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Styledh2>Add a new plant</Styledh2>
+      <Styledh2>
+        {isEdit ? `Edit ${defaultData.name}` : `Add a new plant`}
+      </Styledh2>
 
       <Label>
         Name
-        <Input name="name" type="text" required />
+        <Input
+          name="name"
+          type="text"
+          required
+          defaultValue={isEdit ? defaultData.name : ""}
+        />
       </Label>
 
       <Label>
         Botanical Name
-        <Input name="botanicalName" type="text" required />
+        <Input
+          name="botanicalName"
+          type="text"
+          required
+          defaultValue={isEdit ? defaultData.botanicalName : ""}
+        />
       </Label>
 
       <Label>
         Image URL
-        <Input name="imageUrl" type="text" required />
+        <Input
+          name="imageUrl"
+          type="text"
+          required
+          defaultValue={isEdit ? defaultData.imageUrl : ""}
+        />
       </Label>
 
       <Fieldset>
         <legend>Water Need</legend>
-        <Slider name="waterNeed" type="range" min="1" max="3" step="1" />
+        <Slider
+          name="waterNeed"
+          type="range"
+          min="1"
+          max="3"
+          step="1"
+          defaultValue={isEdit ? defaultData.waterNeed : "1"}
+        />
         <Scale>
           <span>💧</span>
           <span>💧💧</span>
@@ -79,7 +84,14 @@ export default function AddForm() {
 
       <Fieldset>
         <legend>Light Need</legend>
-        <Slider name="lightNeed" type="range" min="1" max="3" step="1" />
+        <Slider
+          name="lightNeed"
+          type="range"
+          min="1"
+          max="3"
+          step="1"
+          defaultValue={isEdit ? defaultData.lightNeed : "1"}
+        />
         <Scale>
           <span>☁️</span>
           <span>🌥️</span>
@@ -90,29 +102,54 @@ export default function AddForm() {
       <Fieldset>
         <legend>Fertiliser Season</legend>
         <CheckboxLabel>
-          <input type="checkbox" name="fertiliserSeason" value="spring" />
+          <input
+            type="checkbox"
+            name="fertiliserSeason"
+            value="spring"
+            defaultChecked={ isEdit && defaultData.fertiliserSeasons.includes("spring")}
+          />
           🌸
         </CheckboxLabel>
         <CheckboxLabel>
-          <input type="checkbox" name="fertiliserSeason" value="summer" />
+          <input
+            type="checkbox"
+            name="fertiliserSeason"
+            value="summer"
+            defaultChecked={ isEdit && defaultData.fertiliserSeasons.includes("summer")}
+          />
           ☀️
         </CheckboxLabel>
         <CheckboxLabel>
-          <input type="checkbox" name="fertiliserSeason" value="autumn" />
+          <input
+            type="checkbox"
+            name="fertiliserSeason"
+            value="autumn"
+            defaultChecked={ isEdit && defaultData.fertiliserSeasons.includes("autumn")}
+          />
           🍁
         </CheckboxLabel>
         <CheckboxLabel>
-          <input type="checkbox" name="fertiliserSeason" value="winter" />
+          <input
+            type="checkbox"
+            name="fertiliserSeason"
+            value="winter"
+            defaultChecked={isEdit && defaultData.fertiliserSeasons.includes("winter")}
+          />
           ❄️
         </CheckboxLabel>
       </Fieldset>
 
       <Label>
         Description
-        <Textarea name="description" rows="4" required />
+        <Textarea
+          name="description"
+          rows="4"
+          required
+          defaultValue={ isEdit ? defaultData.description : ""}
+        />
       </Label>
 
-      <Button type="submit">Save Plant</Button>
+      <Button type="submit">{isEdit ? "Edit Plant" : "Add Plant"}</Button>
     </Form>
   );
 }

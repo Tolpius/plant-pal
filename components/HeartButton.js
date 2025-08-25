@@ -8,7 +8,7 @@ export default function HeartButton({ onToggleOwned, isOwned }) {
   }
 
   return (
-    <StyledHeartButton type="button" onClick={onClick}>
+    <StyledHeartButton type="button" onClick={onClick} aria-label={isOwned ? "Remove from owned plants list" : "Add to owned plants list"}>
       {isOwned ? (
         <HeartStraightIcon weight="fill" color="red" />
       ) : (
