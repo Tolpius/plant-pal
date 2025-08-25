@@ -1,4 +1,3 @@
-import useLocalStorage from "use-local-storage";
 import styled from "styled-components";
 import { HeartStraightIcon } from "@phosphor-icons/react";
 export default function HeartButton({ handleToggleOwned, isOwned }) {
