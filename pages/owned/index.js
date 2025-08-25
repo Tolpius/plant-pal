@@ -14,7 +14,6 @@ export default function Owned() {
   if (!data) {
     return <p>Failed to load plants!</p>;
   }
-  console.log(data);
   const ownedData = data.filter((plant) => ownedPlantIds.includes(plant._id));
   if (ownedData.length == 0) {
     return (

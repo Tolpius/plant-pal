@@ -12,7 +12,6 @@ export default function HomePage() {
   if (!data) {
     return <p>Failed to load plants!</p>;
   }
-console.log(data);
   return (
     <StyledPlantsList>
       {data.map((plant) => (
