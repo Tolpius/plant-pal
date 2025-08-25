@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Head from "next/head";
 import Headline from "./Headline";
-import Footer from "./Footer.js";
+import Navbar from "./Navbar.js";
 
 export default function Layout({ children }) {
   return (
@@ -11,7 +11,7 @@ export default function Layout({ children }) {
       </Head>
       <Headline>Plant Pal</Headline>
       <Main>{children}</Main>
-      <Footer />
+      <Navbar />
     </>
   );
 }
