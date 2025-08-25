@@ -45,7 +45,7 @@ export default function DetailsPage() {
       <BackButton/>
 
       <StyledImage
-        src={plant.imageUrl}
+        src={plant.imageUrl || "/defaultImage.png"}
         alt={plant.name}
         width={300}
         height={0}
