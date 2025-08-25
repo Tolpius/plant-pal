@@ -38,14 +38,14 @@ export default function DetailsPage() {
     return <h2>Error loading plant data</h2>;
   }
 
-  const seasons = plant.fertiliserSeason;
+  const seasons = plant.fertiliserSeasons;
 
   return (
     <>
       <BackButton/>
 
       <StyledImage
-        src={plant.imageUrl}
+        src={plant.imageUrl || "/defaultImage.png"}
         alt={plant.name}
         width={300}
         height={0}
@@ -70,7 +70,7 @@ export default function DetailsPage() {
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {plant.fertiliserSeason.map((season) => (
+        {plant.fertiliserSeasons.map((season) => (
           <li key={season}>
             <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
           </li>
