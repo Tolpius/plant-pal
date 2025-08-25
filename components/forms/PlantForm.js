@@ -1,59 +1,14 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
-export default function PlantForm({ defaultData }) {
+export default function PlantForm({ defaultData, onSubmit }) {
   const isEdit = !!defaultData;
 
   const router = useRouter();
   const { id } = router.query;
 
-  async function addPlant(plant) {
-    try {
-      const response = await fetch("/api/plants", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(plant),
-      });
 
-      if (!response.ok) {
-        throw new Error(`Failed to add plant: ${response.statusText}`);
-      }
 
-      const newPlant = await response.json();
-      console.log("Plant added successfully:", newPlant);
-
-      router.push(`/`);
-    } catch (error) {
-      console.error("Error adding plant:", error);
-      alert("Failed to add plant. Please try again.");
-    }
-  }
-
-  async function editPlant(plant) {
-    try {
-      const response = await fetch(`/api/plants/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(plant),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to edit plant: ${response.statusText}`);
-      }
-
-      const updatedPlant = await response.json();
-      console.log("Plant edited successfully:", updatedPlant);
-
-      router.push(`/plants/${id}`);
-    } catch (error) {
-      console.error("Error editing plant:", error);
-      alert("Failed to edit plant. Please try again.");
-    }
-  }
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -71,7 +26,7 @@ export default function PlantForm({ defaultData }) {
       alert("Please choose at least one Fertiliser Season!");
       return;
     }
-    isEdit ? editPlant(dataWithSeasons) : addPlant(dataWithSeasons);
+   onSubmit(dataWithSeasons);
   }
 
   return (
