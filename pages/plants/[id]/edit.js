@@ -23,10 +23,10 @@ export default function EditPage() {
   return (
     <>
       <h2 id="edit-plant">Edit Plant</h2>
-      <Link href={`/plants/${id}`} $justifySelf="start">
+      <Link href={`/plants/${id}`} $justifySelf="start" aria-label="Edit plant">
         <ArrowCircleLeftIcon size={32} />
       </Link>
-      <AddForm formName={"edit-plant"} defaultData={plant} />
+      <AddForm defaultData={plant} />
     </>
   );
 }
