@@ -7,6 +7,25 @@ import styled from "styled-components";
 import useSWR from "swr";
 import { useState } from "react";
 
+const lightNeedMap = {
+  1: "⛅",
+  2: "🌤️",
+  3: "☀️",
+};
+
+const waterNeedMap = {
+  1: "💧",
+  2: "💧💧",
+  3: "💧💧💧",
+};
+
+const seasonMap = {
+  spring: "🌸 Spring",
+  summer: "☀️ Summer",
+  autumn: "🍂 Autumn",
+  winter: "❄️ Winter",
+};
+
 export default function DetailsPage() {
   const router = useRouter();
   const { isReady } = router;
@@ -15,7 +34,12 @@ export default function DetailsPage() {
   const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
   const [showPopUp, setShowPopUp] = useState(false);
 
-  if (!isReady || isLoading || error || !plant) return <h2>Loading...</h2>;
+  if (isLoading || !isReady) {
+    return <h2>Loading...</h2>;
+  }
+  if (error || !plant) {
+    return <h2>Error loading plant data</h2>;
+  }
 
   const seasons = plant.fertiliserSeason;
 
@@ -28,7 +52,8 @@ export default function DetailsPage() {
 
   return (
     <>
-      <BackButton />
+      <BackButton/>
+
       <StyledImage
         src={plant.imageUrl}
         alt={plant.name}
@@ -44,47 +69,22 @@ export default function DetailsPage() {
       <StyledInfoRow>
         <StyledCareInfo>Plant likes:</StyledCareInfo>
         <StyledCareInfo>
-          {plant.lightNeed === "1"
-            ? "⛅ "
-            : plant.lightNeed === "2"
-            ? "🌤️  "
-            : plant.lightNeed === "3"
-            ? "☀️ "
-            : plant.lightNeed}
+          {lightNeedMap[plant.lightNeed] ?? plant.lightNeed}
         </StyledCareInfo>
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Water need:</StyledCareInfo>
         <StyledCareInfo>
-          {plant.waterNeed === "1"
-            ? "💧 "
-            : plant.waterNeed === "2"
-            ? "💧💧 "
-            : plant.waterNeed === "3"
-            ? "💧💧💧 "
-            : plant.waterNeed}
+          {waterNeedMap[plant.waterNeed] ?? plant.waterNeed}
         </StyledCareInfo>
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
-
-        {seasons.map((season) => {
-          return (
-            <li key={season}>
-              <StyledCareInfo>
-                {season === "spring"
-                  ? "🌸 Spring"
-                  : season === "summer"
-                  ? "☀️ Summer"
-                  : season === "autumn"
-                  ? "🍂 Autumn"
-                  : season === "winter"
-                  ? "❄️ Winter"
-                  : season}
-              </StyledCareInfo>
-            </li>
-          );
-        })}
+        {plant.fertiliserSeason.map((season) => (
+          <li key={season}>
+            <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
+          </li>
+        ))}
       </StyledInfoRow>
       <StyledDeleteButton
         onClick={() => {

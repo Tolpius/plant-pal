@@ -1,10 +1,15 @@
 import Image from "next/image";
 import styled from "styled-components";
+
+import HeartButton from "./HeartButton";
 import Link from "next/link";
 
-export default function Card({ plant, id }) {
+export default function Card({ plant, onToggleOwned, isOwned }) {
   return (
-    <StyledLink href={`plants/${id}`}>
+    <StyledLink
+      href={`/plants/${plant._id}`}
+      aria-label={`View details for ${plant.name}`}
+    >
       <CardWrapper>
         <ImageWrapper>
           <StyledImage
@@ -15,6 +20,11 @@ export default function Card({ plant, id }) {
           />
         </ImageWrapper>
         <TextWrapper>
+          <HeartButton
+            isOwned={isOwned}
+            onToggleOwned={onToggleOwned}
+            aria-label={`Toggle owned for ${plant.name}`}
+          />
           <h3>{plant.name}</h3>
           <p>{plant.botanicalName}</p>
         </TextWrapper>
