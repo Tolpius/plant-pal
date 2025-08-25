@@ -86,7 +86,7 @@ export default function AddForm({ defaultData }) {
           name="name"
           type="text"
           required
-          defaultValue={defaultData.name}
+          defaultValue={isEdit? defaultData.name : ""}
         />
       </Label>
 
@@ -97,7 +97,7 @@ export default function AddForm({ defaultData }) {
           type="text"
           required
           data={defaultData}
-          defaultValue={defaultData.botanicalName}
+          defaultValue={isEdit ? defaultData.botanicalName : ""}
         />
       </Label>
 
@@ -107,7 +107,7 @@ export default function AddForm({ defaultData }) {
           name="imageUrl"
           type="text"
           required
-          defaultValue={defaultData.imageUrl}
+          defaultValue={isEdit ? defaultData.imageUrl : ""}
         />
       </Label>
 
@@ -119,7 +119,7 @@ export default function AddForm({ defaultData }) {
           min="1"
           max="3"
           step="1"
-          defaultValue={defaultData.waterNeed}
+          defaultValue={isEdit ? defaultData.waterNeed : "1"}
         />
         <Scale>
           <span>💧</span>
@@ -136,7 +136,7 @@ export default function AddForm({ defaultData }) {
           min="1"
           max="3"
           step="1"
-          defaultValue={defaultData.lightNeed}
+          defaultValue={isEdit ? defaultData.lightNeed : "1"}
         />
         <Scale>
           <span>☁️</span>
@@ -152,7 +152,7 @@ export default function AddForm({ defaultData }) {
             type="checkbox"
             name="fertiliserSeason"
             value="spring"
-            defaultChecked={defaultData.fertiliserSeasons.includes("spring")}
+            defaultChecked={ isEdit && defaultData.fertiliserSeasons.includes("spring")}
           />
           🌸
         </CheckboxLabel>
@@ -161,7 +161,7 @@ export default function AddForm({ defaultData }) {
             type="checkbox"
             name="fertiliserSeason"
             value="summer"
-            defaultChecked={defaultData.fertiliserSeasons.includes("summer")}
+            defaultChecked={ isEdit && defaultData.fertiliserSeasons.includes("summer")}
           />
           ☀️
         </CheckboxLabel>
@@ -170,7 +170,7 @@ export default function AddForm({ defaultData }) {
             type="checkbox"
             name="fertiliserSeason"
             value="autumn"
-            defaultChecked={defaultData.fertiliserSeasons.includes("autumn")}
+            defaultChecked={ isEdit && defaultData.fertiliserSeasons.includes("autumn")}
           />
           🍁
         </CheckboxLabel>
@@ -179,7 +179,7 @@ export default function AddForm({ defaultData }) {
             type="checkbox"
             name="fertiliserSeason"
             value="winter"
-            defaultChecked={defaultData.fertiliserSeasons.includes("winter")}
+            defaultChecked={isEdit && defaultData.fertiliserSeasons.includes("winter")}
           />
           ❄️
         </CheckboxLabel>
@@ -191,7 +191,7 @@ export default function AddForm({ defaultData }) {
           name="description"
           rows="4"
           required
-          defaultValue={defaultData.description}
+          defaultValue={ isEdit ? defaultData.description : ""}
         />
       </Label>
 
