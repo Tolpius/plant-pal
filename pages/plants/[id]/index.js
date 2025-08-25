@@ -1,4 +1,5 @@
 import BackButton from "@/components/BackButton";
+import { GearIcon } from "@phosphor-icons/react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -43,9 +44,12 @@ export default function DetailsPage() {
 
   return (
     <>
-      <BackButton />
-
-      <Link href={`/plants/${id}/edit`}>😝</Link>
+      <StyledHeadline>
+        <BackButton />
+        <Link href={`/plants/${id}/edit`}>
+          <GearIcon size={32} />
+        </Link>
+      </StyledHeadline>
 
       <StyledImage
         src={plant.imageUrl || "/defaultImage.png"}
@@ -82,6 +86,11 @@ export default function DetailsPage() {
     </>
   );
 }
+
+const StyledHeadline = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const StyledImage = styled(Image)`
   width: 100%;

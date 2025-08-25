@@ -1,4 +1,5 @@
 import AddForm from "@/components/forms/AddForm";
+import { ArrowCircleLeftIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -23,7 +24,7 @@ export default function EditPage() {
     <>
       <h2 id="edit-plant">Edit Plant</h2>
       <Link href={`/plants/${id}`} $justifySelf="start">
-        back
+        <ArrowCircleLeftIcon size={32} />
       </Link>
       <AddForm formName={"edit-plant"} defaultData={plant} />
     </>
