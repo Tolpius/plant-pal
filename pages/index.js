@@ -31,8 +31,6 @@ export default function HomePage() {
     );
   }
 
-  return <PlantList plants={data} />;
-
   function handleFilterSubmit(event) {
     event.preventDefault();
 
@@ -49,7 +47,6 @@ export default function HomePage() {
 
       return matchesLight && matchesWater;
     });
-
     setFilteredPlants(filtered);
   }
 
@@ -76,21 +73,20 @@ export default function HomePage() {
           <PlantFilter
             onSubmit={handleFilterSubmit}
             onClear={handleClearSubmit}
-            setShowFilter={setShowFilter}
           />
         )}
       </FilterContainer>
 
       <PlantCounter length={filteredPlantList.length} />
 
-      <PlantList plants={data} />
+      <PlantList plants={filteredPlantList} />
     </>
   );
 }
 
 const FilterContainer = styled.div`
   ${(props) =>
-    props.showFilter &&
+    props.$showFilter &&
     css`
       border: 1px solid black;
       border-radius: 15px;
@@ -111,7 +107,7 @@ const FilterButton = styled.button`
   border-radius: 15px;
   font-size: medium;
   ${(props) =>
-    props.showFilter
+    props.$showFilter
       ? css`
           border: none;
         `
