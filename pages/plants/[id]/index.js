@@ -52,8 +52,7 @@ export default function DetailsPage() {
 
   return (
     <>
-      <BackButton/>
-
+      <BackButton />
       <StyledImage
         src={plant.imageUrl}
         alt={plant.name}
@@ -94,26 +93,13 @@ export default function DetailsPage() {
         Delete
       </StyledDeleteButton>{" "}
       {showPopUp && (
-        <TestOverlay>
-          <DeletePopUp deletePlant={deletePlant} setShowPopUp={setShowPopUp} />
-        </TestOverlay>
+        <DeletePopUp onDelete={deletePlant} onCancel={setShowPopUp} />
       )}
     </>
   );
 }
 
-const TestOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-`;
+
 
 const StyledDeleteButton = styled.button`
   background-color: red;

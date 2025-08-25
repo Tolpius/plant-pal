@@ -17,23 +17,19 @@ export default function HomePage() {
   if (data.length === 0) {
     return (
       <StyledMessage>
-        There are no plants to admire. <br />
-        <br />
-        Why are there no plants?? <br />
-        Who murdered them? 🥲
-        <br />
-        <br />
-        <br />
-        You can add plants <br />
-        via the + button. <br />
-        Why don&apos;t you go ahead <br />
-        and try it out?
+        <p>There are no plants to admire.</p>
+        <p>Why are there no plants?? Who murdered them? 🥲</p>
+        <p>
+          You can add plants via the + button. Why don&apos;t you go ahead and
+          try it out?
+        </p>
       </StyledMessage>
     );
   }
   return <PlantList plants={data} />;
 }
 
-const StyledMessage = styled.p`
+const StyledMessage = styled.div`
   text-align: center;
+  padding: 30px;
 `;
