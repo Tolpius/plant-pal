@@ -6,7 +6,6 @@ export default function AddForm({ defaultData }) {
 
   async function addPlant(plant) {
     try {
-      console.log(JSON.stringify(plant, null, 2));
       const response = await fetch("/api/plants", {
         method: "POST",
         headers: {
@@ -34,8 +33,8 @@ export default function AddForm({ defaultData }) {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     const fertiliserSeasons = formData.getAll("fertiliserSeason");
-    const dataWithSeasons = { ...data, fertiliserSeason: fertiliserSeasons };
-    console.log(dataWithSeasons);
+    const dataWithSeasons = { ...data, fertiliserSeasons };
+    
 
     // ONLY IMAGES FROM UNSPLASH FOR NOW
     if (!data.imageUrl.startsWith("https://images.unsplash.com")) {
@@ -51,7 +50,7 @@ export default function AddForm({ defaultData }) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <h2>Add a new plant</h2>
+      <Styledh2>Add a new plant</Styledh2>
 
       <Label>
         Name
@@ -121,11 +120,12 @@ export default function AddForm({ defaultData }) {
 /* styled-components */
 const Form = styled.form`
   padding: 1.5rem;
-  h2 {
-    margin-bottom: 1rem;
-    text-align: center;
-  }
   width: 100%;
+`;
+
+const Styledh2 = styled.h2`
+  margin-bottom: 1rem;
+  text-align: center;
 `;
 
 const Label = styled.label`
