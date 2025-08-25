@@ -79,7 +79,7 @@ export default function DetailsPage() {
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {plant.fertiliserSeasons.map((season) => (
+        {seasons.map((season) => (
           <li key={season}>
             <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
           </li>
@@ -99,8 +99,6 @@ export default function DetailsPage() {
   );
 }
 
-
-
 const StyledDeleteButton = styled.button`
   background-color: red;
   color: white;
@@ -108,6 +106,7 @@ const StyledDeleteButton = styled.button`
   height: 30px;
   margin-top: 30px;
 `;
+
 const StyledImage = styled(Image)`
   width: 100%;
   height: auto;
