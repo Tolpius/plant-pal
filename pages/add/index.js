@@ -1,5 +1,5 @@
-import AddForm from "@/components/forms/AddForm";
+import PlantForm from "@/components/forms/PlantForm";
 
 export default function Add() {
-  return <AddForm />;
+  return <PlantForm />;
 }

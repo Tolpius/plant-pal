@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
-export default function AddForm({ defaultData }) {
+export default function PlantForm({ defaultData }) {
   const isEdit = !!defaultData;
 
   const router = useRouter();

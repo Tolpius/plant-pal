@@ -1,4 +1,4 @@
-import AddForm from "@/components/forms/AddForm";
+import PlantForm from "@/components/forms/PlantForm";
 import { ArrowCircleLeftIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -26,7 +26,7 @@ export default function EditPage() {
       <Link href={`/plants/${id}`} $justifySelf="start" aria-label="Edit plant">
         <ArrowCircleLeftIcon size={32} />
       </Link>
-      <AddForm defaultData={plant} />
+      <PlantForm defaultData={plant} />
     </>
   );
 }
