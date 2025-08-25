@@ -1,6 +1,7 @@
 import BackButton from "@/components/BackButton";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import useSWR from "swr";
@@ -42,7 +43,9 @@ export default function DetailsPage() {
 
   return (
     <>
-      <BackButton/>
+      <BackButton />
+
+      <Link href={`/plants/${id}/edit`}>😝</Link>
 
       <StyledImage
         src={plant.imageUrl || "/defaultImage.png"}
