@@ -20,6 +20,7 @@ const Main = styled.main`
   display: flex;
   flex-grow: 1;
   min-height: 100dvh;
+  flex-direction: column;
   gap: 0.5rem;
   padding: 1.5rem;
   padding-top: 0;
