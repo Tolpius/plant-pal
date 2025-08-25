@@ -93,7 +93,10 @@ export default function DetailsPage() {
         Delete
       </StyledDeleteButton>{" "}
       {showPopUp && (
-        <DeletePopUp onDelete={deletePlant} onCancel={setShowPopUp} />
+        <DeletePopUp
+          onDelete={deletePlant}
+          onCancel={() => setShowPopUp(false)}
+        />
       )}
     </>
   );

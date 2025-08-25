@@ -1,29 +1,27 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export default function DeletePopUp({ onDelete, onCancel }) {
   return (
-    <WarningOverlay>
+    <WarningOverlay onClick={onCancel}>
       <StyledPopUpWarning>
         <StyledWarningMessage>
           Are you sure you want to delete this plant? This decision is not
           reversible!
         </StyledWarningMessage>
         <ButtonWrapper>
-          <StyledCancelButton
-            onClick={() => {
-              onCancel(false);
-            }}
-          >
+          <StyledButton $variant="secondary" onClick={onCancel}>
             cancel
-          </StyledCancelButton>
-          <StyledDeleteButton onClick={onDelete}>delete</StyledDeleteButton>
+          </StyledButton>
+          <StyledButton $variant="default" onClick={onDelete}>
+            delete
+          </StyledButton>
         </ButtonWrapper>
       </StyledPopUpWarning>
     </WarningOverlay>
   );
 }
 
-const WarningOverlay = styled.div`
+const WarningOverlay = styled.button`
   position: fixed;
   top: 0;
   left: 0;
@@ -34,6 +32,7 @@ const WarningOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1;
+  border: none;
 `;
 
 const StyledPopUpWarning = styled.article`
@@ -63,17 +62,21 @@ const ButtonWrapper = styled.div`
   height: 30px;
 `;
 
-const StyledDeleteButton = styled.button`
+const StyledButton = styled.button`
   font-size: medium;
-  background-color: lightgray;
   width: 100px;
   border-radius: 5px;
-`;
 
-const StyledCancelButton = styled.button`
-  width: 100px;
-  border-radius: 5px;
-  background-color: darkslategray;
-  color: white;
-  font-size: medium;
+  ${(props) =>
+    props.$variant === "default" &&
+    css`
+      background-color: lightgray;
+    `}
+
+  ${(props) =>
+    props.$variant === "secondary" &&
+    css`
+      background-color: darkslategray;
+      color: white;
+    `}
 `;
