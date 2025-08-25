@@ -1,6 +1,7 @@
 import useSWR from "swr";
-import Card from "@/components/Card";
 import styled, { css } from "styled-components";
+
+import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/PlantFilter";
 import { useState } from "react";
 import PlantCounter from "@/components/PlantCounter";
@@ -17,6 +18,20 @@ export default function HomePage() {
   if (!data) {
     return <p>Failed to load plants!</p>;
   }
+  if (data.length === 0) {
+    return (
+      <StyledMessage>
+        <p>There are no plants to admire.</p>
+        <p>Why are there no plants?? Who murdered them? 🥲</p>
+        <p>
+          You can add plants via the + button. Why don&apos;t you go ahead and
+          try it out?
+        </p>
+      </StyledMessage>
+    );
+  }
+
+  return <PlantList plants={data} />;
 
   function handleFilterSubmit(event) {
     event.preventDefault();
@@ -68,13 +83,7 @@ export default function HomePage() {
 
       <PlantCounter length={filteredPlantList.length} />
 
-      <StyledPlantsList>
-        {filteredPlantList.map((plant) => (
-          <li key={plant._id}>
-            <Card plant={plant} />
-          </li>
-        ))}
-      </StyledPlantsList>
+      <PlantList plants={data} />
     </>
   );
 }
@@ -111,10 +120,7 @@ const FilterButton = styled.button`
         `};
 `;
 
-const StyledPlantsList = styled.ul`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  list-style: none;
-  padding: 0;
+const StyledMessage = styled.div`
+  text-align: center;
+  padding: 30px;
 `;

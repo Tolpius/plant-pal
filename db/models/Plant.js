@@ -4,10 +4,10 @@ const { Schema } = mongoose;
 const plantSchema = new Schema({
   name: { type: String, required: true },
   botanicalName: { type: String, required: true },
-  imageURL: { type: String, required: true },
+  imageUrl: { type: String, required: true },
   waterNeed: { type: String, required: true },
   lightNeed: { type: String, required: true },
-  fertiliserSeason: { type: [String], required: true },
+  fertiliserSeasons: { type: [String], required: true },
   description: { type: String, required: true },
 });
 
