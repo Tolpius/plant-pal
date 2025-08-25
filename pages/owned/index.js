@@ -1,7 +1,6 @@
 import useSWR from "swr";
-import Card from "@/components/Card";
-import styled from "styled-components";
 import useLocalStorage from "use-local-storage";
+import PlantList from "@/components/PlantList";
 
 export default function Owned() {
   const { data, isLoading } = useSWR("/api/plants");
@@ -27,21 +26,5 @@ export default function Owned() {
       </p>
     );
   }
-  return (
-    <StyledPlantsList>
-      {ownedData.map((plant) => (
-        <li key={plant._id}>
-          <Card plant={plant} />
-        </li>
-      ))}
-    </StyledPlantsList>
-  );
+  return <PlantList plants={ownedData} />;
 }
-
-const StyledPlantsList = styled.ul`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  list-style: none;
-  padding: 0;
-`;
