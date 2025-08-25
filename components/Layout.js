@@ -4,7 +4,6 @@ import Headline from "./Headline";
 
 const Main = styled.main`
   display: grid;
-  gap: 0.5rem;
   padding: 1.5rem;
   padding-top: 0;
   position: relative;
