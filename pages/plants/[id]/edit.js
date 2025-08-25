@@ -17,22 +17,6 @@ export default function EditPage() {
     return <h2>Error loading plant data</h2>;
   }
 
-  // return <h2>Editpage functioniert </h2>;
-
-  async function editPlant(plant) {
-    const response = await fetch(`/api/plants/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(plant),
-    });
-
-    if (response.ok) {
-      router.push(`/plants/${id}`);
-    }
-  }
-
   if (!isReady || isLoading || error) return <h2>Loading...</h2>;
 
   return (
@@ -41,11 +25,7 @@ export default function EditPage() {
       <Link href={`/plants/${id}`} $justifySelf="start">
         back
       </Link>
-      <AddForm
-        onSubmit={editPlant}
-        formName={"edit-plant"}
-        defaultData={plant}
-      />
+      <AddForm formName={"edit-plant"} defaultData={plant} />
     </>
   );
 }
