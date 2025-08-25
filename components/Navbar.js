@@ -1,4 +1,4 @@
-import { HeartIcon, HouseIcon } from "@phosphor-icons/react";
+import { HeartIcon, HouseIcon, PlusCircleIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
 import { useRouter } from "next/router";
@@ -13,6 +13,12 @@ export default function Navbar() {
         <HouseIcon
           size={28}
           weight={currentPath === "/" ? "fill" : "regular"}
+        />
+      </NavItem>
+      <NavItem href="/add">
+        <PlusCircleIcon
+          size={28}
+          weight={currentPath === "/add" ? "fill" : "regular"}
         />
       </NavItem>
       <NavItem href="/owned">
