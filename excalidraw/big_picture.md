@@ -68,5 +68,3 @@ Hier ist eine strukturierte Zusammenfassung eurer Brainstorming-Notizen für die
 
 ---
 
-👉 Damit habt ihr jetzt ein sauberes Big Picture.
-Wollt ihr, dass ich die einzelnen Punkte gleich in **Mini-Projekte / Module** clustere (z. B. "Core App", "Community", "Gamification", "Design & Branding")?
