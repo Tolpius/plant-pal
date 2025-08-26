@@ -1,10 +1,14 @@
 import useSWR from "swr";
-import styled from "styled-components";
 
 import PlantList from "@/components/PlantList";
+import { useState } from "react";
+import PlantCounter from "@/components/PlantCounter";
+import PlantFilter from "@/components/filter/PlantFilter";
+import MessageNoPlants from "@/components/MessageNoPlants";
 
 export default function HomePage() {
   const { data, isLoading } = useSWR("/api/plants");
+  const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -15,21 +19,26 @@ export default function HomePage() {
   }
 
   if (data.length === 0) {
-    return (
-      <StyledMessage>
-        <p>There are no plants to admire.</p>
-        <p>Why are there no plants?? Who murdered them? 🥲</p>
-        <p>
-          You can add plants via the + button. Why don&apos;t you go ahead and
-          try it out?
-        </p>
-      </StyledMessage>
-    );
+    return <MessageNoPlants />;
   }
-  return <PlantList plants={data} />;
-}
 
-const StyledMessage = styled.div`
-  text-align: center;
-  padding: 30px;
-`;
+  const filteredPlantList =
+    filters.lightNeed.length === 0 && filters.waterNeed.length === 0
+      ? data
+      : data.filter((plant) => {
+          const matchesLight =
+            filters.lightNeed.length === 0 ||
+            filters.lightNeed.includes(plant.lightNeed);
+          const matchesWater =
+            filters.waterNeed.length === 0 ||
+            filters.waterNeed.includes(plant.waterNeed);
+          return matchesLight && matchesWater;
+        });
+  return (
+    <>
+      <PlantFilter onFilter={setFilters} />
+      <PlantCounter length={filteredPlantList.length} />
+      <PlantList plants={filteredPlantList} />
+    </>
+  );
+}
