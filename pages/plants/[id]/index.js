@@ -1,7 +1,11 @@
 import BackButton from "@/components/BackButton";
+
+import { GearIcon } from "@phosphor-icons/react";
+
 import DeletePopUp from "@/components/DeletePopUp";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import useSWR from "swr";
@@ -52,7 +56,12 @@ export default function DetailsPage() {
 
   return (
     <>
-      <BackButton />
+      <StyledHeadline>
+        <BackButton />
+        <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
+          <GearIcon size={32} />
+        </Link>
+      </StyledHeadline>
       <StyledImage
         src={plant.imageUrl || "/defaultImage.png"}
         alt={plant.name}
@@ -101,6 +110,11 @@ export default function DetailsPage() {
     </>
   );
 }
+
+const StyledHeadline = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const StyledDeleteButton = styled.button`
   background-color: red;
