@@ -1,17 +1,9 @@
 import styled from "styled-components";
-import { useRef } from "react";
 
 export default function PlantFilterForm({ onSubmit, onClear }) {
-  const form = useRef(null);
-
-  function handleClearFilter() {
-    form.current.reset();
-    onClear();
-  }
-
   return (
     <StyledFilterForm>
-      <form ref={form} onSubmit={onSubmit}>
+      <form onSubmit={onSubmit}>
         <StyledLightWrapper>
           <legend>Light Need:</legend>
           <label>
