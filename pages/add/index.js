@@ -1,6 +1,9 @@
 import PlantForm from "@/components/forms/PlantForm";
+import { useRouter } from "next/router";
 
 export default function Add() {
+  const router = useRouter();
+
     async function addPlant(plant) {
     try {
       const response = await fetch("/api/plants", {
