@@ -64,11 +64,3 @@ Super, dann brechen wir das Ganze mal in **Teilprojekte/Module** herunter, die i
 * Erweiterte Community-Features (Challenges, Gruppen)
 
 ---
-
-👉 Damit habt ihr jetzt **klare Module**, die ihr auch als Roadmap nutzen könnt:
-
-* **MVP:** Core App + Pflegeplanung
-* **Phase 2:** Community + Gamification
-* **Phase 3:** Erweiterungen (Krankheitserkennung, Personalisierung, etc.)
-
----
