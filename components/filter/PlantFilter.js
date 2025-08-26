@@ -20,10 +20,10 @@ export default function PlantFilter({ onFilter }) {
   }
 
   return (
-    <FilterContainer $displayBorder={!showFilter}>
+    <FilterContainer $displayBorder={showFilter}>
       <ButtonContainer>
         <FilterButton
-          $displayBorder={!showFilter}
+          $displayBorder={showFilter}
           onClick={() => {
             setShowFilter(!showFilter);
           }}
@@ -45,12 +45,12 @@ const FilterContainer = styled.div`
   ${(props) =>
     props.$displayBorder
       ? css`
-          border: none;
-        `
-      : css`
           border: 1px solid black;
           border-radius: 15px;
           overflow: hidden;
+        `
+      : css`
+          border: none;
         `};
 `;
 
@@ -69,9 +69,9 @@ const FilterButton = styled.button`
   ${(props) =>
     props.$displayBorder
       ? css`
-          border: 1px solid black;
+          border: none;
         `
       : css`
-          border: none;
+          border: 1px solid black;
         `};
 `;
