@@ -5,26 +5,23 @@ export default function PlantForm({ defaultData, onSubmit }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEdit = !!defaultData;
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    setIsSubmitting(true);
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     const fertiliserSeasons = formData.getAll("fertiliserSeason");
     const dataWithSeasons = { ...data, fertiliserSeasons };
-
     // ONLY IMAGES FROM UNSPLASH FOR NOW
     if (!data.imageUrl.startsWith("https://images.unsplash.com")) {
       alert("Image URL must start with https://images.unsplash.com/");
-      setIsSubmitting(false);
       return;
     }
     if (fertiliserSeasons.length === 0) {
       alert("Please choose at least one Fertiliser Season!");
-       setIsSubmitting(false);
       return;
     }
-    onSubmit(dataWithSeasons);
+    setIsSubmitting(true);
+    await onSubmit(dataWithSeasons);
     setIsSubmitting(false);
   }
 
