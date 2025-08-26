@@ -2,7 +2,7 @@ import useSWR from "swr";
 import styled, { css } from "styled-components";
 
 import PlantList from "@/components/PlantList";
-import PlantFilter from "@/components/PlantFilter";
+import PlantFilterForm from "@/components/PlantFilterForm";
 import { useState } from "react";
 import PlantCounter from "@/components/PlantCounter";
 
@@ -70,7 +70,7 @@ export default function HomePage() {
           </FilterButton>
         </ButtonContainer>
         {showFilter && (
-          <PlantFilter
+          <PlantFilterForm
             onSubmit={handleFilterSubmit}
             onClear={handleClearSubmit}
           />

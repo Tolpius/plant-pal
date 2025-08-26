@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useRef } from "react";
 
-export default function PlantFilter({ onSubmit, onClear }) {
+export default function PlantFilterForm({ onSubmit, onClear }) {
   const form = useRef(null);
 
   function handleClearFilter() {
