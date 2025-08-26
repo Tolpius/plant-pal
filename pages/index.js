@@ -1,10 +1,10 @@
 import useSWR from "swr";
-import styled, { css } from "styled-components";
 
 import PlantList from "@/components/PlantList";
 import { useState } from "react";
 import PlantCounter from "@/components/PlantCounter";
-import PlantFilter from "@/components/PlantFilter";
+import PlantFilter from "@/components/filter/PlantFilter";
+import MessageNoPlants from "@/components/MessageNoPlants";
 
 export default function HomePage() {
   const { data, isLoading } = useSWR("/api/plants");
@@ -19,16 +19,7 @@ export default function HomePage() {
   }
 
   if (data.length === 0) {
-    return (
-      <StyledMessage>
-        <p>There are no plants to admire.</p>
-        <p>Why are there no plants?? Who murdered them? 🥲</p>
-        <p>
-          You can add plants via the + button. Why don&apos;t you go ahead and
-          try it out?
-        </p>
-      </StyledMessage>
-    );
+    return <MessageNoPlants />;
   }
 
   const filteredPlantList = filteredPlants ?? data;
@@ -41,8 +32,3 @@ export default function HomePage() {
     </>
   );
 }
-
-const StyledMessage = styled.div`
-  text-align: center;
-  padding: 30px;
-`;
