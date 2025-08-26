@@ -1,39 +1,29 @@
 import styled, { css } from "styled-components";
 import { useState } from "react";
-
 import PlantFilterForm from "./PlantFilterForm";
 
-export default function PlantFilter({ data, setFilteredPlants }) {
+export default function PlantFilter({ onFilter }) {
   const [showFilter, setShowFilter] = useState(false);
 
   function handleFilterSubmit(event) {
     event.preventDefault();
-
     const formData = new FormData(event.target);
 
     const lightNeed = formData.getAll("lightNeed");
     const waterNeed = formData.getAll("waterNeed");
 
-    const filtered = data.filter((plant) => {
-      const matchesLight =
-        lightNeed.length === 0 || lightNeed.includes(plant.lightNeed);
-      const matchesWater =
-        waterNeed.length === 0 || waterNeed.includes(plant.waterNeed);
-
-      return matchesLight && matchesWater;
-    });
-    setFilteredPlants(filtered);
+    onFilter({ lightNeed, waterNeed });
   }
 
   function handleClearSubmit() {
-    setFilteredPlants(undefined);
+    onFilter({ lightNeed: [], waterNeed: [] });
   }
 
   return (
-    <FilterContainer $showFilter={showFilter}>
+    <FilterContainer $displayBorder={showFilter}>
       <ButtonContainer>
         <FilterButton
-          $showFilter={showFilter}
+          $displayBorder={showFilter}
           onClick={() => {
             setShowFilter(!showFilter);
           }}
@@ -53,7 +43,7 @@ export default function PlantFilter({ data, setFilteredPlants }) {
 
 const FilterContainer = styled.div`
   ${(props) =>
-    props.$showFilter &&
+    props.$displayBorder &&
     css`
       border: 1px solid black;
       border-radius: 15px;
@@ -74,7 +64,7 @@ const FilterButton = styled.button`
   border-radius: 15px;
   font-size: medium;
   ${(props) =>
-    props.$showFilter
+    props.$displayBorder
       ? css`
           border: none;
         `

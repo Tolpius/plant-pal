@@ -8,7 +8,7 @@ import MessageNoPlants from "@/components/MessageNoPlants";
 
 export default function HomePage() {
   const { data, isLoading } = useSWR("/api/plants");
-  const [filteredPlants, setFilteredPlants] = useState();
+  const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -22,11 +22,21 @@ export default function HomePage() {
     return <MessageNoPlants />;
   }
 
-  const filteredPlantList = filteredPlants ?? data;
-
+  const filteredPlantList =
+    filters.lightNeed.length === 0 && filters.waterNeed.length === 0
+      ? data
+      : data.filter((plant) => {
+          const matchesLight =
+            filters.lightNeed.length === 0 ||
+            filters.lightNeed.includes(plant.lightNeed);
+          const matchesWater =
+            filters.waterNeed.length === 0 ||
+            filters.waterNeed.includes(plant.waterNeed);
+          return matchesLight && matchesWater;
+        });
   return (
     <>
-      <PlantFilter data={data} setFilteredPlants={setFilteredPlants} />
+      <PlantFilter onFilter={setFilters} />
       <PlantCounter length={filteredPlantList.length} />
       <PlantList plants={filteredPlantList} />
     </>

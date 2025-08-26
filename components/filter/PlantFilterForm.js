@@ -44,12 +44,7 @@ export default function PlantFilterForm({ onSubmit, onClear }) {
         </StyledWaterWrapper>
         <StyledButtonWrapper>
           <StyledButton type="submit">apply</StyledButton>
-          <StyledButton
-            type="button"
-            onClick={() => {
-              handleClearFilter();
-            }}
-          >
+          <StyledButton type="reset" onClick={onClear}>
             clear
           </StyledButton>
         </StyledButtonWrapper>
