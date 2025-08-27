@@ -1,22 +1,16 @@
 import styled from "styled-components";
-import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function PlantForm({ defaultData, onSubmit }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const isEdit = !!defaultData;
 
-  const router = useRouter();
-  const { id } = router.query;
-
-
-
-
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     const fertiliserSeasons = formData.getAll("fertiliserSeason");
     const dataWithSeasons = { ...data, fertiliserSeasons };
-
     // ONLY IMAGES FROM UNSPLASH FOR NOW
     if (!data.imageUrl.startsWith("https://images.unsplash.com")) {
       alert("Image URL must start with https://images.unsplash.com/");
@@ -26,7 +20,9 @@ export default function PlantForm({ defaultData, onSubmit }) {
       alert("Please choose at least one Fertiliser Season!");
       return;
     }
-   onSubmit(dataWithSeasons);
+    setIsSubmitting(true);
+    await onSubmit(dataWithSeasons);
+    setIsSubmitting(false);
   }
 
   return (
@@ -106,7 +102,9 @@ export default function PlantForm({ defaultData, onSubmit }) {
             type="checkbox"
             name="fertiliserSeason"
             value="spring"
-            defaultChecked={ isEdit && defaultData.fertiliserSeasons.includes("spring")}
+            defaultChecked={
+              isEdit && defaultData.fertiliserSeasons.includes("spring")
+            }
           />
           🌸
         </CheckboxLabel>
@@ -115,7 +113,9 @@ export default function PlantForm({ defaultData, onSubmit }) {
             type="checkbox"
             name="fertiliserSeason"
             value="summer"
-            defaultChecked={ isEdit && defaultData.fertiliserSeasons.includes("summer")}
+            defaultChecked={
+              isEdit && defaultData.fertiliserSeasons.includes("summer")
+            }
           />
           ☀️
         </CheckboxLabel>
@@ -124,7 +124,9 @@ export default function PlantForm({ defaultData, onSubmit }) {
             type="checkbox"
             name="fertiliserSeason"
             value="autumn"
-            defaultChecked={ isEdit && defaultData.fertiliserSeasons.includes("autumn")}
+            defaultChecked={
+              isEdit && defaultData.fertiliserSeasons.includes("autumn")
+            }
           />
           🍁
         </CheckboxLabel>
@@ -133,7 +135,9 @@ export default function PlantForm({ defaultData, onSubmit }) {
             type="checkbox"
             name="fertiliserSeason"
             value="winter"
-            defaultChecked={isEdit && defaultData.fertiliserSeasons.includes("winter")}
+            defaultChecked={
+              isEdit && defaultData.fertiliserSeasons.includes("winter")
+            }
           />
           ❄️
         </CheckboxLabel>
@@ -145,11 +149,13 @@ export default function PlantForm({ defaultData, onSubmit }) {
           name="description"
           rows="4"
           required
-          defaultValue={ isEdit ? defaultData.description : ""}
+          defaultValue={isEdit ? defaultData.description : ""}
         />
       </Label>
 
-      <Button type="submit">{isEdit ? "Edit Plant" : "Add Plant"}</Button>
+      <Button type="submit" disabled={isSubmitting}>
+        {isEdit ? "Edit Plant" : "Add Plant"} 
+      </Button>
     </Form>
   );
 }
