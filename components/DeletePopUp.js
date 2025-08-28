@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 export default function DeletePopUp({ onDelete, onCancel }) {
   return (
     <WarningOverlay onClick={onCancel}>
-      <StyledPopUpWarning>
+      <StyledPopUpWarning onClick={event => event.stopPropagation()}>
         <StyledWarningMessage>
           Are you sure you want to delete this plant? This decision is not
           reversible!
