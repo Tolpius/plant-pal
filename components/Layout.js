@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Head from "next/head";
 import Headline from "./Headline";
 import Navbar from "./Navbar.js";
+import SessionButton from "./session/SessionButton";
 
 export default function Layout({ children }) {
   return (
@@ -9,6 +10,7 @@ export default function Layout({ children }) {
       <Head>
         <title>Plant Pal</title>
       </Head>
+      <SessionButton/>
       <Headline>Plant Pal</Headline>
       <Main>{children}</Main>
       <Navbar />
