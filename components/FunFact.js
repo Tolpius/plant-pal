@@ -13,11 +13,10 @@ export default function FunFactDisplay() {
 
   function getRandomIndex(lastIndex, length) {
     if (data.length <= 1) return 0;
-    const newIndex = Math.floor(Math.random() * length);
-
-    if (newIndex === lastIndex) {
-      return getRandomIndex(lastIndex, length);
-    }
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * length);
+    } while (newIndex === lastIndex);
 
     return newIndex;
   }
@@ -35,7 +34,6 @@ export default function FunFactDisplay() {
   return (
     <Wrapper>
       <LightButton onClick={handleClick}>💡</LightButton>
-      {}
       {funFactPopUp && (
         <PopUpOverlay onClick={() => setFunFactPopUp(false)}>
           <StyledPopUpFunFact onClick={(event) => event.stopPropagation()}>
