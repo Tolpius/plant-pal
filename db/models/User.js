@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 const UserSchema = new Schema(
   {
@@ -11,5 +11,8 @@ const UserSchema = new Schema(
   },
   { timestamps: true }
 );
+
+//Index in MongoDB so user accounts have to be unique and lookups are faster
+UserSchema.index({ provider: 1, providerAccountId: 1 }, { unique: true });
 
 export default models.User || model("User", UserSchema);
