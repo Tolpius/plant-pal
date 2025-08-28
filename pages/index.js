@@ -5,6 +5,7 @@ import { useState } from "react";
 import PlantCounter from "@/components/PlantCounter";
 import PlantFilter from "@/components/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
+import FunFactDisplay from "@/components/FunFact";
 
 export default function HomePage() {
   const { data, isLoading } = useSWR("/api/plants");
@@ -38,6 +39,7 @@ export default function HomePage() {
     <>
       <PlantFilter onFilter={setFilters} />
       <PlantCounter length={filteredPlantList.length} />
+      <FunFactDisplay />
       <PlantList plants={filteredPlantList} />
     </>
   );
