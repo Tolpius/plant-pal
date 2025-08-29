@@ -25,9 +25,6 @@ export default async function handler(request, response) {
     if (!token) {
       return response.status(401).json({ error: "Not authenticated" });
     }
-    if (token.role !== "admin" && token.id !== userId) {
-      return response.status(403).json({ error: "Access denied" });
-    }
 
     if (request.method === "PUT") {
       const plant = await Plant.findByIdAndUpdate(id, request.body, {
