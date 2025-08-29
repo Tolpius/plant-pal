@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import useSWR from "swr";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 const lightNeedMap = {
   1: "⛅",
@@ -37,6 +38,7 @@ export default function DetailsPage() {
 
   const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
   const [showPopUp, setShowPopUp] = useState(false);
+  const { data: session } = useSession();
 
   if (isLoading || !isReady) {
     return <h2>Loading...</h2>;
@@ -58,9 +60,10 @@ export default function DetailsPage() {
     <>
       <StyledHeadline>
         <BackButton />
+        {session &&
         <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
           <GearIcon size={32} />
-        </Link>
+        </Link>}
       </StyledHeadline>
       <StyledImage
         src={plant.imageUrl || "/defaultImage.png"}
@@ -94,13 +97,15 @@ export default function DetailsPage() {
           </li>
         ))}
       </StyledInfoRow>
-      <StyledDeleteButton
-        onClick={() => {
-          setShowPopUp(true);
-        }}
-      >
-        Delete
-      </StyledDeleteButton>{" "}
+      {session && (
+        <StyledDeleteButton
+          onClick={() => {
+            setShowPopUp(true);
+          }}
+        >
+          Delete
+        </StyledDeleteButton>
+      )}
       {showPopUp && (
         <DeletePopUp
           onDelete={deletePlant}
