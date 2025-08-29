@@ -8,9 +8,6 @@ export default function PlantList({ plants, session }) {
   const { data: ownedPlantIds } = useSWR(swrUrl);
 
   async function handleToggleOwned(plantId, isOwned) {
-    //nothing toDo if not logged in
-    if (!session) return;
-
     //define fetch options for toggle
     const fetchUrl = `/api/user/${userId}/owned/${plantId}`;
     const fetchOptions = {
