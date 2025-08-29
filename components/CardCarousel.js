@@ -9,11 +9,12 @@ export default function CardCarousel({ plant, grayScale }) {
       href={`/plants/${plant._id}`}
       aria-label={`View details for ${plant.name}`}
     >
-      <CardWrapper grayScale={grayScale}>
+      <CardWrapper>
         <StyledImage
           src={plant.imageUrl || "/defaultImage.png"}
           alt={plant.name}
           fill
+          grayScale={grayScale}
         />
       </CardWrapper>
     </StyledLink>
@@ -29,14 +30,14 @@ const CardWrapper = styled.div`
   position: relative;
   width: 220px;
   height: 300px;
-  border: 1px black solid;
+  border: 1px solid black;
   border-radius: 25px;
   overflow: hidden;
   background-color: white;
-  filter: grayscale(${(props) => props.grayScale});
 `;
 
 const StyledImage = styled(Image)`
   object-fit: cover;
   border-radius: 25px;
+  filter: ${(props) => `grayscale(${props.grayScale})`};
 `;

@@ -1,5 +1,5 @@
 // PlantCarousel.js
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import CardCarousel from "./CardCarousel";
 
@@ -9,54 +9,44 @@ export default function PlantCarousel({ plants }) {
   const cardWidth = 220;
   const peek = 40;
   const maxVisible = 2;
-  const outerPadding = 32; // Abstand zum Rand
-
-  if (!plants || plants.length === 0) return <p>Keine Pflanzen vorhanden</p>;
-
   const totalCards = plants.length;
+
+  if (!plants || totalCards === 0) return <p>Keine Pflanzen vorhanden</p>;
 
   const prev = () =>
     setActiveIndex((prev) => (prev - 1 + totalCards) % totalCards);
   const next = () => setActiveIndex((prev) => (prev + 1) % totalCards);
+
+  // Berechne Offset mit Endlos-Loop (Modulo)
+  const getOffset = (i) => {
+    let offset = i - activeIndex;
+    if (offset > totalCards / 2) offset -= totalCards;
+    if (offset < -totalCards / 2) offset += totalCards;
+    return offset;
+  };
 
   return (
     <>
       <CarouselOuterWrapper>
         <CarouselWrapper>
           {plants.map((plant, i) => {
-            const offset = i - activeIndex;
-            let scale = 0.7;
-            let xOffset = 0;
-            let yOffset = 0;
-            let zIndex = 0;
-            let opacity = 0;
+            const offset = getOffset(i);
 
+            if (Math.abs(offset) > maxVisible) return null;
+
+            const scale = offset === 0 ? 1 : 1 - 0.15 * Math.abs(offset);
+            const xOffset = offset * peek;
             const grayScale = Math.min(1, 0.3 * Math.abs(offset));
-
-            if (Math.abs(offset) <= maxVisible) {
-              if (offset === 0) {
-                scale = 1;
-                xOffset = 0;
-                yOffset = 0;
-                zIndex = 3;
-                opacity = 1;
-              } else {
-                scale = 1 - 0.15 * Math.abs(offset);
-                xOffset = offset * peek;
-                yOffset = 0;
-                zIndex = 3 - Math.abs(offset);
-                opacity = 1 - 0.2 * Math.abs(offset);
-              }
-            }
+            const zIndex = 3 - Math.abs(offset);
 
             return (
               <CardWrapper
                 key={plant._id}
                 style={{
-                  transform: `translateX(calc(${xOffset}px - 50%)) translateY(${yOffset}px) scale(${scale})`,
+                  transform: `translateX(calc(${xOffset}px - 50%)) scale(${scale})`,
                   zIndex,
-                  opacity: 1,
-                  filter: `grayscale(${grayScale})`, // optional, falls du Wrapper schon anpasst
+                  filter: `grayscale(${grayScale})`,
+                  transition: "transform 0.5s ease, filter 0.5s ease",
                 }}
               >
                 <CardCarousel plant={plant} grayScale={grayScale} />
@@ -78,9 +68,9 @@ export default function PlantCarousel({ plants }) {
 // Styled Components
 const CarouselOuterWrapper = styled.div`
   width: 100%;
-  box-sizing: border-box;
   display: flex;
   justify-content: center;
+  box-sizing: border-box;
 `;
 
 const CarouselWrapper = styled.div`
@@ -93,7 +83,7 @@ const CardWrapper = styled.div`
   top: 0;
   left: 50%;
   width: 220px;
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.5s ease, filter 0.5s ease;
 `;
 
 const ButtonsWrapper = styled.div`
