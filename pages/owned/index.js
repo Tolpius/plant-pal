@@ -1,22 +1,26 @@
 import useSWR from "swr";
-import useLocalStorage from "use-local-storage";
 import { useState } from "react";
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
 import PlantCounter from "@/components/PlantCounter";
+import { useSession } from "next-auth/react";
 
 export default function Owned() {
   const { data, isLoading } = useSWR("/api/plants");
-  const [ownedPlantIds] = useLocalStorage("ownedPlantIds", []);
   const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
+  const { data: session, status: sessionStatus } = useSession();
+  const userId = session?.user.id;
+  const swrUrl = session ? `/api/user/${userId}/owned` : null;
+  const { data: ownedPlantIds } = useSWR(swrUrl);
 
-  if (isLoading) {
+  if (isLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
   }
 
   if (!data) {
     return <p>Failed to load plants!</p>;
   }
+
   const ownedData = data.filter((plant) => ownedPlantIds.includes(plant._id));
 
   if (ownedData.length == 0) {
@@ -49,7 +53,7 @@ export default function Owned() {
     <>
       <PlantFilter onFilter={setFilters} />
       <PlantCounter length={filteredPlantList.length} />
-      <PlantList plants={filteredPlantList} />
+      <PlantList plants={filteredPlantList} session={session} />
     </>
   );
 }
