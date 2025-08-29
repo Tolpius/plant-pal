@@ -48,6 +48,7 @@ const CardWrapper = styled.div`
   border-radius: 25px;
   overflow: hidden;
   height: 300px;
+  background-color: white;
 `;
 
 const ImageWrapper = styled.div`
