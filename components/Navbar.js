@@ -1,7 +1,18 @@
-import { HeartIcon, HouseIcon, PlusCircleIcon } from "@phosphor-icons/react";
+import {
+  BookOpenTextIcon,
+  CalendarIcon,
+  HeartIcon,
+  HouseIcon,
+  LightbulbIcon,
+  ListIcon,
+  PlusCircleIcon,
+} from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { SignOutIcon } from "@phosphor-icons/react/dist/ssr";
+import { signOut } from "next-auth/react";
+import FunFactDisplay from "./FunFact";
 
 export default function Navbar() {
   const router = useRouter();
@@ -9,34 +20,44 @@ export default function Navbar() {
 
   return (
     <StyledNavbar>
-      <NavItem href="/">
+      <NavLink href="/owned">
         <HouseIcon
           size={28}
-          weight={currentPath === "/" ? "fill" : "regular"}
-          aria-label="Homepage"
+          weight={currentPath === "/owned" ? "fill" : "regular"}
+          aria-label="My Plants"
         />
-      </NavItem>
-      <NavItem href="/add">
-        <PlusCircleIcon
+      </NavLink>
+      <NavLink href="/catalogue">
+        <BookOpenTextIcon
           size={28}
-          weight={currentPath === "/add" ? "fill" : "regular"}
-          aria-label="Add plant"
+          weight={currentPath === "/catalogue" ? "fill" : "regular"}
+          aria-label="Owned plant list"
         />
-      </NavItem>
-      <NavItem href="/owned">
-        <HeartIcon
+      </NavLink>
+      <NavItem>
+        <FunFactDisplay
           size={28}
           weight={currentPath === "/owned" ? "fill" : "regular"}
           aria-label="Owned plant list"
         />
       </NavItem>
+      <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
+        <SignOutIcon size={28} weight="regular" aria-label="Owned plant list" />
+      </NavButton>{" "}
+      <NavButton href="/owned">
+        <ListIcon
+          size={28}
+          weight={currentPath === "/owned" ? "fill" : "regular"}
+          aria-label="Owned plant list"
+        />
+      </NavButton>
     </StyledNavbar>
   );
 }
 
 const StyledNavbar = styled.nav`
   position: sticky;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
   background: white;
@@ -47,13 +68,40 @@ const StyledNavbar = styled.nav`
   z-index: 1000;
 `;
 
-const NavItem = styled(Link)`
+const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
   color: #444;
   transition: color 0.2s ease-in-out;
+  padding: 0;
 
+  &:hover {
+    color: #000;
+  }
+`;
+
+const NavButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: transparent;
+  color: #444;
+  transition: color 0.2s ease-in-out;
+  padding: 0;
+  &:hover {
+    color: #000;
+  }
+`;
+
+const NavItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  transition: color 0.2s ease-in-out;
+  padding: 0;
   &:hover {
     color: #000;
   }

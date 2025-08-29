@@ -1,3 +1,4 @@
+import { LightbulbIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
@@ -33,7 +34,7 @@ export default function FunFactDisplay() {
 
   return (
     <Wrapper>
-      <LightButton onClick={handleClick}>💡</LightButton>
+      <LightButton onClick={handleClick}><LightbulbIcon size="28" weight="regular"/></LightButton>
       {funFactPopUp && (
         <PopUpOverlay onClick={() => setFunFactPopUp(false)}>
           <StyledPopUpFunFact onClick={(event) => event.stopPropagation()}>
@@ -58,7 +59,10 @@ const Wrapper = styled.div`
 `;
 
 const LightButton = styled.button`
-  padding: 0.5rem;
+  padding: 0;
+  background: transparent;
+  border: transparent;
+  color: #444;
 `;
 
 const PopUpOverlay = styled.button`

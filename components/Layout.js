@@ -3,17 +3,20 @@ import Head from "next/head";
 import Headline from "./Headline";
 import Navbar from "./Navbar.js";
 import SessionButton from "./session/SessionButton";
+import { useSession } from "next-auth/react";
+  
 
 export default function Layout({ children }) {
+  const { data: session } = useSession();
   return (
     <>
       <Head>
         <title>Plant Pal</title>
       </Head>
-      <SessionButton/>
+      {session && <Navbar />}
+     {!session && <SessionButton/>}
       <Headline>Plant Pal</Headline>
       <Main>{children}</Main>
-      <Navbar />
     </>
   );
 }

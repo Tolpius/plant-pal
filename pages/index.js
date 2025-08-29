@@ -41,7 +41,6 @@ export default function HomePage() {
     <>
       <PlantFilter onFilter={setFilters} />
       <PlantCounter length={filteredPlantList.length} />
-      <FunFactDisplay />
       <PlantList plants={filteredPlantList} session={session} />
     </>
   );
