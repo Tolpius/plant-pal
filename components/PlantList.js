@@ -2,7 +2,7 @@ import useLocalStorage from "use-local-storage";
 import Card from "./Card";
 import styled from "styled-components";
 
-export default function PlantList({ plants }) {
+export default function PlantList({ plants, session }) {
   const [ownedPlantIds, setOwnedPlantIds] = useLocalStorage(
     "ownedPlantIds",
     []
@@ -26,6 +26,7 @@ export default function PlantList({ plants }) {
               plant={plant}
               isOwned={isOwned}
               onToggleOwned={() => handleToggleOwned(plant._id, isOwned)}
+              session={session}
             />
           </li>
         );
