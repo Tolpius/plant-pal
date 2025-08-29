@@ -4,40 +4,45 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import dbConnect from "@/db/dbConnect";
 import User from "@/db/models/User";
 
-const providers = [
-  GoogleProvider({
-    clientId: process.env.GOOGLE_ID,
-    clientSecret: process.env.GOOGLE_SECRET,
-  }),
-];
-
-if (process.env.VERCEL_ENV === "preview") {
-  providers.push(
-    CredentialsProvider({
-      name: "credentials",
-      credentials: {
-        username: { label: "Username", type: "text", placeholder: "username" },
-        password: { label: "Password", type: "password", placeholder: "password" },
-      },
-      async authorize(credentials) {
-        // Simulierter Login
-        if (credentials.username === process.env.PREVIEW_USER_USERNAME && credentials.password === process.env.PREVIEW_USER_PASSWORD) {
-          // Objekt für Session und DB
-          return {
-            name: "Neuer Fisch",
-            email: "test@example.com",
-            id: process.env.PREVIEW_USER_ID,
-            provider: "preview_credentials"
-          };
-        }
-        return null;
-      },
-    })
-  );
-}
-
 export const authOptions = {
-  providers,
+  providers: [
+    process.env.VERCEL_ENV === "preview"
+      ? CredentialsProvider({
+          name: "credentials",
+          credentials: {
+            username: {
+              label: "Username",
+              type: "text",
+              placeholder: "username",
+            },
+            password: {
+              label: "Password",
+              type: "password",
+              placeholder: "password",
+            },
+          },
+          async authorize(credentials) {
+            // Simulated login depending on environment
+            if (
+              credentials.username === process.env.PREVIEW_USER_USERNAME &&
+              credentials.password === process.env.PREVIEW_USER_PASSWORD
+            ) {
+              // Object for Session and DB
+              return {
+                name: "Neuer Fisch",
+                email: "test@example.com",
+                id: process.env.PREVIEW_USER_ID,
+                provider: "preview_credentials",
+              };
+            }
+            return null;
+          },
+        })
+      : GoogleProvider({
+          clientId: process.env.GOOGLE_ID,
+          clientSecret: process.env.GOOGLE_SECRET,
+        }),
+  ],
   callbacks: {
     async signIn({ user, account }) {
       await dbConnect();
@@ -46,7 +51,10 @@ export const authOptions = {
       // Credentials (Preview): use user.id as unique identifier
       let query;
       if (account) {
-        query = { provider: account.provider, providerAccountId: account.providerAccountId };
+        query = {
+          provider: account.provider,
+          providerAccountId: account.providerAccountId,
+        };
       } else {
         query = { provider: user.provider, providerAccountId: user.id };
       }
