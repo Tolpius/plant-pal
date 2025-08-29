@@ -6,7 +6,12 @@ import PlantCounter from "@/components/PlantCounter";
 import PlantFilter from "@/components/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
 import FunFactDisplay from "@/components/FunFact";
+<<<<<<< HEAD
 import { useSession } from "next-auth/react";
+=======
+import PlantSlider from "@/components/PlantsCarousel";
+import PlantCarousel from "@/components/PlantsCarousel";
+>>>>>>> feature/carousel
 
 export default function HomePage() {
   const { data, isLoading } = useSWR("/api/plants");
@@ -39,9 +44,17 @@ export default function HomePage() {
         });
   return (
     <>
+<<<<<<< HEAD
       <PlantFilter onFilter={setFilters} />
       <PlantCounter length={filteredPlantList.length} />
       <PlantList plants={filteredPlantList} session={session} />
+=======
+      {/* <PlantFilter onFilter={setFilters} />
+      <PlantCounter length={filteredPlantList.length} /> */}
+      {/* <FunFactDisplay /> */}
+      <PlantCarousel plants={filteredPlantList} />
+      {/* <PlantList plants={filteredPlantList} /> */}
+>>>>>>> feature/carousel
     </>
   );
 }

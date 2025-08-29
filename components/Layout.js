@@ -17,6 +17,7 @@ export default function Layout({ children }) {
      {!session && <SessionButton/>}
       <Headline>Plant Pal</Headline>
       <Main>{children}</Main>
+      {/* <Navbar /> */}
     </>
   );
 }
