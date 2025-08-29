@@ -11,7 +11,7 @@ export default function Layout({ children }) {
       </Head>
       <Headline>Plant Pal</Headline>
       <Main>{children}</Main>
-      <Navbar />
+      {/* <Navbar /> */}
     </>
   );
 }
