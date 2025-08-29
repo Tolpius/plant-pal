@@ -12,7 +12,7 @@ export default async function handler(request, response) {
     return response.status(401).json({ error: "Not authenticated" });
   }
   if (token.role !== "admin" && token.id !== userId) {
-    return res.status(403).json({ error: "Access denied" });
+    return response.status(403).json({ error: "Access denied" });
   }
 
   await dbConnect();
