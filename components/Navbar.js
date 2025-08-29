@@ -19,7 +19,7 @@ export default function Navbar() {
   return (
     <StyledNavbar>
       {/* Linke Seite: Logo oder leer */}
-      <Logo>🌱 PlantPal</Logo>
+      <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
 
       {/* Rechte Seite */}
       <RightMenu>
@@ -88,9 +88,13 @@ const StyledNavbar = styled.nav`
   z-index: 1000;
 `;
 
-const Logo = styled.div`
+const Logo = styled(Link)`
   font-weight: bold;
   font-size: 1.25rem;
+  text-decoration: none;
+  &:visited{
+    color: inherit;
+  }
 `;
 
 const RightMenu = styled.div`
