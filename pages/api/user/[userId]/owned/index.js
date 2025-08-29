@@ -16,16 +16,18 @@ export default async function handler(request, response) {
   }
 
   await dbConnect();
+  try {
 
   if (request.method === "GET") {
-    try {
       const user = await User.findById(userId);
       if (!user) {
         return response.status(404).json({ error: "User not found" });
       }
       response.status(200).json(user.owned);
-    } catch (error) {
-      response.status(500).json({ success: false, error: error.message });
+    } 
     }
+    catch (error) {
+      response.status(500).json({ success: false, error: error.message });
   }
 }
+
