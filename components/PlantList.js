@@ -1,25 +1,42 @@
-import useLocalStorage from "use-local-storage";
 import Card from "./Card";
 import styled from "styled-components";
+import useSWR, { mutate } from "swr";
 
 export default function PlantList({ plants, session }) {
-  const [ownedPlantIds, setOwnedPlantIds] = useLocalStorage(
-    "ownedPlantIds",
-    []
-  );
+  const userId = session?.user.id;
+  const swrUrl = session ? `/api/user/${userId}/owned` : null;
+  const { data: ownedPlantIds } = useSWR(swrUrl);
 
-  function handleToggleOwned(plantId, isOwned) {
-    if (isOwned) {
-      setOwnedPlantIds(ownedPlantIds.filter((id) => id !== plantId));
-    } else {
-      setOwnedPlantIds([...ownedPlantIds,plantId]);
+  async function handleToggleOwned(plantId, isOwned) {
+    //nothing toDo if not logged in
+    if (!session) return;
+
+    //define fetch options for toggle
+    const fetchUrl = `/api/user/${userId}/owned/${plantId}`;
+    const fetchOptions = {
+      method: isOwned ? "DELETE" : "POST",
+    };
+
+    // Optimistic UI Update
+    if (ownedPlantIds) {
+      mutate(swrUrl, isOwned
+        ? ownedPlantIds.filter(id => id !== plantId)
+        : [...ownedPlantIds, plantId],
+        false //false = no revalidation for now
+      );
+
+      //send API call
+      await fetch(fetchUrl, fetchOptions);
+
+      //SWR Revalidate
+      mutate(swrUrl);
     }
   }
 
   return (
     <StyledPlantsList>
       {plants.map((plant) => {
-        const isOwned = ownedPlantIds.includes(plant._id);
+        const isOwned = ownedPlantIds?.includes(plant._id);
         return (
           <li key={plant._id}>
             <Card
