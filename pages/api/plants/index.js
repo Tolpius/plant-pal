@@ -1,24 +1,33 @@
-import dbConnect from "@/db/dbConnect"; 
+import dbConnect from "@/db/dbConnect";
 import Plant from "@/db/models/Plant";
+import { getToken } from "next-auth/jwt";
 
 export default async function handler(request, response) {
-  await dbConnect();
+  try {
+    await dbConnect();
 
-  if (request.method === "GET") {
-    try {
+    if (request.method === "GET") {
       const plants = await Plant.find();
-      response.status(200).json(plants);
-    } catch (error) {
-      response.status(500).json({ success: false, error: error.message });
+      return response.status(200).json(plants);
     }
-  } else if (request.method === "POST") {
-    try {
+    //every reqest method except "GET" is protected
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+    if (!token) {
+      return response.status(401).json({ error: "Not authenticated" });
+    }
+
+    if (request.method === "POST") {
       const plant = await Plant.create(request.body);
-      response.status(201).json({ success: true, data: plant });
-    } catch (error) {
-      response.status(400).json({ success: false, error: error.message });
+      return response.status(201).json({ success: true, data: plant });
+    } else {
+      return response
+        .status(405)
+        .json({ success: false, message: "Method not allowed" });
     }
-  } else {
-    response.status(405).json({ success: false, message: "Method not allowed" });
+  } catch (error) {
+    return response.status(500).json({ success: false, error: error.message });
   }
 }

@@ -7,12 +7,14 @@ export default async function handler(request, response) {
   if (request.method === "GET") {
     try {
       const funfacts = await Funfact.find();
-      response.status(200).json(funfacts);
+      return response.status(200).json(funfacts);
     } catch (error) {
-      response.status(500).json({ success: false, error: error.message });
+      return response
+        .status(500)
+        .json({ success: false, error: error.message });
     }
   } else {
-    response
+    return response
       .status(405)
       .json({ success: false, message: "Method not allowed" });
   }

@@ -12,7 +12,7 @@ export default async function handler(request, response) {
     return response.status(401).json({ error: "Not authenticated" });
   }
   if (token.role !== "admin" && token.id !== userId) {
-    return res.status(403).json({ error: "Access denied" });
+    return response.status(403).json({ error: "Access denied" });
   }
 
   await dbConnect();
@@ -23,7 +23,7 @@ export default async function handler(request, response) {
       if (!user) {
         return response.status(404).json({ error: "User not found" });
       }
-      response.status(200).json(user.owned);
+     return response.status(200).json(user.owned);
     } 
     }
     catch (error) {
