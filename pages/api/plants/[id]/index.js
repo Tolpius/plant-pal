@@ -14,7 +14,7 @@ export default async function handler(request, response) {
           .status(404)
           .json({ success: false, message: "Plant not found" });
       }
-      response.status(200).json(plant);
+    return response.status(200).json(plant);
     }
 
     //every reqest method except "GET" is protected
@@ -36,7 +36,7 @@ export default async function handler(request, response) {
           .status(404)
           .json({ success: false, message: "Plant not found" });
       }
-      response.status(200).json({ success: true, data: plant });
+      return response.status(200).json({ success: true, data: plant });
     } else if (request.method === "DELETE") {
       const deleted = await Plant.findByIdAndDelete(id);
       if (!deleted) {
@@ -44,13 +44,13 @@ export default async function handler(request, response) {
           .status(404)
           .json({ success: false, message: "Plant not found" });
       }
-      response.status(200).json({ success: true, message: "Plant deleted" });
+     return response.status(200).json({ success: true, message: "Plant deleted" });
     } else {
-      response
+     return response
         .status(405)
         .json({ success: false, message: "Method not allowed" });
     }
   } catch (error) {
-    response.status(500).json({ success: false, error: error.message });
+   return response.status(500).json({ success: false, error: error.message });
   }
 }

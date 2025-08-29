@@ -8,7 +8,7 @@ export default async function handler(request, response) {
 
     if (request.method === "GET") {
       const plants = await Plant.find();
-      response.status(200).json(plants);
+      return response.status(200).json(plants);
     }
     //every reqest method except "GET" is protected
     const token = await getToken({
@@ -21,13 +21,13 @@ export default async function handler(request, response) {
 
     if (request.method === "POST") {
       const plant = await Plant.create(request.body);
-      response.status(201).json({ success: true, data: plant });
+      return response.status(201).json({ success: true, data: plant });
     } else {
-      response
+      return response
         .status(405)
         .json({ success: false, message: "Method not allowed" });
     }
   } catch (error) {
-    response.status(500).json({ success: false, error: error.message });
+    return response.status(500).json({ success: false, error: error.message });
   }
 }
