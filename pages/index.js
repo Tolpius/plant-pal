@@ -5,7 +5,6 @@ import { useState } from "react";
 import PlantCounter from "@/components/PlantCounter";
 import PlantFilter from "@/components/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
-import FunFactDisplay from "@/components/FunFact";
 import { useSession } from "next-auth/react";
 
 export default function HomePage() {

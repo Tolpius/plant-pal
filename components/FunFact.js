@@ -34,7 +34,9 @@ export default function FunFactDisplay() {
 
   return (
     <Wrapper>
-      <LightButton onClick={handleClick}><LightbulbIcon size="28" weight="regular"/></LightButton>
+      <LightButton onClick={handleClick}>
+        <LightbulbIcon className="icon" size="24" weight="regular" />
+      </LightButton>
       {funFactPopUp && (
         <PopUpOverlay onClick={() => setFunFactPopUp(false)}>
           <StyledPopUpFunFact onClick={(event) => event.stopPropagation()}>
@@ -61,7 +63,7 @@ const Wrapper = styled.div`
 const LightButton = styled.button`
   padding: 0;
   background: transparent;
-  border: transparent;
+  border: none;
   color: #444;
 `;
 

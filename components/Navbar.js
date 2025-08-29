@@ -22,6 +22,7 @@ export default function Navbar() {
     <StyledNavbar>
       <NavLink href="/owned">
         <HouseIcon
+          className="icon"
           size={28}
           weight={currentPath === "/owned" ? "fill" : "regular"}
           aria-label="My Plants"
@@ -29,6 +30,7 @@ export default function Navbar() {
       </NavLink>
       <NavLink href="/catalogue">
         <BookOpenTextIcon
+          className="icon"
           size={28}
           weight={currentPath === "/catalogue" ? "fill" : "regular"}
           aria-label="Owned plant list"
@@ -42,10 +44,16 @@ export default function Navbar() {
         />
       </NavItem>
       <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-        <SignOutIcon size={28} weight="regular" aria-label="Owned plant list" />
+        <SignOutIcon
+          className="icon"
+          size={28}
+          weight="regular"
+          aria-label="Owned plant list"
+        />
       </NavButton>{" "}
       <NavButton href="/owned">
         <ListIcon
+          className="icon"
           size={28}
           weight={currentPath === "/owned" ? "fill" : "regular"}
           aria-label="Owned plant list"
