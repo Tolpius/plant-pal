@@ -25,6 +25,7 @@ export default function Navbar() {
       <RightMenu>
         {!session ? (
           <NavButton onClick={() => signIn({ callbackUrl: "/owned" })}>
+            <p>Login</p>
             <SignInIcon size={28} weight="regular" aria-label="Login" />
           </NavButton>
         ) : (
