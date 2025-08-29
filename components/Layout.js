@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import Head from "next/head";
-import Headline from "./Headline";
 import Navbar from "./Navbar.js";
 import SessionButton from "./session/SessionButton";
 import { useSession } from "next-auth/react";
-  
 
 export default function Layout({ children }) {
   const { data: session } = useSession();
@@ -13,11 +11,9 @@ export default function Layout({ children }) {
       <Head>
         <title>Plant Pal</title>
       </Head>
-      {session && <Navbar />}
-     {!session && <SessionButton/>}
-      <Headline>Plant Pal</Headline>
+      <Navbar />
       <Main>{children}</Main>
-      {/* <Navbar /> */}
+      <Navbar />
     </>
   );
 }

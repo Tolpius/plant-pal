@@ -1,22 +1,15 @@
 import useSWR from "swr";
-
-import PlantList from "@/components/PlantList";
 import { useState } from "react";
-import PlantCounter from "@/components/PlantCounter";
-import PlantFilter from "@/components/filter/PlantFilter";
-import MessageNoPlants from "@/components/MessageNoPlants";
-import FunFactDisplay from "@/components/FunFact";
-<<<<<<< HEAD
 import { useSession } from "next-auth/react";
-=======
-import PlantSlider from "@/components/PlantsCarousel";
+import styled from "styled-components";
+
+import MessageNoPlants from "@/components/MessageNoPlants";
 import PlantCarousel from "@/components/PlantsCarousel";
->>>>>>> feature/carousel
 
 export default function HomePage() {
   const { data, isLoading } = useSWR("/api/plants");
   const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
-  const {data: session, status: sessionStatus} = useSession();
+  const { data: session, status: sessionStatus } = useSession();
 
   if (isLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
@@ -43,18 +36,16 @@ export default function HomePage() {
           return matchesLight && matchesWater;
         });
   return (
-    <>
-<<<<<<< HEAD
-      <PlantFilter onFilter={setFilters} />
-      <PlantCounter length={filteredPlantList.length} />
-      <PlantList plants={filteredPlantList} session={session} />
-=======
-      {/* <PlantFilter onFilter={setFilters} />
-      <PlantCounter length={filteredPlantList.length} /> */}
-      {/* <FunFactDisplay /> */}
+    <PageContainer>
       <PlantCarousel plants={filteredPlantList} />
-      {/* <PlantList plants={filteredPlantList} /> */}
->>>>>>> feature/carousel
-    </>
+    </PageContainer>
   );
 }
+
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center; // horizontal zentriert
+  justify-content: center; // vertikal zentriert
+  min-height: calc(100vh - 60px); // Navbar Höhe abziehen
+`;
