@@ -6,12 +6,14 @@ import PlantCounter from "@/components/PlantCounter";
 import PlantFilter from "@/components/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
 import FunFactDisplay from "@/components/FunFact";
+import { useSession } from "next-auth/react";
 
 export default function HomePage() {
   const { data, isLoading } = useSWR("/api/plants");
   const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
+  const {data: session, status: sessionStatus} = useSession();
 
-  if (isLoading) {
+  if (isLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
   }
 
@@ -40,7 +42,7 @@ export default function HomePage() {
       <PlantFilter onFilter={setFilters} />
       <PlantCounter length={filteredPlantList.length} />
       <FunFactDisplay />
-      <PlantList plants={filteredPlantList} />
+      <PlantList plants={filteredPlantList} session={session} />
     </>
   );
 }

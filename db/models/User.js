@@ -8,6 +8,7 @@ const UserSchema = new Schema(
     provider: String,
     providerAccountId: String,
     role: { type: String, enum: ["user", "admin"], default: "user" },
+    owned: { type: [String], default: [] },
   },
   { timestamps: true }
 );
