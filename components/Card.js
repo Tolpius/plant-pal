@@ -1,7 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
-
-import HeartButton from "./HeartButton";
+import OwnedButton from "./OwnedButton";
 import Link from "next/link";
 
 export default function Card({ plant, onToggleOwned, isOwned, session }) {
@@ -21,7 +20,7 @@ export default function Card({ plant, onToggleOwned, isOwned, session }) {
         </ImageWrapper>
         <TextWrapper>
           {session && (
-            <HeartButton
+            <OwnedButton
               isOwned={isOwned}
               onToggleOwned={onToggleOwned}
               aria-label={`Toggle owned for ${plant.name}`}
