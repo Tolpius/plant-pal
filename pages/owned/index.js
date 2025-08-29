@@ -8,7 +8,6 @@ import PlantCounter from "@/components/PlantCounter";
 export default function Owned() {
   const { data, isLoading } = useSWR("/api/plants");
   const [ownedPlantIds] = useLocalStorage("ownedPlantIds", []);
-  const [filteredPlants, setFilteredPlants] = useState();
   const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
 
   if (isLoading) {
