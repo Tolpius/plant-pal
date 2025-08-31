@@ -2,13 +2,13 @@ import useSWR from "swr";
 
 import PlantList from "@/components/PlantList";
 import { useState } from "react";
-import PlantCounter from "@/components/PlantCounter";
+
 import PlantFilter from "@/components/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
 import { useSession } from "next-auth/react";
 
 export default function Catalogue() {
-  const { data, isLoading } = useSWR("/api/plants");
+  const { data, isLoading } = useSWR("/api/catalogue");
   const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
   const { data: session, status: sessionStatus } = useSession();
 

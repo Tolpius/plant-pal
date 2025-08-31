@@ -6,8 +6,8 @@ export default async function handler(request, response) {
     await dbConnect();
 
     if (request.method === "GET") {
-      const catalogues = await Catalogue.find();
-      return response.status(200).json(catalogues);
+      const catalogue = await Catalogue.find();
+      return response.status(200).json(catalogue);
     }
   } catch (error) {
     return response.status(500).json({ success: false, error: error.message });
