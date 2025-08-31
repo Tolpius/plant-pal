@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 export default function Catalogue() {
   const { data, isLoading } = useSWR("/api/plants");
   const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
-  const {data: session, status: sessionStatus} = useSession();
+  const { data: session, status: sessionStatus } = useSession();
 
   if (isLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
@@ -39,7 +39,6 @@ export default function Catalogue() {
   return (
     <>
       <PlantFilter onFilter={setFilters} />
-      <PlantCounter length={filteredPlantList.length} />
       <PlantList plants={filteredPlantList} session={session} />
     </>
   );
