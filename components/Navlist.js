@@ -7,23 +7,34 @@ import {
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
-import { useRouter } from "next/router";
 import { signOut, signIn, useSession } from "next-auth/react";
 import FunFactDisplay from "./FunFact";
 
-export default function Navbar({
+export default function Navlist({
   onToggleNavlist,
   isExtendedNavList,
   session,
   currentPath,
 }) {
-  return (
-    <StyledNavbar>
-      {/* Linke Seite: Logo oder leer */}
-      <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
 
-      {/* Rechte Seite */}
-      <RightMenu>
+    console.log('isExtendedNavList: ', isExtendedNavList);
+    
+  return (
+    <>
+      <StyledNavlist>
+        {/* Linke Seite: Logo oder leer */}
+        <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
+        <NavButton onClick={() => onToggleNavlist()}>
+          <ListIcon
+            size={28}
+            weight={isExtendedNavList === "true" ? "fill" : "regular"}
+            aria-label="Extended Navlist"
+          />
+        </NavButton>
+      </StyledNavlist>
+
+     
+      <ExtendedMenu>
         {!session ? (
           <NavButton
             onClick={() => signIn(undefined, { callbackUrl: "/owned" })}
@@ -61,23 +72,16 @@ export default function Navbar({
               <SignOutIcon size={28} weight="regular" aria-label="Logout" />
             </NavButton>
 
-            <NavButton onClick={() => onToggleNavlist()}>
-              <ListIcon
-                size={28}
-                weight={isExtendedNavList === "true" ? "fill" : "regular"}
-                aria-label="Extended Navlist"
-              />
-            </NavButton>
           </>
         )}
-      </RightMenu>
-    </StyledNavbar>
+      </ExtendedMenu>
+    </>
   );
 }
 
 // ================= Styled Components =================
 
-const StyledNavbar = styled.nav`
+const StyledNavlist = styled.nav`
   position: sticky;
   top: 0;
   left: 0;
@@ -100,10 +104,14 @@ const Logo = styled(Link)`
   }
 `;
 
-const RightMenu = styled.div`
+
+const ExtendedMenu = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+  justify-content: column;
+  background-color: green;
+  height: 500px;
 `;
 
 const NavLink = styled(Link)`
