@@ -16,9 +16,6 @@ const lightNeedMap = {
   1: "⛅",
   2: "🌤️",
   3: "☀️",
-  "Full Shade": "⛅",
-  "Partial Shade": "🌤️",
-  "Full Sun": "☀️",
 };
 
 const waterNeedMap = {
