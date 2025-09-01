@@ -17,7 +17,6 @@ export default function Navlist({
   currentPath,
   handleClick,
 }) {
-  console.log("isExtendedNavList: ", isExtendedNavList);
 
   return (
     <>
@@ -62,8 +61,9 @@ export default function Navlist({
             </NavLink>
 
             <NavItem>
-              Fun Fact
+              
               <FunFactDisplay
+                isExtendedNavList={isExtendedNavList}
                 onClick={() => handleClick()}
                 size={26}
                 weight={currentPath === "/owned" ? "fill" : "regular"}
