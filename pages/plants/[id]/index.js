@@ -22,16 +22,12 @@ const waterNeedMap = {
   1: "💧",
   2: "💧💧",
   3: "💧💧💧",
-  Low: "💧",
-  Medium: "💧💧",
-  High: "💧💧💧",
 };
 
 const seasonMap = {
   spring: "🌸 Spring",
   summer: "☀️ Summer",
   autumn: "🍂 Autumn",
-  fall: "🍂 Autumn",
   winter: "❄️ Winter",
 };
 
