@@ -15,6 +15,7 @@ export default function Navlist({
   isExtendedNavList,
   session,
   currentPath,
+  handleClick,
 }) {
   console.log("isExtendedNavList: ", isExtendedNavList);
 
@@ -42,7 +43,7 @@ export default function Navlist({
           </NavButton>
         ) : (
           <>
-            <NavLink href="/owned">
+            <NavLink onClick={() => onToggleNavlist()} href="/owned">
               <StyledText>Home</StyledText>
               <HouseIcon
                 size={28}
@@ -51,7 +52,7 @@ export default function Navlist({
               />
             </NavLink>
 
-            <NavLink href="/catalogue">
+            <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
               Catalogue
               <BookOpenTextIcon
                 size={28}
@@ -63,6 +64,7 @@ export default function Navlist({
             <NavItem>
               Fun Fact
               <FunFactDisplay
+                onClick={() => handleClick()}
                 size={26}
                 weight={currentPath === "/owned" ? "fill" : "regular"}
                 aria-label="Fun Facts"
@@ -173,5 +175,5 @@ const NavItem = styled.div`
 `;
 
 const StyledText = styled.p`
-padding: 0px, 25px;
-`
+  padding: 0px, 25px;
+`;
