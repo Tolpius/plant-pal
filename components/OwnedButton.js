@@ -38,9 +38,9 @@ const StyledOwnedButton = styled.button`
   border-width: 1px;
   width: auto;
   height: auto;
-  bottom: -15px;
+  /* bottom: -15px; */
   background: white;
   border-radius: 3px;
-  padding: 4px;
+  padding: var(--pd-sm);
   z-index: 2;
 `;

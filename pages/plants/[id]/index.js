@@ -150,6 +150,7 @@ const StyledBotanicalName = styled.p`
   margin-top: 8px;
   font-style: italic;
   color: var(--color-gray-600);
+  font-size: var(--fs-sm);
 `;
 
 const StyledSection = styled.h4`

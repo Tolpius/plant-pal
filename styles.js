@@ -5,13 +5,15 @@ export default createGlobalStyle`
   *::before,
   *::after {
     box-sizing: border-box;
+    margin: 0;
   }
 
   body {
     margin: 0;
-    /* font-family: system-ui }; */
     font-family: var(--font-body);
-  background-color: var(--color-beige-100)}
+  background-color: var(--color-beige-100);
+font-size: var(--fs-md);
+}
    
 
   :root {

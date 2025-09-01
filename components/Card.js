@@ -64,6 +64,7 @@ const StyledImage = styled(Image)`
 `;
 
 const TextWrapper = styled.div`
+  padding: var(--pd-md);
   font-family: var(--font-headline);
   color: var(--color-gray-800);
   flex-grow: 1;
@@ -76,9 +77,11 @@ const TextWrapper = styled.div`
 
 const StyledName = styled.h3`
   font-size: var(--fs-xl);
+  padding: var(--pd-sm);
 `;
 
 const StyledBotanicalName = styled.p`
   font-style: italic;
   color: var(--color-gray-600);
+  font-size: var(--fs-sm);
 `;
