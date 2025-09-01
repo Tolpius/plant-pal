@@ -77,7 +77,7 @@ export default function DetailsPage() {
         <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
       </NameWrapper>
       <p>{plant.description}</p>
-      <h4>Care</h4>
+      <StyledSection>Care</StyledSection>
       <StyledInfoRow>
         <StyledCareInfo>Plant likes:</StyledCareInfo>
         <StyledCareInfo>
@@ -142,12 +142,18 @@ const NameWrapper = styled.div`
 `;
 
 const StyledPlantName = styled.h3`
+  font-size: var(--fs-xl);
   margin-bottom: 8px;
 `;
 
 const StyledBotanicalName = styled.p`
   margin-top: 8px;
   font-style: italic;
+  color: var(--color-gray-600);
+`;
+
+const StyledSection = styled.h4`
+  font-size: var(--fs-lg);
 `;
 
 const StyledInfoRow = styled.div`

@@ -26,8 +26,8 @@ export default function Card({ plant, onToggleOwned, isOwned, session }) {
               aria-label={`Toggle owned for ${plant.name}`}
             />
           )}
-          <h3>{plant.name}</h3>
-          <p>{plant.botanicalName}</p>
+          <StyledName>{plant.name}</StyledName>
+          <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
         </TextWrapper>
       </CardWrapper>
     </StyledLink>
@@ -64,10 +64,21 @@ const StyledImage = styled(Image)`
 `;
 
 const TextWrapper = styled.div`
+  font-family: var(--font-headline);
+  color: var(--color-gray-800);
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 80px;
+`;
+
+const StyledName = styled.h3`
+  font-size: var(--fs-xl);
+`;
+
+const StyledBotanicalName = styled.p`
+  font-style: italic;
+  color: var(--color-gray-600);
 `;
