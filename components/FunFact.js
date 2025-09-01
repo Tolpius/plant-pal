@@ -64,7 +64,7 @@ const LightButton = styled.button`
   padding: 0;
   background: transparent;
   border: none;
-  color: #444;
+  color: var(--color-beige-100);
 `;
 
 const PopUpOverlay = styled.button`

@@ -81,7 +81,7 @@ const StyledNavbar = styled.nav`
   top: 0;
   left: 0;
   width: 100%;
-  background: white;
+  background: var(--color-green-500);
   border-bottom: 1px solid #e5e5e5;
   display: flex;
   justify-content: space-between;
@@ -109,7 +109,7 @@ const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #444;
+  color: var(--color-beige-100);
   transition: color 0.2s ease-in-out;
 
   &:hover {
@@ -123,7 +123,7 @@ const NavButton = styled.button`
   justify-content: center;
   background: transparent;
   border: none;
-  color: #444;
+  color: var(--color-beige-100);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 
@@ -136,7 +136,7 @@ const NavItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #444;
+  color: var(--color-beige-100);
   transition: color 0.2s ease-in-out;
 
   &:hover {
