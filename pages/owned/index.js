@@ -11,21 +11,24 @@ export default function Owned() {
   const { data: session, status: sessionStatus } = useSession();
   const userId = session?.user.id;
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
-  const { data: ownedPlantIds, isLoading: isOwnedPlantIdsLoading } = useSWR(swrUrl);
+  const { data: ownedPlantIds, isLoading: isOwnedPlantIdsLoading } =
+    useSWR(swrUrl);
 
-  if (isPlantsLoading || sessionStatus === "loading", isOwnedPlantIdsLoading) {
+  if (
+    (isPlantsLoading || sessionStatus === "loading", isOwnedPlantIdsLoading)
+  ) {
     return <p>Loading...</p>;
   }
 
-  if (!plantList|| !ownedPlantIds) {
+  if (!plantList || !ownedPlantIds) {
     return <p>Failed to load plantList!</p>;
   }
 
   const ownedData = ownedPlantIds
-    ? data.filter((plant) => ownedPlantIds.includes(plant._id))
+    ? plantList.filter((plant) => ownedPlantIds.includes(plant._id))
     : [];
 
-  if (ownedPlantList.length == 0) {
+  if (ownedData.length == 0) {
     return (
       <p>
         You dont own any plants. <br />
@@ -40,8 +43,8 @@ export default function Owned() {
 
   const filteredPlantList =
     filters.lightNeed.length === 0 && filters.waterNeed.length === 0
-      ? ownedPlantList
-      : ownedPlantList.filter((plant) => {
+      ? ownedData
+      : ownedData.filter((plant) => {
           const matchesLight =
             filters.lightNeed.length === 0 ||
             filters.lightNeed.includes(plant.lightNeed);

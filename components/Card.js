@@ -36,7 +36,7 @@ export default function Card({ plant, onToggleOwned, isOwned, session }) {
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: black;
+  color: var(--color-gray-800);
 `;
 
 const CardWrapper = styled.div`
@@ -48,7 +48,7 @@ const CardWrapper = styled.div`
   border-radius: 25px;
   overflow: hidden;
   height: 300px;
-  background-color: white;
+  background-color: var(--color-beige-200);
 `;
 
 const ImageWrapper = styled.div`

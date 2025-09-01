@@ -60,10 +60,11 @@ export default function DetailsPage() {
     <>
       <StyledHeadline>
         <BackButton />
-        {session &&
-        <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
-          <GearIcon size={32} />
-        </Link>}
+        {session && (
+          <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
+            <GearIcon size={32} />
+          </Link>
+        )}
       </StyledHeadline>
       <StyledImage
         src={plant.imageUrl || "/defaultImage.png"}
@@ -136,6 +137,7 @@ const StyledImage = styled(Image)`
 `;
 
 const NameWrapper = styled.div`
+  font-family: var(--font-headline);
   text-align: center;
 `;
 

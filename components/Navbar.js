@@ -24,7 +24,9 @@ export default function Navbar() {
       {/* Rechte Seite */}
       <RightMenu>
         {!session ? (
-          <NavButton onClick={() => signIn({ callbackUrl: "/owned" })}>
+          <NavButton
+            onClick={() => signIn(undefined, { callbackUrl: "/owned" })}
+          >
             <p>Login</p>
             <SignInIcon size={28} weight="regular" aria-label="Login" />
           </NavButton>
@@ -92,7 +94,7 @@ const Logo = styled(Link)`
   font-weight: bold;
   font-size: 1.25rem;
   text-decoration: none;
-  &:visited{
+  &:visited {
     color: inherit;
   }
 `;
