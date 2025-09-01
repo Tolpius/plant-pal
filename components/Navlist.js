@@ -16,24 +16,22 @@ export default function Navlist({
   session,
   currentPath,
 }) {
+  console.log("isExtendedNavList: ", isExtendedNavList);
 
-    console.log('isExtendedNavList: ', isExtendedNavList);
-    
   return (
     <>
       <StyledNavlist>
         {/* Linke Seite: Logo oder leer */}
         <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
-        <NavButton onClick={() => onToggleNavlist()}>
+        <NavlistButton onClick={() => onToggleNavlist()}>
           <ListIcon
             size={28}
             weight={isExtendedNavList === "true" ? "fill" : "regular"}
             aria-label="Extended Navlist"
           />
-        </NavButton>
+        </NavlistButton>
       </StyledNavlist>
 
-     
       <ExtendedMenu>
         {!session ? (
           <NavButton
@@ -45,6 +43,7 @@ export default function Navlist({
         ) : (
           <>
             <NavLink href="/owned">
+              <StyledText>Home</StyledText>
               <HouseIcon
                 size={28}
                 weight={currentPath === "/owned" ? "fill" : "regular"}
@@ -53,6 +52,7 @@ export default function Navlist({
             </NavLink>
 
             <NavLink href="/catalogue">
+              Catalogue
               <BookOpenTextIcon
                 size={28}
                 weight={currentPath === "/catalogue" ? "fill" : "regular"}
@@ -61,17 +61,18 @@ export default function Navlist({
             </NavLink>
 
             <NavItem>
+              Fun Fact
               <FunFactDisplay
-                size={28}
+                size={26}
                 weight={currentPath === "/owned" ? "fill" : "regular"}
                 aria-label="Fun Facts"
               />
             </NavItem>
 
             <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-              <SignOutIcon size={28} weight="regular" aria-label="Logout" />
+              Log Out{" "}
+              <SignOutIcon size={26} weight="regular" aria-label="Logout" />
             </NavButton>
-
           </>
         )}
       </ExtendedMenu>
@@ -104,23 +105,24 @@ const Logo = styled(Link)`
   }
 `;
 
-
 const ExtendedMenu = styled.div`
   display: flex;
-  align-items: center;
+  padding: 12px 22px;
   gap: 1rem;
-  justify-content: column;
+  flex-direction: column;
   background-color: green;
   height: 500px;
+  justify-content: right;
+  font-size: var(--fs-md);
 `;
 
 const NavLink = styled(Link)`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
   color: var(--color-beige-100);
   transition: color 0.2s ease-in-out;
-
+  text-decoration: none;
   &:hover {
     color: #000;
   }
@@ -129,7 +131,24 @@ const NavLink = styled(Link)`
 const NavButton = styled.button`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
+  background: transparent;
+  border: none;
+
+  padding: 0;
+  color: var(--color-beige-100);
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: #000;
+  }
+`;
+const NavlistButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+
   background: transparent;
   border: none;
   color: var(--color-beige-100);
@@ -144,7 +163,7 @@ const NavButton = styled.button`
 const NavItem = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
   color: var(--color-beige-100);
   transition: color 0.2s ease-in-out;
 
@@ -152,3 +171,7 @@ const NavItem = styled.div`
     color: #000;
   }
 `;
+
+const StyledText = styled.p`
+padding: 0px, 25px;
+`
