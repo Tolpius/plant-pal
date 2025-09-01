@@ -16,18 +16,25 @@ const lightNeedMap = {
   1: "⛅",
   2: "🌤️",
   3: "☀️",
+  "Full Shade": "⛅",
+  "Partial Shade": "🌤️",
+  "Full Sun": "☀️",
 };
 
 const waterNeedMap = {
   1: "💧",
   2: "💧💧",
   3: "💧💧💧",
+  Low: "💧",
+  Medium: "💧💧",
+  High: "💧💧💧",
 };
 
 const seasonMap = {
   spring: "🌸 Spring",
   summer: "☀️ Summer",
   autumn: "🍂 Autumn",
+  fall: "🍂 Autumn",
   winter: "❄️ Winter",
 };
 
@@ -60,10 +67,11 @@ export default function DetailsPage() {
     <>
       <StyledHeadline>
         <BackButton />
-        {session &&
-        <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
-          <GearIcon size={32} />
-        </Link>}
+        {session && (
+          <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
+            <GearIcon size={32} />
+          </Link>
+        )}
       </StyledHeadline>
       <StyledImage
         src={plant.imageUrl || "/defaultImage.png"}
@@ -93,7 +101,9 @@ export default function DetailsPage() {
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
         {seasons.map((season) => (
           <li key={season}>
-            <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
+            <StyledCareInfo>
+              {seasonMap[season.toLowerCase()] ?? season}
+            </StyledCareInfo>
           </li>
         ))}
       </StyledInfoRow>
