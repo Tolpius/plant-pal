@@ -18,6 +18,9 @@ export default async function handler(request, response) {
     if (!token) {
       return response.status(401).json({ error: "Not authenticated" });
     }
+    if (token.role !== "admin"){
+      return response.status(403).json({error: "Forbidden"})
+    }
 
     if (request.method === "POST") {
       const plant = await Plant.create(request.body);
