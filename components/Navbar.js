@@ -18,10 +18,10 @@ export default function Navbar({
 }) {
   return (
     <StyledNavbar>
-      {/* Linke Seite: Logo oder leer */}
+      {/* Logo on the left side */}
       <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
 
-      {/* Rechte Seite */}
+      {/* Right side Menu */}
       <RightMenu>
         {!session ? (
           <NavButton
@@ -79,7 +79,7 @@ const StyledNavbar = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  z-index: 1000;
+  z-index: 10;
 `;
 
 const Logo = styled(Link)`
@@ -95,18 +95,6 @@ const RightMenu = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-`;
-
-const NavLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-beige-100);
-  transition: color 0.2s ease-in-out;
-
-  &:hover {
-    color: #000;
-  }
 `;
 
 const NavButton = styled.button`
@@ -125,6 +113,18 @@ const NavButton = styled.button`
 `;
 
 const NavItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-beige-100);
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: #000;
+  }
+`;
+
+const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;

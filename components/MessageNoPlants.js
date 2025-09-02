@@ -3,23 +3,21 @@ import styled from "styled-components";
 export default function MessageNoPlants() {
   return (
     <StyledMessage>
-      <p>There are no plants to admire.</p>
-      <p>Why are there no plants?? Who murdered them? 🥲</p>
-      <p>
-        You can add plants via the + button. Why don&apos;t you go ahead and try
-        it out?
-      </p>
+      <StyledText>There are no plants to admire.</StyledText>
+      <StyledText>Why are there no plants?? Who murdered them? 🥲</StyledText>
+      <StyledText>
+        Don&apos;t you worry, we are already looking into this problem.
+      </StyledText>
     </StyledMessage>
   );
 }
 
 const StyledMessage = styled.div`
   text-align: center;
+  align-items: center;
   padding: 10px;
   padding-top: 30px;
-  gap: 15px;
-text-align: center;
-font-size: var(--fs-lg);
+  font-size: var(--fs-lg);
 `;
 
 const StyledText = styled.p`

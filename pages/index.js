@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+
 import styled from "styled-components";
 
 import MessageNoPlants from "@/components/MessageNoPlants";
@@ -45,7 +46,7 @@ export default function HomePage() {
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center; // horizontal zentriert
-  justify-content: center; // vertikal zentriert
-  min-height: calc(100vh - 60px); // Navbar Höhe abziehen
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 60px);
 `;

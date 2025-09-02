@@ -74,11 +74,12 @@ const LightButton = styled.button`
   justify-content: end;
   background: transparent;
   border: none;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   width: 100%;
-  font-size: var(--fs-lg);
+  font-size: var(--font-size-lg);
+  transition: color 0.2s ease-in-out;
   &:hover {
-    color: #000;
+    color: var(--color-black);
   }
 `;
 

@@ -19,8 +19,8 @@ export default function Catalogue() {
   if (!data) {
     return <p>Failed to load plants!</p>;
   }
-const datas = []
-  if (datas.length === 0) {
+
+  if (data.length === 0) {
     return <MessageNoPlants />;
   }
 
@@ -49,5 +49,5 @@ const datas = []
 const StyledText = styled.p`
   padding-top: 10px;
   text-align: center;
-  font-size: var(--fs-lg);
+  font-size: var(--font-size-lg);
 `;

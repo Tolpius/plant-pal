@@ -20,7 +20,7 @@ export default function Navlist({
   return (
     <>
       <StyledNavlist>
-        {/* Linke Seite: Logo oder leer */}
+        {/* The Navbar is empty except for the logo and the menu icon */}
         <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
         <NavlistButton onClick={() => onToggleNavlist()}>
           <ListIcon

@@ -69,7 +69,7 @@ export default function Owned() {
 const StyledText = styled.p`
   padding-top: 10px;
   text-align: center;
-  font-size: var(--fs-xl);
+  font-size: var(--font-size-xl);
 `;
 
 const TextWrapper = styled.div`

@@ -31,9 +31,9 @@ const CardWrapper = styled.div`
   width: 220px;
   height: 300px;
   border: 1px solid black;
-  border-radius: 25px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background-color: white;
+  background-color: var(--color-neutral-light);
 `;
 
 const StyledImage = styled(Image)`
