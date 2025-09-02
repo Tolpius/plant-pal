@@ -1,6 +1,6 @@
 import { LightbulbIcon } from "@phosphor-icons/react";
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import useSWR from "swr";
 
 export default function FunFactDisplay(event) {
@@ -31,6 +31,7 @@ export default function FunFactDisplay(event) {
     }
     setFunFactPopUp(!funFactPopUp);
   }
+
   return (
     <Wrapper>
       {event.isExtendedNavList === true ? (
@@ -64,15 +65,19 @@ export default function FunFactDisplay(event) {
 const Wrapper = styled.div`
   position: relative;
   display: inline-block;
+  width: 100%;
 `;
 
 const LightButton = styled.button`
-  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: end;
   background: transparent;
   border: none;
   color: var(--color-beige-100);
+  width: 100%;
   font-size: var(--fs-lg);
-    &:hover {
+  &:hover {
     color: #000;
   }
 `;

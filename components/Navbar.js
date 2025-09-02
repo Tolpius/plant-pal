@@ -3,13 +3,12 @@ import {
   HouseIcon,
   ListIcon,
   SignInIcon,
-  SignOutIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
-import { useRouter } from "next/router";
-import { signOut, signIn, useSession } from "next-auth/react";
-import FunFactDisplay from "./FunFact";
+
+import { signIn } from "next-auth/react";
+import FunFactDisplay from "./FunFactDisplay";
 
 export default function Navbar({
   onToggleNavlist,
@@ -50,16 +49,8 @@ export default function Navbar({
             </NavLink>
 
             <NavItem>
-              <FunFactDisplay
-                size={28}
-                weight={currentPath === "/owned" ? "fill" : "regular"}
-                aria-label="Fun Facts"
-              />
+              <FunFactDisplay size={28} aria-label="Fun Facts" />
             </NavItem>
-
-            <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-              <SignOutIcon size={28} weight="regular" aria-label="Logout" />
-            </NavButton>
 
             <NavButton onClick={() => onToggleNavlist()}>
               <ListIcon

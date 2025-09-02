@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import styled from "styled-components";
 import { signOut, signIn, useSession } from "next-auth/react";
-import FunFactDisplay from "./FunFact";
+import FunFactDisplay from "./FunFactDisplay";
 
 export default function Navlist({
   onToggleNavlist,
@@ -17,7 +17,6 @@ export default function Navlist({
   currentPath,
   handleClick,
 }) {
-
   return (
     <>
       <StyledNavlist>
@@ -52,7 +51,7 @@ export default function Navlist({
             </NavLink>
 
             <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
-              Catalogue
+              <StyledText>Catalogue</StyledText>
               <BookOpenTextIcon
                 size={28}
                 weight={currentPath === "/catalogue" ? "fill" : "regular"}
@@ -60,16 +59,14 @@ export default function Navlist({
               />
             </NavLink>
 
-            <NavItem>
-              
+            <NavButton>
               <FunFactDisplay
                 isExtendedNavList={isExtendedNavList}
                 onClick={() => handleClick()}
                 size={26}
-                weight={currentPath === "/owned" ? "fill" : "regular"}
                 aria-label="Fun Facts"
               />
-            </NavItem>
+            </NavButton>
 
             <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
               Log Out{" "}
@@ -112,7 +109,7 @@ const ExtendedMenu = styled.div`
   padding: 12px 22px;
   gap: 1rem;
   flex-direction: column;
-  background-color: green;
+  background-color: var(--color-green-500);
   height: 500px;
   justify-content: right;
   font-size: var(--fs-md);
@@ -128,6 +125,7 @@ const NavLink = styled(Link)`
   &:hover {
     color: #000;
   }
+  border-bottom: 1px solid #000;
 `;
 
 const NavButton = styled.button`
@@ -136,12 +134,12 @@ const NavButton = styled.button`
   justify-content: end;
   background: transparent;
   border: none;
-
+  font-size: var(--fs-lg);
   padding: 0;
   color: var(--color-beige-100);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
-
+  border-bottom: 1px solid #000;
   &:hover {
     color: #000;
   }
@@ -168,7 +166,8 @@ const NavItem = styled.div`
   justify-content: end;
   color: var(--color-beige-100);
   transition: color 0.2s ease-in-out;
-
+  border-bottom: 1px solid #000;
+  font-size: var(--fs-lg);
   &:hover {
     color: #000;
   }
@@ -176,4 +175,5 @@ const NavItem = styled.div`
 
 const StyledText = styled.p`
   padding: 0px, 25px;
+  font-size: var(--fs-lg);
 `;

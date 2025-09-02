@@ -15,5 +15,13 @@ export default function MessageNoPlants() {
 
 const StyledMessage = styled.div`
   text-align: center;
-  padding: 30px;
+  padding: 10px;
+  padding-top: 30px;
+  gap: 15px;
+text-align: center;
+font-size: var(--fs-lg);
+`;
+
+const StyledText = styled.p`
+  padding-top: 10px;
 `;
