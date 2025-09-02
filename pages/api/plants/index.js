@@ -8,7 +8,8 @@ export default async function handler(request, response) {
 
     if (request.method === "GET") {
       const plants = await Plant.find();
-      return response.status(200).json(plants);
+      const publicPlants = plants.filter(plant => plant.isPublic === true)
+      return response.status(200).json(publicPlants);
     }
     //every reqest method except "GET" is protected
     const token = await getToken({
