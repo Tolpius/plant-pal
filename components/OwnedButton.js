@@ -4,29 +4,22 @@ import {
   PlusSquareIcon,
   PlusCircleIcon,
 } from "@phosphor-icons/react";
-export default function OwnedButton({ onToggleOwned, isOwned }) {
+export default function OwnedButton({ onAddOwned }) {
   function onClick(event) {
     event.preventDefault();
     event.stopPropagation();
-    onToggleOwned();
+    console.log("Trying to add plant!")
+    onAddOwned();
   }
 
   return (
     <StyledOwnedButton
       type="button"
       onClick={onClick}
-      aria-label={
-        isOwned ? "Remove from owned plants list" : "Add to owned plants list"
-      }
+      aria-label={"Add to owned plants list"}
     >
-      {isOwned ? (
-        <CheckCircleIcon weight="fill" color="darkgreen" />
-      ) : (
-        <>
-          <PlusSquareIcon color="darkgreen" />
-          <span>Add</span>
-        </>
-      )}
+      <PlusSquareIcon color="darkgreen" />
+      <span>Add</span>
     </StyledOwnedButton>
   );
 }

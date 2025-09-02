@@ -1,9 +1,16 @@
 import Image from "next/image";
 import styled from "styled-components";
 import OwnedButton from "./OwnedButton";
+import OwnedCounter from "./counters/OwnedCounter";
 import Link from "next/link";
+import useSWR from "swr";
 
-export default function Card({ plant, onToggleOwned, isOwned, session }) {
+export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
+  const { data: count, isLoading } = useSWR(
+    !isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null
+  );
+
+  if (isLoading) return <></>;
   return (
     <StyledLink
       href={`/plants/${plant._id}`}
@@ -19,12 +26,14 @@ export default function Card({ plant, onToggleOwned, isOwned, session }) {
           />
         </ImageWrapper>
         <TextWrapper>
-          {session && (
-            <OwnedButton
-              isOwned={isOwned}
-              onToggleOwned={onToggleOwned}
-              aria-label={`Toggle owned for ${plant.name}`}
-            />
+          {!isOwnedPlantList && (
+            <>
+              <OwnedButton
+                onAddOwned={onAddOwned}
+                aria-label={`Add plant to owned for ${plant.name}`}
+              />
+              <OwnedCounter length={count} />
+            </>
           )}
           <StyledName>{plant.name}</StyledName>
           <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
@@ -73,8 +82,6 @@ const TextWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 180px;
-
-
 `;
 
 const StyledName = styled.h3`

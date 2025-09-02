@@ -1,5 +1,5 @@
 import dbConnect from "@/db/dbConnect";
-import User from "@/db/models/User";
+import OwnedPlant from "@/db/models/OwnedPlant";
 import { getToken } from "next-auth/jwt";
 
 export default async function handler(request, response) {
@@ -19,11 +19,11 @@ export default async function handler(request, response) {
   try {
 
   if (request.method === "GET") {
-      const user = await User.findById(userId);
-      if (!user) {
-        return response.status(404).json({ error: "User not found" });
+      const plants = await OwnedPlant.find({userId});
+      if (!plants) {
+        return response.status(404).json({ error: "ownedPlants not found" });
       }
-     return response.status(200).json(user.owned);
+     return response.status(200).json(plants);
     } 
     }
     catch (error) {
