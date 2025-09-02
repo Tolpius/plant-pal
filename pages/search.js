@@ -1,13 +1,13 @@
 import BackButton from "@/components/BackButton";
 import PlantList from "@/components/PlantList";
 import { useSession } from "next-auth/react";
-import useSWR from "swr";
+import { useState } from "react";
 
 export default function SearchPage() {
   const { data: session, status: sessionStatus } = useSession();
-  const { data, isLoading } = useSWR("/api/plants");
+  const [data, setData] = useState([]);
 
-  if (isLoading || sessionStatus === "loading") {
+  if (sessionStatus === "loading") {
     return <p>Loading...</p>;
   }
 
@@ -18,15 +18,15 @@ export default function SearchPage() {
   async function handleSearch(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
+    const { query } = Object.fromEntries(formData.entries());
 
-    console.log(data);
-
-    const response = await fetch(`/api/plants/search?query=${data.query}`);
+    const response = await fetch(`/api/plants/search?query=${query}`);
+    const data = await response.json();
 
     if (!response.ok) {
       throw new Error(`Failed to search plant: ${response.statusText}`);
     }
+    setData(data);
   }
 
   return (
