@@ -3,7 +3,7 @@ import PlantList from "@/components/PlantList";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 
-export default function searchPage() {
+export default function SearchPage() {
   const { data: session, status: sessionStatus } = useSession();
   const { data, isLoading } = useSWR("/api/plants");
 
