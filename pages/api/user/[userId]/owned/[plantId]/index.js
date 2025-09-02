@@ -18,18 +18,14 @@ export default async function handler(request, response) {
     return response.status(403).json({ error: "Access denied" });
   }
 
-  await dbConnect();
-
   try {
+    await dbConnect();
     const user = await User.findById(userId);
     if (!user) return response.status(404).json({ error: "User not found" });
 
     switch (request.method) {
-      // GET: returns boolean if current plant is included in owned plants
-      case "GET":
-        return response.status(200).json(user.owned.includes(plantId));
-
-      // POST: Add Plant to OwnedList
+      // POST: Add Plant from Catalogue to OwnedList
+      // HERE THE PLANT ID OF THE CATALOGUE IS USED
       case "POST": {
         const plant = await Plant.findById(plantId);
         if (!plant) {
@@ -49,13 +45,20 @@ export default async function handler(request, response) {
         await ownedPlant.save();
         return response.status(200).json(ownedPlant);
       }
-
-      // DELETE: Remove Plant from OwnedList
+      // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
+      case "PUT": {
+        const ownedPlant = await ownedPlant.findByIdAndUpdate(
+          plantId,
+          request.body,
+          { new: true, runValidators: true }
+        );
+        return response.status(200).json(ownedPlant);
+      }
+      // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "DELETE": {
-        user.owned = user.owned.filter((id) => id !== plantId);
-        await user.save();
-
-        return response.status(200).json(user.owned);
+        console.log(request.body);
+        const ownedPlant = await ownedPlant.findByIdAndDelete(plantId);
+        return response.status(200).json(ownedPlant);
       }
 
       default:

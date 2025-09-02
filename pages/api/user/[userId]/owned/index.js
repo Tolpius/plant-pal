@@ -19,12 +19,14 @@ export default async function handler(request, response) {
   try {
     await dbConnect();
     switch (request.method) {
+      // GET: Get all ownedPlants belonging to the userId
       case "GET":
         const plants = await OwnedPlant.find({ userId });
         if (!plants) {
           return response.status(404).json({ error: "ownedPlants not found" });
         }
         return response.status(200).json(plants);
+        // POST: Add a completely new plant to catalogue(isPublic=false) and to OwnedList
       case "POST": {
         const plant = await Plant.create(request.body);
         const ownedPlant = new OwnedPlant({
