@@ -64,7 +64,7 @@ const LightButton = styled.button`
   padding: 0;
   background: transparent;
   border: none;
-  color: #444;
+  color: var(--color-beige-100);
 `;
 
 const PopUpOverlay = styled.button`
@@ -74,7 +74,7 @@ const PopUpOverlay = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 3;
+  z-index: 1005;
 `;
 
 const CancelButton = styled.button`
