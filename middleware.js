@@ -13,7 +13,7 @@ export async function middleware(req) {
     signInUrl.searchParams.set("callbackUrl", req.url);
     return NextResponse.redirect(signInUrl);
   }
-  if (token.role !== "admin") return NextResponse.redirect("/plants")
+  if (token.role !== "admin")  return NextResponse.redirect(new URL("/catalogue", req.url))
 }
 
   // Homepage and detailsPage free
