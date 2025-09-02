@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import Head from "next/head";
 import Navbar from "./Navbar.js";
-import SessionButton from "./session/SessionButton";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Navlist from "./Navlist.js";
 import { useRouter } from "next/router.js";
+import { ToastContainer } from "react-toastify";
 
 export default function Layout({ children }) {
   const { data: session } = useSession();
@@ -17,7 +17,7 @@ export default function Layout({ children }) {
   function onToggleNavlist() {
     setIsExtendedNavList(!isExtendedNavList);
   }
-  
+
   if (isExtendedNavList) {
     return (
       <>
@@ -45,6 +45,18 @@ export default function Layout({ children }) {
         currentPath={currentPath}
       />
       <Main>{children}</Main>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 }
