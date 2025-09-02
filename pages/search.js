@@ -15,12 +15,18 @@ export default function SearchPage() {
     return <p>Failed to load plants!</p>;
   }
 
-  function handleSearch(event) {
+  async function handleSearch(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
     console.log(data);
+
+    const response = await fetch(`/api/plants/search?query=${data.query}`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to search plant: ${response.statusText}`);
+    }
   }
 
   return (

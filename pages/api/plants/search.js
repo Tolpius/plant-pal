@@ -17,12 +17,23 @@ export default async function handler(request, response) {
 
     if (request.method === "GET") {
       const query = request.query.query;
+      if (!query)
+        response
+          .status(402)
+          .json({ success: false, message: "Specify the 'query' parameter" });
+      //const pattern = query.replace(" ", "|");
+
+      const keywords = query
+        .trim() //entf. Leers am start u end
+        .split(/\s+/); //bricht string in einzelne Wörter
+
+      const pattern = keywords.join("|"); // Monstera|Pothos
       const plants = await Plant.find({
         $or: [
           {
-            name: { $regex: query, $options: "i" },
+            name: { $regex: pattern, $options: "i" },
           },
-          { botanicalName: { $regex: query, $options: "i" } },
+          { botanicalName: { $regex: pattern, $options: "i" } },
         ],
       });
       return response.status(200).json(plants);
