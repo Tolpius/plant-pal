@@ -12,4 +12,7 @@ export default function BackButton({ href = "/", ariaLabel = "Go back" }) {
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  &:visited {
+    color: inherit;
+  }
 `;
