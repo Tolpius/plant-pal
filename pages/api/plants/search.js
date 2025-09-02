@@ -17,7 +17,9 @@ export default async function handler(request, response) {
 
     if (request.method === "GET") {
       const query = request.query.query;
-      const plants = await Plant.find({ name: query });
+      const plants = await Plant.find({
+        name: { $regex: query, $options: "i" },
+      });
       return response.status(200).json(plants);
     } else {
       return response
