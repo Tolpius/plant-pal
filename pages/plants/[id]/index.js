@@ -59,8 +59,8 @@ export default function DetailsPage() {
   return (
     <>
       <StyledHeadline>
-        <BackButton href={session ? "/catalogue" : "/"}/>
-        {session.user.role === "admin" && (
+        <BackButton href={session ? "/catalogue" : "/"} />
+        {session?.user?.role === "admin" && (
           <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
             <GearIcon size={32} />
           </Link>
@@ -98,7 +98,7 @@ export default function DetailsPage() {
           </li>
         ))}
       </StyledInfoRow>
-      {session.user.role === "admin" && (
+      {session?.user?.role === "admin" && (
         <StyledDeleteButton
           onClick={() => {
             setShowPopUp(true);
