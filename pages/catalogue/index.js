@@ -4,6 +4,7 @@ import PlantList from "@/components/PlantList";
 import { useState } from "react";
 
 import PlantFilter from "@/components/filter/PlantFilter";
+import AddLink from "@/components/AddLink";
 import MessageNoPlants from "@/components/MessageNoPlants";
 import { useSession } from "next-auth/react";
 
@@ -39,6 +40,7 @@ export default function Catalogue() {
   return (
     <>
       <PlantFilter onFilter={setFilters} />
+      <AddLink/>
       <PlantList plants={filteredPlantList} session={session} />
     </>
   );
