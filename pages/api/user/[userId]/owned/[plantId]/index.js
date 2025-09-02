@@ -3,7 +3,6 @@ import User from "@/db/models/User";
 import { getToken } from "next-auth/jwt";
 import OwnedPlant from "@/db/models/OwnedPlant";
 import Plant from "@/db/models/Plant";
-import mongoose from "mongoose";
 
 export default async function handler(request, response) {
   const { userId, plantId } = request.query;
@@ -24,6 +23,12 @@ export default async function handler(request, response) {
     if (!user) return response.status(404).json({ error: "User not found" });
 
     switch (request.method) {
+      // GET: returns the owned plant of userId and plantId
+      // HERE THE PLANT ID OF THE OWNED PLANT IS USED
+      case "GET": {
+        const ownedPlant = await OwnedPlant.findById(plantId);
+        return response.status(200).json(ownedPlant)
+      }
       // POST: Add Plant from Catalogue to OwnedList
       // HERE THE PLANT ID OF THE CATALOGUE IS USED
       case "POST": {

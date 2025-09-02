@@ -13,7 +13,7 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
   if (isLoading) return <></>;
   return (
     <StyledLink
-      href={`/plants/${plant._id}`}
+      href={isOwnedPlantList ? `/owned/${plant._id}` : `/plants/${plant._id}`}
       aria-label={`View details for ${plant.name}`}
     >
       <CardWrapper>
