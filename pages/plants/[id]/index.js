@@ -59,7 +59,7 @@ export default function DetailsPage() {
   return (
     <>
       <StyledHeadline>
-        <BackButton />
+        <BackButton href={session ? "/catalogue" : "/"}/>
         {session.user.role === "admin" && (
           <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
             <GearIcon size={32} />
