@@ -14,7 +14,7 @@ export default async function handler(request, response) {
           .status(404)
           .json({ success: false, message: "Plant not found" });
       }
-    return response.status(200).json(plant);
+      return response.status(200).json(plant);
     }
 
     //every reqest method except "GET" is protected
@@ -25,12 +25,13 @@ export default async function handler(request, response) {
     if (!token) {
       return response.status(401).json({ error: "Not authenticated" });
     }
-    if (token.role !== "admin"){
-      return response.status(403).json({error: "Forbidden"})
+    if (token.role !== "admin") {
+      return response.status(403).json({ error: "Forbidden" });
     }
 
     if (request.method === "PUT") {
-      const plant = await Plant.findByIdAndUpdate(id, request.body, {
+      const editedPlant = { ...request.body, isPublic: true };
+      const plant = await Plant.findByIdAndUpdate(id, editedPlant, {
         new: true,
         runValidators: true,
       });
@@ -47,13 +48,15 @@ export default async function handler(request, response) {
           .status(404)
           .json({ success: false, message: "Plant not found" });
       }
-     return response.status(200).json({ success: true, message: "Plant deleted" });
+      return response
+        .status(200)
+        .json({ success: true, message: "Plant deleted" });
     } else {
-     return response
+      return response
         .status(405)
         .json({ success: false, message: "Method not allowed" });
     }
   } catch (error) {
-   return response.status(500).json({ success: false, error: error.message });
+    return response.status(500).json({ success: false, error: error.message });
   }
 }
