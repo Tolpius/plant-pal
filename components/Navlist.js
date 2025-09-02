@@ -7,23 +7,32 @@ import {
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
-import { useRouter } from "next/router";
 import { signOut, signIn, useSession } from "next-auth/react";
 import FunFactDisplay from "./FunFact";
 
-export default function Navbar({
+export default function Navlist({
   onToggleNavlist,
   isExtendedNavList,
   session,
   currentPath,
+  handleClick,
 }) {
-  return (
-    <StyledNavbar>
-      {/* Linke Seite: Logo oder leer */}
-      <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
 
-      {/* Rechte Seite */}
-      <RightMenu>
+  return (
+    <>
+      <StyledNavlist>
+        {/* Linke Seite: Logo oder leer */}
+        <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
+        <NavlistButton onClick={() => onToggleNavlist()}>
+          <ListIcon
+            size={28}
+            weight={isExtendedNavList === "true" ? "fill" : "regular"}
+            aria-label="Extended Navlist"
+          />
+        </NavlistButton>
+      </StyledNavlist>
+
+      <ExtendedMenu>
         {!session ? (
           <NavButton
             onClick={() => signIn(undefined, { callbackUrl: "/owned" })}
@@ -33,7 +42,8 @@ export default function Navbar({
           </NavButton>
         ) : (
           <>
-            <NavLink href="/owned">
+            <NavLink onClick={() => onToggleNavlist()} href="/owned">
+              <StyledText>Home</StyledText>
               <HouseIcon
                 size={28}
                 weight={currentPath === "/owned" ? "fill" : "regular"}
@@ -41,7 +51,8 @@ export default function Navbar({
               />
             </NavLink>
 
-            <NavLink href="/catalogue">
+            <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
+              Catalogue
               <BookOpenTextIcon
                 size={28}
                 weight={currentPath === "/catalogue" ? "fill" : "regular"}
@@ -50,34 +61,30 @@ export default function Navbar({
             </NavLink>
 
             <NavItem>
+              
               <FunFactDisplay
-                size={28}
+                isExtendedNavList={isExtendedNavList}
+                onClick={() => handleClick()}
+                size={26}
                 weight={currentPath === "/owned" ? "fill" : "regular"}
                 aria-label="Fun Facts"
               />
             </NavItem>
 
             <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-              <SignOutIcon size={28} weight="regular" aria-label="Logout" />
-            </NavButton>
-
-            <NavButton onClick={() => onToggleNavlist()}>
-              <ListIcon
-                size={28}
-                weight={isExtendedNavList === "true" ? "fill" : "regular"}
-                aria-label="Extended Navlist"
-              />
+              Log Out{" "}
+              <SignOutIcon size={26} weight="regular" aria-label="Logout" />
             </NavButton>
           </>
         )}
-      </RightMenu>
-    </StyledNavbar>
+      </ExtendedMenu>
+    </>
   );
 }
 
 // ================= Styled Components =================
 
-const StyledNavbar = styled.nav`
+const StyledNavlist = styled.nav`
   position: sticky;
   top: 0;
   left: 0;
@@ -100,19 +107,24 @@ const Logo = styled(Link)`
   }
 `;
 
-const RightMenu = styled.div`
+const ExtendedMenu = styled.div`
   display: flex;
-  align-items: center;
+  padding: 12px 22px;
   gap: 1rem;
+  flex-direction: column;
+  background-color: green;
+  height: 500px;
+  justify-content: right;
+  font-size: var(--fs-md);
 `;
 
 const NavLink = styled(Link)`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
   color: var(--color-beige-100);
   transition: color 0.2s ease-in-out;
-
+  text-decoration: none;
   &:hover {
     color: #000;
   }
@@ -121,7 +133,24 @@ const NavLink = styled(Link)`
 const NavButton = styled.button`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
+  background: transparent;
+  border: none;
+
+  padding: 0;
+  color: var(--color-beige-100);
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: #000;
+  }
+`;
+const NavlistButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+
   background: transparent;
   border: none;
   color: var(--color-beige-100);
@@ -136,11 +165,15 @@ const NavButton = styled.button`
 const NavItem = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
   color: var(--color-beige-100);
   transition: color 0.2s ease-in-out;
 
   &:hover {
     color: #000;
   }
+`;
+
+const StyledText = styled.p`
+  padding: 0px, 25px;
 `;

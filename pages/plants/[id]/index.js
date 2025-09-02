@@ -60,10 +60,11 @@ export default function DetailsPage() {
     <>
       <StyledHeadline>
         <BackButton />
-        {session &&
-        <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
-          <GearIcon size={32} />
-        </Link>}
+        {session && (
+          <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
+            <GearIcon size={32} />
+          </Link>
+        )}
       </StyledHeadline>
       <StyledImage
         src={plant.imageUrl || "/defaultImage.png"}
@@ -76,7 +77,7 @@ export default function DetailsPage() {
         <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
       </NameWrapper>
       <p>{plant.description}</p>
-      <h4>Care</h4>
+      <StyledSection>Care</StyledSection>
       <StyledInfoRow>
         <StyledCareInfo>Plant likes:</StyledCareInfo>
         <StyledCareInfo>
@@ -93,7 +94,9 @@ export default function DetailsPage() {
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
         {seasons.map((season) => (
           <li key={season}>
-            <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
+            <StyledCareInfo>
+              {seasonMap[season.toLowerCase()] ?? season}
+            </StyledCareInfo>
           </li>
         ))}
       </StyledInfoRow>
@@ -136,16 +139,24 @@ const StyledImage = styled(Image)`
 `;
 
 const NameWrapper = styled.div`
+  font-family: var(--font-headline);
   text-align: center;
 `;
 
 const StyledPlantName = styled.h3`
+  font-size: var(--fs-xl);
   margin-bottom: 8px;
 `;
 
 const StyledBotanicalName = styled.p`
   margin-top: 8px;
   font-style: italic;
+  color: var(--color-gray-600);
+  font-size: var(--fs-sm);
+`;
+
+const StyledSection = styled.h4`
+  font-size: var(--fs-lg);
 `;
 
 const StyledInfoRow = styled.div`

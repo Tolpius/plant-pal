@@ -26,8 +26,8 @@ export default function Card({ plant, onToggleOwned, isOwned, session }) {
               aria-label={`Toggle owned for ${plant.name}`}
             />
           )}
-          <h3>{plant.name}</h3>
-          <p>{plant.botanicalName}</p>
+          <StyledName>{plant.name}</StyledName>
+          <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
         </TextWrapper>
       </CardWrapper>
     </StyledLink>
@@ -36,7 +36,7 @@ export default function Card({ plant, onToggleOwned, isOwned, session }) {
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: black;
+  color: var(--color-gray-800);
 `;
 
 const CardWrapper = styled.div`
@@ -48,7 +48,7 @@ const CardWrapper = styled.div`
   border-radius: 25px;
   overflow: hidden;
   height: 300px;
-  background-color: white;
+  background-color: var(--color-beige-200);
 `;
 
 const ImageWrapper = styled.div`
@@ -64,10 +64,26 @@ const StyledImage = styled(Image)`
 `;
 
 const TextWrapper = styled.div`
+  padding: var(--pd-md);
+  font-family: var(--font-headline);
+  color: var(--color-gray-800);
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 80px;
+  min-height: 180px;
+
+
+`;
+
+const StyledName = styled.h3`
+  font-size: var(--fs-xl);
+  padding: var(--pd-sm);
+`;
+
+const StyledBotanicalName = styled.p`
+  font-style: italic;
+  color: var(--color-gray-600);
+  font-size: var(--fs-sm);
 `;

@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { CheckCircleIcon, PlusCircleIcon } from "@phosphor-icons/react";
+import {
+  CheckCircleIcon,
+  PlusSquareIcon,
+  PlusCircleIcon,
+} from "@phosphor-icons/react";
 export default function OwnedButton({ onToggleOwned, isOwned }) {
   function onClick(event) {
     event.preventDefault();
@@ -18,23 +22,25 @@ export default function OwnedButton({ onToggleOwned, isOwned }) {
       {isOwned ? (
         <CheckCircleIcon weight="fill" color="darkgreen" />
       ) : (
-        <PlusCircleIcon color="darkgreen" />
+        <>
+          <PlusSquareIcon color="darkgreen" />
+          <span>Add</span>
+        </>
       )}
     </StyledOwnedButton>
   );
 }
 
 const StyledOwnedButton = styled.button`
+  position: relative;
+  display: inline-flex;
   font-size: 1.25rem;
-  border-style: none;
-  width: 2em;
-  height: 2em;
-  bottom: -15px;
-  transform: translateX(-50%);
-  left: 50%;
+  border-width: 1px;
+  width: auto;
+  height: auto;
+  /* bottom: -15px; */
   background: white;
-  border-radius: 50%;
-  padding: 4px;
-  cursor: pointer;
+  border-radius: 3px;
+  padding: var(--pd-sm);
   z-index: 2;
 `;

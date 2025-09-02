@@ -51,7 +51,7 @@ export default function PlantList({ plants, session }) {
 
 const StyledPlantsList = styled.ul`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(150px,2fr));
   gap: 1rem;
   list-style: none;
   padding: 0;

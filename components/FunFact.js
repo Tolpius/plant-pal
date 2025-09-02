@@ -3,7 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
 
-export default function FunFactDisplay() {
+export default function FunFactDisplay(event) {
   const { data, isLoading } = useSWR(`/api/funfacts`);
   const [funFactPopUp, setFunFactPopUp] = useState(false);
   const [lastIndex, setLastIndex] = useState(null);
@@ -31,12 +31,18 @@ export default function FunFactDisplay() {
     }
     setFunFactPopUp(!funFactPopUp);
   }
-
   return (
     <Wrapper>
-      <LightButton onClick={handleClick}>
-        <LightbulbIcon className="icon" size="24" weight="regular" />
-      </LightButton>
+      {event.isExtendedNavList === true ? (
+        <LightButton onClick={handleClick}>
+          FunFact
+          <LightbulbIcon className="icon" size="24" weight="regular" />
+        </LightButton>
+      ) : (
+        <LightButton onClick={handleClick}>
+          <LightbulbIcon className="icon" size="24" weight="regular" />
+        </LightButton>
+      )}
       {funFactPopUp && (
         <PopUpOverlay onClick={() => setFunFactPopUp(false)}>
           <StyledPopUpFunFact onClick={(event) => event.stopPropagation()}>
@@ -64,7 +70,7 @@ const LightButton = styled.button`
   padding: 0;
   background: transparent;
   border: none;
-  color: #444;
+  color: var(--color-beige-100);
 `;
 
 const PopUpOverlay = styled.button`
@@ -74,7 +80,7 @@ const PopUpOverlay = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 3;
+  z-index: 1005;
 `;
 
 const CancelButton = styled.button`
