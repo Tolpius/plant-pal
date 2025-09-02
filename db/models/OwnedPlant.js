@@ -16,6 +16,14 @@ const ownedPlantSchema = new Schema(
   { timestamps: true }
 );
 
+// Index for finding all owned Plants of a user
+// /api/user/[userId]/owned/[plantId]/index.js
+ownedPlantSchema.index({ userId: 1 });
+
+// Index for finding out, how many of this plant a user has
+// /api/plants/[id]/countowned/index.js
+ownedPlantSchema.index({ userId: 1, cataloguePlantId: 1 });
+
 const OwnedPlant =
   mongoose.models.OwnedPlant || mongoose.model("OwnedPlant", ownedPlantSchema);
 
