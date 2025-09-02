@@ -66,7 +66,7 @@ export default function DetailsPage() {
   return (
     <>
       <StyledHeadline>
-        <BackButton />
+        <BackButton href = "/owned"/>
         {session && (
           <Link
             href={`/owned/${ownedPlantId}/edit`}
@@ -114,7 +114,7 @@ export default function DetailsPage() {
             setShowPopUp(true);
           }}
         >
-          Delete
+          Remove
         </StyledDeleteButton>
       )}
       {showPopUp && (

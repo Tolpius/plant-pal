@@ -5,7 +5,7 @@ export default function DeletePopUp({ onDelete, onCancel }) {
     <WarningOverlay onClick={onCancel}>
       <StyledPopUpWarning onClick={event => event.stopPropagation()}>
         <StyledWarningMessage>
-          Are you sure you want to delete this plant? This decision is not
+          Are you sure you want to remove this plant? This decision is not
           reversible!
         </StyledWarningMessage>
         <ButtonWrapper>
@@ -13,7 +13,7 @@ export default function DeletePopUp({ onDelete, onCancel }) {
             cancel
           </StyledButton>
           <StyledButton $variant="default" onClick={onDelete}>
-            delete
+            Remove
           </StyledButton>
         </ButtonWrapper>
       </StyledPopUpWarning>

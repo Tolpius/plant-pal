@@ -52,9 +52,12 @@ export default async function handler(request, response) {
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "PUT": {
-        const ownedPlant = await ownedPlant.findByIdAndUpdate(
+        const updatedOwnedPlant = request.body
+        updatedOwnedPlant.cataloguePlantId = plantId;
+        updatedOwnedPlant.userId = userId;
+        const ownedPlant = await OwnedPlant.findByIdAndUpdate(
           plantId,
-          request.body,
+          updatedOwnedPlant,
           { new: true, runValidators: true }
         );
         return response.status(200).json(ownedPlant);
@@ -62,7 +65,7 @@ export default async function handler(request, response) {
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "DELETE": {
         console.log(request.body);
-        const ownedPlant = await ownedPlant.findByIdAndDelete(plantId);
+        const ownedPlant = await OwnedPlant.findByIdAndDelete(plantId);
         return response.status(200).json(ownedPlant);
       }
 
