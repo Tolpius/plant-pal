@@ -1,17 +1,13 @@
 import useSWR from "swr";
-import { useState } from "react";
-import { useSession } from "next-auth/react";
-
 import styled from "styled-components";
-
 import MessageNoPlants from "@/components/MessageNoPlants";
 import PlantCarousel from "@/components/PlantsCarousel";
 
 export default function HomePage() {
   const { data, isLoading } = useSWR("/api/plants");
-  const { data: session, status: sessionStatus } = useSession();
 
-  if (isLoading || sessionStatus === "loading") {
+
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 
