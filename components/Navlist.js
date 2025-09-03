@@ -4,6 +4,7 @@ import {
   ListIcon,
   SignInIcon,
   SignOutIcon,
+  TicketIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
@@ -56,6 +57,15 @@ export default function Navlist({
               aria-label="Fun Facts"
             />
           </NavButton>
+
+          <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
+            <StyledText>Admin Catalogue</StyledText>
+            <TicketIcon
+              size={28}
+              weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
+              aria-label="Admin Catalogue"
+            />
+          </NavLink>
 
           <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
             Log Out{" "}
