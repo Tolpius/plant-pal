@@ -1,9 +1,8 @@
-import BackButton from "@/components/BackButton";
-import PlantList from "@/components/PlantList";
+
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-export default function SearchPlant() {
+export default function SearchPlant({onSearchResult}) {
   const { data: session, status: sessionStatus } = useSession();
   const [data, setData] = useState([]);
 
@@ -21,12 +20,13 @@ export default function SearchPlant() {
     const { query } = Object.fromEntries(formData.entries());
 
     const response = await fetch(`/api/plants/search?query=${query}`);
-    const data = await response.json();
+    const searchResult = await response.json();
 
     if (!response.ok) {
       throw new Error(`Failed to search plant: ${response.statusText}`);
     }
-    setData(data);
+    onSearchResult(searchResult);
+    
   }
 
   return (
