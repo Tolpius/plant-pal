@@ -12,7 +12,7 @@ export default function Catalogue() {
   const { data: allPlants, isLoading } = useSWR("/api/plants");
   const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
   const { data: session, status: sessionStatus } = useSession();
-  const [plantList, setPlantList] = useState(allPlants);
+  const [plantList, setPlantList] = useState();
 
   if (isLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
@@ -28,8 +28,10 @@ export default function Catalogue() {
 
   const filteredPlantList =
     filters.lightNeed.length === 0 && filters.waterNeed.length === 0
-      ? plantList
-      : plantList.filter((plant) => {
+      ? !plantList
+        ? allPlants
+        : plantList
+      : (!plantList ? allPlants : plantList).filter((plant) => {
           const matchesLight =
             filters.lightNeed.length === 0 ||
             filters.lightNeed.includes(plant.lightNeed);
