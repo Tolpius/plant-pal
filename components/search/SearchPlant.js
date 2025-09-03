@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react";
-import { useState } from "react";
 
 export default function SearchPlant({ onSearchResult }) {
   const { data: session, status: sessionStatus } = useSession();
