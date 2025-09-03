@@ -47,15 +47,14 @@ export default function Catalogue() {
   }
 
   function handleHideOwned(event) {
-    console.log(event);
     setHideOwned(event.target.checked);
+    console.log(handleHideOwned);
   }
 
   return (
     <>
-      <PlantFilter onFilter={setFilters} />
-      <input type="checkbox" onClick={handleHideOwned}></input>
-      <label>hide owned</label>
+      <PlantFilter onFilter={setFilters} handleHideOwned={handleHideOwned} />
+
       <SearchPlant onSearchResult={handleSearchResult} />
       <PlantList
         hideOwned={hideOwned}

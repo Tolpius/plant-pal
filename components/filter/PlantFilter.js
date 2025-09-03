@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import { useState } from "react";
 import PlantFilterForm from "./PlantFilterForm";
 
-export default function PlantFilter({ onFilter }) {
+export default function PlantFilter({ onFilter, handleHideOwned }) {
   const [showFilter, setShowFilter] = useState(false);
 
   function handleFilterSubmit(event) {
@@ -35,6 +35,7 @@ export default function PlantFilter({ onFilter }) {
         <PlantFilterForm
           onSubmit={handleFilterSubmit}
           onClear={handleClearSubmit}
+          handleHideOwned={handleHideOwned}
         />
       )}
     </FilterContainer>

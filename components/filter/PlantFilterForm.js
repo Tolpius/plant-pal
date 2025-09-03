@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-export default function PlantFilterForm({ onSubmit, onClear }) {
+export default function PlantFilterForm({
+  onSubmit,
+  onClear,
+  handleHideOwned,
+}) {
   return (
     <StyledFilterForm>
       <form onSubmit={onSubmit}>
@@ -34,6 +38,11 @@ export default function PlantFilterForm({ onSubmit, onClear }) {
             <span>💧💧💧</span>
           </label>
         </StyledWaterWrapper>
+        <StyledHideWrapper>
+          <label>hide owned:</label>
+          <input type="checkbox" onClick={handleHideOwned}></input>
+        </StyledHideWrapper>
+
         <StyledButtonWrapper>
           <StyledButton type="submit">apply</StyledButton>
           <StyledButton type="reset" onClick={onClear}>
@@ -61,6 +70,13 @@ const StyledLightWrapper = styled.div`
 `;
 
 const StyledWaterWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0 0 20px 50px;
+`;
+
+const StyledHideWrapper = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
