@@ -46,11 +46,10 @@ export default function PlantFilterForm({ onSubmit, onClear }) {
 }
 
 const StyledFilterForm = styled.div`
-  background-color: white;
-  border-radius: 15px;
-  font-size: medium;
+  background-color: var(--color-white);
+  border-radius: 0;
   overflow: hidden;
-  padding: 10px;
+  padding: var(--padding-bg-sm);
 `;
 
 const StyledLightWrapper = styled.div`
@@ -75,6 +74,6 @@ const StyledButtonWrapper = styled.div`
 
 const StyledButton = styled.button`
   padding: 5px 15px;
-  border: 1px solid lightgray;
-  border-radius: 5px;
+  border: 1px solid var(--color-light-grey);
+  border-radius: var(--radius-sm);
 `;

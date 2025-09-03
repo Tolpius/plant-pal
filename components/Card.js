@@ -1,7 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
-
-import HeartButton from "./HeartButton";
+import OwnedButton from "./OwnedButton";
 import Link from "next/link";
 
 export default function Card({ plant, onToggleOwned, isOwned, session }) {
@@ -21,14 +20,14 @@ export default function Card({ plant, onToggleOwned, isOwned, session }) {
         </ImageWrapper>
         <TextWrapper>
           {session && (
-            <HeartButton
+            <OwnedButton
               isOwned={isOwned}
               onToggleOwned={onToggleOwned}
               aria-label={`Toggle owned for ${plant.name}`}
             />
           )}
-          <h3>{plant.name}</h3>
-          <p>{plant.botanicalName}</p>
+          <StyledName>{plant.name}</StyledName>
+          <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
         </TextWrapper>
       </CardWrapper>
     </StyledLink>
@@ -37,7 +36,6 @@ export default function Card({ plant, onToggleOwned, isOwned, session }) {
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: black;
 `;
 
 const CardWrapper = styled.div`
@@ -45,10 +43,11 @@ const CardWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
-  border: 1px black solid;
-  border-radius: 25px;
+  border: var(--border-sm-dark);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   height: 300px;
+  background-color: var(--color-secondary-dark);
 `;
 
 const ImageWrapper = styled.div`
@@ -64,10 +63,24 @@ const StyledImage = styled(Image)`
 `;
 
 const TextWrapper = styled.div`
+  padding: var(--padding-medium);
+  font-family: var(--font-primary);
+  color: var(--color-neutral-dark);
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 80px;
+  min-height: 180px;
+`;
+
+const StyledName = styled.h3`
+  font-size: var(--font-size-xl);
+  padding: var(--padding-small);
+`;
+
+const StyledBotanicalName = styled.p`
+  font-style: italic;
+  color: var(--color-text-medium);
+  font-size: var(--font-size-sm);
 `;

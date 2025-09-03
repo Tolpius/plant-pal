@@ -16,9 +16,11 @@ export default function PlantList({ plants, session }) {
 
     // Optimistic UI Update
     if (ownedPlantIds) {
-      mutate(swrUrl, isOwned
-        ? ownedPlantIds.filter(id => id !== plantId)
-        : [...ownedPlantIds, plantId],
+      mutate(
+        swrUrl,
+        isOwned
+          ? ownedPlantIds.filter((id) => id !== plantId)
+          : [...ownedPlantIds, plantId],
         false //false = no revalidation for now
       );
 
@@ -51,7 +53,7 @@ export default function PlantList({ plants, session }) {
 
 const StyledPlantsList = styled.ul`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(150px, 2fr));
   gap: 1rem;
   list-style: none;
   padding: 0;

@@ -1,16 +1,16 @@
-import BackButton from "@/components/BackButton";
-
-import { GearIcon } from "@phosphor-icons/react";
-
-import DeletePopUp from "@/components/DeletePopUp";
-
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import styled from "styled-components";
 import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+
+import Image from "next/image";
+import Link from "next/link";
+import styled from "styled-components";
+
+import { GearIcon } from "@phosphor-icons/react";
+
+import BackButton from "@/components/BackButton";
+import DeletePopUp from "@/components/DeletePopUp";
 
 const lightNeedMap = {
   1: "⛅",
@@ -60,10 +60,11 @@ export default function DetailsPage() {
     <>
       <StyledHeadline>
         <BackButton />
-        {session &&
-        <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
-          <GearIcon size={32} />
-        </Link>}
+        {session && (
+          <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
+            <GearIcon size={32} />
+          </Link>
+        )}
       </StyledHeadline>
       <StyledImage
         src={plant.imageUrl || "/defaultImage.png"}
@@ -76,7 +77,7 @@ export default function DetailsPage() {
         <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
       </NameWrapper>
       <p>{plant.description}</p>
-      <h4>Care</h4>
+      <StyledSection>Care</StyledSection>
       <StyledInfoRow>
         <StyledCareInfo>Plant likes:</StyledCareInfo>
         <StyledCareInfo>
@@ -93,7 +94,9 @@ export default function DetailsPage() {
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
         {seasons.map((season) => (
           <li key={season}>
-            <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
+            <StyledCareInfo>
+              {seasonMap[season.toLowerCase()] ?? season}
+            </StyledCareInfo>
           </li>
         ))}
       </StyledInfoRow>
@@ -122,9 +125,9 @@ const StyledHeadline = styled.div`
 `;
 
 const StyledDeleteButton = styled.button`
-  background-color: red;
-  color: white;
-  border-radius: 5px;
+  background-color: var(--color-alert);
+  color: var(--color-text-white);
+  border-radius: var(--radius-sm);
   height: 30px;
   margin-top: 30px;
 `;
@@ -136,16 +139,24 @@ const StyledImage = styled(Image)`
 `;
 
 const NameWrapper = styled.div`
+  font-family: var(--font-primary);
   text-align: center;
 `;
 
 const StyledPlantName = styled.h3`
+  font-size: var(--font-size-xl);
   margin-bottom: 8px;
 `;
 
 const StyledBotanicalName = styled.p`
   margin-top: 8px;
   font-style: italic;
+  color: var(--color-text-medium);
+  font-size: var(--font-size-sm);
+`;
+
+const StyledSection = styled.h4`
+  font-size: var(--font-size-lg);
 `;
 
 const StyledInfoRow = styled.div`

@@ -154,7 +154,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
       </Label>
 
       <Button type="submit" disabled={isSubmitting}>
-        {isEdit ? "Edit Plant" : "Add Plant"} 
+        {isEdit ? "Edit Plant" : "Add Plant"}
       </Button>
     </Form>
   );
@@ -181,8 +181,8 @@ const Input = styled.input`
   display: block;
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  border: 1px solid var(--color-light-grey);
+  border-radius: var(--radius-md);
 `;
 
 const Textarea = styled.textarea`
@@ -190,8 +190,8 @@ const Textarea = styled.textarea`
   width: 100%;
   padding: 0.5rem;
   margin-top: 0.3rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1px solid var(--color-light-grey);
+  border-radius: var(--radius-md);
 `;
 
 const Slider = styled.input`
@@ -228,15 +228,15 @@ const Button = styled.button`
   display: block;
   width: 100%;
   padding: 0.75rem;
-  background: #2e7d32;
+  background: var(--color-primary);
   color: white;
   font-weight: bold;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: background 0.2s ease;
 
   &:hover {
-    background: #1b5e20;
+    background: var(--color-primary-dark);
   }
 `;

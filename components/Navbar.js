@@ -1,60 +1,137 @@
-import { HeartIcon, HouseIcon, PlusCircleIcon } from "@phosphor-icons/react";
+import {
+  BookOpenTextIcon,
+  HouseIcon,
+  ListIcon,
+  SignInIcon,
+} from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
-import { useRouter } from "next/router";
 
-export default function Navbar() {
-  const router = useRouter();
-  const currentPath = router.pathname;
+import { signIn } from "next-auth/react";
+import FunFactDisplay from "./FunFactDisplay";
 
+export default function Navbar({
+  onToggleNavlist,
+  isExtendedNavList,
+  session,
+  currentPath,
+}) {
   return (
     <StyledNavbar>
-      <NavItem href="/">
-        <HouseIcon
-          size={28}
-          weight={currentPath === "/" ? "fill" : "regular"}
-          aria-label="Homepage"
-        />
-      </NavItem>
-      <NavItem href="/add">
-        <PlusCircleIcon
-          size={28}
-          weight={currentPath === "/add" ? "fill" : "regular"}
-          aria-label="Add plant"
-        />
-      </NavItem>
-      <NavItem href="/owned">
-        <HeartIcon
-          size={28}
-          weight={currentPath === "/owned" ? "fill" : "regular"}
-          aria-label="Owned plant list"
-        />
-      </NavItem>
+      {/* Logo on the left side */}
+      <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
+
+      {/* Right side Menu */}
+      <RightMenu>
+        {!session ? (
+          <NavButton
+            onClick={() => signIn(undefined, { callbackUrl: "/owned" })}
+          >
+            <p>Login</p>
+            <SignInIcon size={28} weight="regular" aria-label="Login" />
+          </NavButton>
+        ) : (
+          <>
+            <NavLink href="/owned">
+              <HouseIcon
+                size={28}
+                weight={currentPath === "/owned" ? "fill" : "regular"}
+                aria-label="My Plants"
+              />
+            </NavLink>
+
+            <NavLink href="/catalogue">
+              <BookOpenTextIcon
+                size={28}
+                weight={currentPath === "/catalogue" ? "fill" : "regular"}
+                aria-label="Catalogue"
+              />
+            </NavLink>
+
+            <NavItem>
+              <FunFactDisplay aria-label="Fun Facts" />
+            </NavItem>
+
+            <NavButton onClick={() => onToggleNavlist()}>
+              <ListIcon
+                size={28}
+                weight={isExtendedNavList === "true" ? "fill" : "regular"}
+                aria-label="Extended Navlist"
+              />
+            </NavButton>
+          </>
+        )}
+      </RightMenu>
     </StyledNavbar>
   );
 }
 
+// ================= Styled Components =================
+
 const StyledNavbar = styled.nav`
   position: sticky;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
-  background: white;
-  border-top: 1px solid #e5e5e5;
+  background: var(--color-primary);
+  border-bottom: 1px solid var(--color-neutral-light);
   display: flex;
-  justify-content: space-around;
-  padding: 0.75rem 0;
-  z-index: 1000;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  z-index: 10;
 `;
 
-const NavItem = styled(Link)`
+const Logo = styled(Link)`
+  font-weight: bold;
+  font-size: 1.25rem;
+  text-decoration: none;
+  &:visited {
+    color: inherit;
+  }
+`;
+
+const RightMenu = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const NavButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #444;
+  background: transparent;
+  border: none;
+  color: var(--color-secondary);
+  cursor: pointer;
   transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: #000;
+    color: var(--color-black);
+  }
+`;
+
+const NavItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-secondary);
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: var(--color-black);
+  }
+`;
+
+const NavLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-secondary);
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: var(--color-black);
   }
 `;
