@@ -3,14 +3,9 @@ import { useState } from "react";
 
 export default function SearchPlant({ onSearchResult }) {
   const { data: session, status: sessionStatus } = useSession();
-  const [data, setData] = useState([]);
 
   if (sessionStatus === "loading") {
     return <p>Loading...</p>;
-  }
-
-  if (!data) {
-    return <p>Failed to load plants!</p>;
   }
 
   async function handleSearch(event) {
