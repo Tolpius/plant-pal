@@ -16,9 +16,11 @@ export default function PlantList({ plants, session, hideOwned }) {
 
     // Optimistic UI Update
     if (ownedPlantIds) {
-      mutate(swrUrl, isOwned
-        ? ownedPlantIds.filter(id => id !== plantId)
-        : [...ownedPlantIds, plantId],
+      mutate(
+        swrUrl,
+        isOwned
+          ? ownedPlantIds.filter((id) => id !== plantId)
+          : [...ownedPlantIds, plantId],
         false //false = no revalidation for now
       );
 
@@ -32,28 +34,32 @@ export default function PlantList({ plants, session, hideOwned }) {
 
   return (
     <StyledPlantsList>
-      {plants.map((plant) => {
-        const isOwned = ownedPlantIds?.includes(plant._id);
-    
-        if(isOwned && hideOwned)return<></>
-        return (
-          <li key={plant._id}>
-            <Card
-              plant={plant}
-              isOwned={isOwned}
-              onToggleOwned={() => handleToggleOwned(plant._id, isOwned)}
-              session={session}
-            />
-          </li>
-        );
-      })}
+      {plants
+        .filter((plant) => {
+          const isOwned = ownedPlantIds?.includes(plant._id);
+          if (isOwned && hideOwned) return false;
+          else return true;
+        })
+        .map((plant) => {
+          const isOwned = ownedPlantIds?.includes(plant._id);
+          return (
+            <li key={plant._id}>
+              <Card
+                plant={plant}
+                isOwned={isOwned}
+                onToggleOwned={() => handleToggleOwned(plant._id, isOwned)}
+                session={session}
+              />
+            </li>
+          );
+        })}
     </StyledPlantsList>
   );
 }
 
 const StyledPlantsList = styled.ul`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px,2fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 2fr));
   gap: 1rem;
   list-style: none;
   padding: 0;

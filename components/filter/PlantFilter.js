@@ -6,6 +6,7 @@ export default function PlantFilter({ onFilter, handleHideOwned }) {
   const [showFilter, setShowFilter] = useState(false);
 
   function handleFilterSubmit(event) {
+    console.log(event);
     event.preventDefault();
     const formData = new FormData(event.target);
 

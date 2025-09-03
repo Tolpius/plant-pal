@@ -5,9 +5,10 @@ export default function PlantFilterForm({
   onClear,
   handleHideOwned,
 }) {
+  const formRef = useRef(null);
   return (
     <StyledFilterForm>
-      <form onSubmit={onSubmit}>
+      <form ref={formRef} onChange={() => onSubmit(formRef)}>
         <StyledLightWrapper>
           <legend>Light Need:</legend>
           <label>
@@ -48,7 +49,6 @@ export default function PlantFilterForm({
         </StyledHideWrapper>
 
         <StyledButtonWrapper>
-          <StyledButton type="submit">apply</StyledButton>
           <StyledButton type="reset" onClick={onClear}>
             clear
           </StyledButton>
