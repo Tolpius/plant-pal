@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import styled from "styled-components";
 
 export default function PlantFilterForm({
@@ -50,7 +51,7 @@ export default function PlantFilterForm({
 
         <StyledButtonWrapper>
           <StyledButton type="reset" onClick={onClear}>
-            clear
+            clear filter
           </StyledButton>
         </StyledButtonWrapper>
       </form>

@@ -12,6 +12,7 @@ export default function SearchPlant({ onSearchResult }) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const { query } = Object.fromEntries(formData.entries());
+    if (query.trim() === "") return onSearchResult(query.trim());
 
     const response = await fetch(`/api/plants/search?query=${query}`);
     const searchResult = await response.json();

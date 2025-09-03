@@ -50,7 +50,6 @@ export default function Catalogue() {
 
   function handleHideOwned(event) {
     setHideOwned(event.target.checked);
-    console.log(handleHideOwned);
   }
 
   return (

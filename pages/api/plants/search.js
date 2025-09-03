@@ -19,7 +19,7 @@ export default async function handler(request, response) {
       const query = request.query.query;
       if (!query)
         response
-          .status(402)
+          .status(422)
           .json({ success: false, message: "Specify the 'query' parameter" });
       //const pattern = query.replace(" ", "|");
 
