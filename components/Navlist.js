@@ -86,8 +86,8 @@ const StyledNavlist = styled.nav`
   top: 0;
   left: 0;
   width: 100%;
-  background: var(--color-green-500);
-  border-bottom: 1px solid #e5e5e5;
+  background: var(--color-primary);
+  border-bottom: 1px solid var(--color-neutral-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -109,23 +109,24 @@ const ExtendedMenu = styled.div`
   padding: 12px 22px;
   gap: 1rem;
   flex-direction: column;
-  background-color: var(--color-green-500);
-  height: 500px;
+  background-color: var(--color-primary);
+  height: auto;
   justify-content: right;
-  font-size: var(--fs-md);
+  font-size: var(--font-size-md);
 `;
 
 const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: end;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   transition: color 0.2s ease-in-out;
   text-decoration: none;
+  font-size: var(--font-size-lg);
   &:hover {
-    color: #000;
+    color: var(--color-black);
   }
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid var(--color-neutral-dark);
 `;
 
 const NavButton = styled.button`
@@ -134,14 +135,14 @@ const NavButton = styled.button`
   justify-content: end;
   background: transparent;
   border: none;
-  font-size: var(--fs-lg);
+  font-size: var(--font-size-lg);
   padding: 0;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid var(--color-neutral-dark);
   &:hover {
-    color: #000;
+    color: var(--color-black);
   }
 `;
 const NavlistButton = styled.button`
@@ -151,29 +152,16 @@ const NavlistButton = styled.button`
 
   background: transparent;
   border: none;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: #000;
-  }
-`;
-
-const NavItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  color: var(--color-beige-100);
-  transition: color 0.2s ease-in-out;
-  border-bottom: 1px solid #000;
-  font-size: var(--fs-lg);
-  &:hover {
-    color: #000;
+    color: var(--color-black);
   }
 `;
 
 const StyledText = styled.p`
   padding: 0px, 25px;
-  font-size: var(--fs-lg);
+  font-size: var(--font-size-lg);
 `;

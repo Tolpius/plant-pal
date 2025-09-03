@@ -90,26 +90,26 @@ const PopUpOverlay = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1005;
+  z-index: 11;
 `;
 
 const CancelButton = styled.button`
   position: absolute;
   top: 10px;
   right: 12px;
-  color: white;
+  color: var(--color-white);
   width: 32px;
   height: 32px;
   font-size: 1.2rem;
   background-color: transparent;
   border: none;
-  z-index: 6;
+  z-index: 16;
 `;
 
 const StyledPopUpFunFact = styled.article`
   display: flex;
   justify-content: center;
-  font-size: medium;
+  font-size: var(--font-size-md);
   flex-direction: column;
   z-index: 5;
   position: fixed;
@@ -119,8 +119,8 @@ const StyledPopUpFunFact = styled.article`
   background-image: url("https://plus.unsplash.com/premium_photo-1664005877764-122a552ebf2e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
   background-size: cover;
   background-position: center;
-  border-radius: 25px;
+  border-radius: var(--radius-lg);
   box-shadow: 5px 5px 15px black;
-  color: white;
+  color: var(--color-white);
   text-shadow: 0 1px 3px black;
 `;

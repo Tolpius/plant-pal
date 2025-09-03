@@ -73,8 +73,8 @@ const StyledNavbar = styled.nav`
   top: 0;
   left: 0;
   width: 100%;
-  background: var(--color-green-500);
-  border-bottom: 1px solid #e5e5e5;
+  background: var(--color-primary);
+  border-bottom: 1px solid var(--color-neutral-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -103,12 +103,12 @@ const NavButton = styled.button`
   justify-content: center;
   background: transparent;
   border: none;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: #000;
+    color: var(--color-black);
   }
 `;
 
@@ -116,11 +116,11 @@ const NavItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: #000;
+    color: var(--color-black);
   }
 `;
 
@@ -128,10 +128,10 @@ const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: #000;
+    color: var(--color-black);
   }
 `;

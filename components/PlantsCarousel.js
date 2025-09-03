@@ -1,12 +1,12 @@
 // PlantCarousel.js
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+
 import CardCarousel from "./CardCarousel";
 
 export default function PlantCarousel({ plants }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const cardWidth = 220;
   const peek = 40;
   const maxVisible = 2;
   const totalCards = plants.length;
@@ -65,7 +65,6 @@ export default function PlantCarousel({ plants }) {
   );
 }
 
-// Styled Components
 const CarouselOuterWrapper = styled.div`
   width: 100%;
   display: flex;

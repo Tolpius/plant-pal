@@ -16,7 +16,7 @@ export default function Layout({ children }) {
   function onToggleNavlist() {
     setIsExtendedNavList(!isExtendedNavList);
   }
-  
+
   if (isExtendedNavList) {
     return (
       <>

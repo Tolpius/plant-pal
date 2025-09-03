@@ -17,7 +17,7 @@ const StyledMessage = styled.div`
   align-items: center;
   padding: 10px;
   padding-top: 30px;
-  font-size: var(--fs-lg);
+  font-size: var(--font-size-lg);
 `;
 
 const StyledText = styled.p`
