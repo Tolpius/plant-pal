@@ -39,8 +39,12 @@ export default function PlantFilterForm({
           </label>
         </StyledWaterWrapper>
         <StyledHideWrapper>
-          <label>hide owned:</label>
-          <input type="checkbox" onClick={handleHideOwned}></input>
+          {handleHideOwned ? (
+            <>
+              <label>hide owned:</label>
+              <input type="checkbox" onClick={handleHideOwned}></input>
+            </>
+          ) : null}
         </StyledHideWrapper>
 
         <StyledButtonWrapper>

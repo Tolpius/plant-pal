@@ -1,8 +1,7 @@
-
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-export default function SearchPlant({onSearchResult}) {
+export default function SearchPlant({ onSearchResult }) {
   const { data: session, status: sessionStatus } = useSession();
   const [data, setData] = useState([]);
 
@@ -26,14 +25,10 @@ export default function SearchPlant({onSearchResult}) {
       throw new Error(`Failed to search plant: ${response.statusText}`);
     }
     onSearchResult(searchResult);
-    
   }
 
   return (
     <>
-    
-
-     
       <form onSubmit={handleSearch}>
         <input
           name="query"
@@ -42,7 +37,6 @@ export default function SearchPlant({onSearchResult}) {
         ></input>
         <button type="submit">Search Plant</button>
       </form>
-      <button>Add a new one</button>
     </>
   );
 }
