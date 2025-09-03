@@ -4,13 +4,13 @@ import { useSession } from "next-auth/react";
 import styled from "styled-components";
 
 import PlantList from "@/components/PlantList";
-import PlantFilter from "@/components/filter/PlantFilter";
+import PlantFilter from "@/components/admin/filter/PlantFilter";
 import AddLink from "@/components/AddLink";
 import MessageNoPlants from "@/components/MessageNoPlants";
 
 export default function AdminCatalogue() {
-  const { data, isLoading } = useSWR("/api/plants");
-  const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
+  const { data, isLoading } = useSWR("/api/admin/catalogue");
+  const [filter, setFilter] = useState({ isPublic: "all" });
   const { data: session, status: sessionStatus } = useSession();
 
   if (isLoading || sessionStatus === "loading") {
@@ -24,25 +24,16 @@ export default function AdminCatalogue() {
   if (data.length === 0) {
     return <MessageNoPlants />;
   }
-
   const filteredPlantList =
-    filters.lightNeed.length === 0 && filters.waterNeed.length === 0
+    filter.isPublic === "all"
       ? data
-      : data.filter((plant) => {
-          const matchesLight =
-            filters.lightNeed.length === 0 ||
-            filters.lightNeed.includes(plant.lightNeed);
-          const matchesWater =
-            filters.waterNeed.length === 0 ||
-            filters.waterNeed.includes(plant.waterNeed);
-          return matchesLight && matchesWater;
-        });
+      : data.filter((plant) => plant.isPublic === filter.isPublic);
 
   return (
     <>
       <StyledText>Browse to find and select your plants. </StyledText>
-      <PlantFilter onFilter={setFilters} />
-      <AddLink/>
+      <PlantFilter onFilter={setFilter} />
+      <AddLink />
       <PlantList plants={filteredPlantList} session={session} />
     </>
   );
