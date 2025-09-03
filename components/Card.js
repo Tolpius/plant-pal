@@ -43,7 +43,7 @@ const CardWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
-  border: 1px black solid;
+  border: var(--border-sm-dark);
   border-radius: var(--radius-lg);
   overflow: hidden;
   height: 300px;

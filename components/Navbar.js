@@ -49,7 +49,7 @@ export default function Navbar({
             </NavLink>
 
             <NavItem>
-              <FunFactDisplay size={28} aria-label="Fun Facts" />
+              <FunFactDisplay aria-label="Fun Facts" />
             </NavItem>
 
             <NavButton onClick={() => onToggleNavlist()}>

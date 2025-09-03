@@ -21,5 +21,5 @@ const StyledMessage = styled.div`
 `;
 
 const StyledText = styled.p`
-  padding-top: 10px;
+  padding-top: var(--padding-bg-sm);
 `;

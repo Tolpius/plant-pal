@@ -23,14 +23,14 @@ export default function CardCarousel({ plant, grayScale }) {
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: black;
+  color: var(--color-black);
 `;
 
 const CardWrapper = styled.div`
   position: relative;
   width: 220px;
   height: 300px;
-  border: 1px solid black;
+  border: var(--border-sm-dark);
   border-radius: var(--radius-lg);
   overflow: hidden;
   background-color: var(--color-neutral-light);
@@ -38,6 +38,6 @@ const CardWrapper = styled.div`
 
 const StyledImage = styled(Image)`
   object-fit: cover;
-  border-radius: 25px;
+  border-radius: var(--radius-lg);
   filter: ${(props) => `grayscale(${props.grayScale})`};
 `;

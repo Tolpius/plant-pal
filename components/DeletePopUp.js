@@ -39,14 +39,14 @@ const StyledPopUpWarning = styled.article`
   position: fixed;
   width: 80%;
   height: 40%;
-  padding: 20px;
+  padding: var(--padding-bg-md);
   background-color: var(--color-neutral-light);
-  border-radius: 25px;
+  border-radius: var(--radius-lg);
   box-shadow: 5px 5px 15px;
 `;
 
 const StyledWarningMessage = styled.p`
-  padding: 20px;
+  padding: var(--padding-bg-md);
   padding-top: 40px;
   font-size: var(--font-size-md);
   text-align: center;

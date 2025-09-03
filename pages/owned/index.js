@@ -67,7 +67,7 @@ export default function Owned() {
 }
 
 const StyledText = styled.p`
-  padding-top: 10px;
+  padding-top: var(--padding-bg-sm);
   text-align: center;
   font-size: var(--font-size-xl);
 `;

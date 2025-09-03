@@ -40,8 +40,11 @@ export default createGlobalStyle`
     --color-alert: #ff0015ff;
     
     --radius-lg: 25px;
+    --radius-bg-md: 15px;
     --radius-md: 10px;
     --radius-sm: 5px;
+
+    --border-sm-dark: 1px black solid;
 
     --font-primary: 'Playfair Display';
     --font-secondary: 'Nunito';
@@ -51,8 +54,12 @@ export default createGlobalStyle`
     --font-size-md: 16px;
     --font-size-sm: 14px;
 
+    --box-shadow-md: 5px 5px 15px black;
+
     --padding-small: 8px ;
+    --padding-bg-sm: 10px;
     --padding-medium: 16px ;
+    --padding-bg-md: 20px;
     --padding-large: 24px ;
     --padding-extra-large: 32px ;
   }`;

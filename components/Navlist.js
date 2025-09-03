@@ -7,7 +7,7 @@ import {
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
-import { signOut, signIn, useSession } from "next-auth/react";
+import { signOut, signIn } from "next-auth/react";
 import FunFactDisplay from "./FunFactDisplay";
 
 export default function Navlist({
@@ -15,13 +15,12 @@ export default function Navlist({
   isExtendedNavList,
   session,
   currentPath,
-  handleClick,
 }) {
   return (
     <>
       <StyledNavlist>
         {/* The Navbar is empty except for the logo and the menu icon */}
-        <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
+        <Logo href="/">🌱 PlantPal</Logo>
         <NavlistButton onClick={() => onToggleNavlist()}>
           <ListIcon
             size={28}
@@ -32,48 +31,37 @@ export default function Navlist({
       </StyledNavlist>
 
       <ExtendedMenu>
-        {!session ? (
-          <NavButton
-            onClick={() => signIn(undefined, { callbackUrl: "/owned" })}
-          >
-            <p>Login</p>
-            <SignInIcon size={28} weight="regular" aria-label="Login" />
+        <>
+          <NavLink onClick={() => onToggleNavlist()} href="/owned">
+            <StyledText>Home</StyledText>
+            <HouseIcon
+              size={28}
+              weight={currentPath === "/owned" ? "fill" : "regular"}
+              aria-label="My Plants"
+            />
+          </NavLink>
+
+          <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
+            <StyledText>Catalogue</StyledText>
+            <BookOpenTextIcon
+              size={28}
+              weight={currentPath === "/catalogue" ? "fill" : "regular"}
+              aria-label="Catalogue"
+            />
+          </NavLink>
+
+          <NavButton>
+            <FunFactDisplay
+              isExtendedNavList={isExtendedNavList}
+              aria-label="Fun Facts"
+            />
           </NavButton>
-        ) : (
-          <>
-            <NavLink onClick={() => onToggleNavlist()} href="/owned">
-              <StyledText>Home</StyledText>
-              <HouseIcon
-                size={28}
-                weight={currentPath === "/owned" ? "fill" : "regular"}
-                aria-label="My Plants"
-              />
-            </NavLink>
 
-            <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
-              <StyledText>Catalogue</StyledText>
-              <BookOpenTextIcon
-                size={28}
-                weight={currentPath === "/catalogue" ? "fill" : "regular"}
-                aria-label="Catalogue"
-              />
-            </NavLink>
-
-            <NavButton>
-              <FunFactDisplay
-                isExtendedNavList={isExtendedNavList}
-                onClick={() => handleClick()}
-                size={26}
-                aria-label="Fun Facts"
-              />
-            </NavButton>
-
-            <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-              Log Out{" "}
-              <SignOutIcon size={26} weight="regular" aria-label="Logout" />
-            </NavButton>
-          </>
-        )}
+          <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
+            Log Out{" "}
+            <SignOutIcon size={26} weight="regular" aria-label="Logout" />
+          </NavButton>
+        </>
       </ExtendedMenu>
     </>
   );

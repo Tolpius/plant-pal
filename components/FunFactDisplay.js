@@ -1,9 +1,9 @@
 import { LightbulbIcon } from "@phosphor-icons/react";
 import { useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import useSWR from "swr";
 
-export default function FunFactDisplay(event) {
+export default function FunFactDisplay({ isExtendedNavList }) {
   const { data, isLoading } = useSWR(`/api/funfacts`);
   const [funFactPopUp, setFunFactPopUp] = useState(false);
   const [lastIndex, setLastIndex] = useState(null);
@@ -34,14 +34,14 @@ export default function FunFactDisplay(event) {
 
   return (
     <Wrapper>
-      {event.isExtendedNavList === true ? (
+      {isExtendedNavList === true ? (
         <LightButton onClick={handleClick}>
           FunFact
-          <LightbulbIcon className="icon" size="24" weight="regular" />
+          <LightbulbIcon size="24" weight="regular" />
         </LightButton>
       ) : (
         <LightButton onClick={handleClick}>
-          <LightbulbIcon className="icon" size="24" weight="regular" />
+          <LightbulbIcon size="24" weight="regular" />
         </LightButton>
       )}
       {funFactPopUp && (
@@ -120,7 +120,7 @@ const StyledPopUpFunFact = styled.article`
   background-size: cover;
   background-position: center;
   border-radius: var(--radius-lg);
-  box-shadow: 5px 5px 15px black;
+  box-shadow: var(--box-shadow-md);
   color: var(--color-white);
   text-shadow: 0 1px 3px black;
 `;
