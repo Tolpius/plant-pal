@@ -6,6 +6,7 @@ import { useState } from "react";
 import PlantFilter from "@/components/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
 import { useSession } from "next-auth/react";
+import SearchPlant from "@/components/search/SearchPlant";
 
 export default function Catalogue() {
   const { data, isLoading } = useSWR("/api/plants");
@@ -39,6 +40,7 @@ export default function Catalogue() {
   return (
     <>
       <PlantFilter onFilter={setFilters} />
+      <SearchPlant />
       <PlantList plants={filteredPlantList} session={session} />
     </>
   );
