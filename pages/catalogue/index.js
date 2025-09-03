@@ -13,6 +13,7 @@ export default function Catalogue() {
   const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
   const { data: session, status: sessionStatus } = useSession();
   const [plantList, setPlantList] = useState();
+  const [hideOwned, setHideOwned] = useState(false);
 
   if (isLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
@@ -45,11 +46,22 @@ export default function Catalogue() {
     setPlantList(searchResult);
   }
 
+  function handleHideOwned(event) {
+    console.log(event);
+    setHideOwned(event.target.checked);
+  }
+
   return (
     <>
       <PlantFilter onFilter={setFilters} />
+      <input type="checkbox" onClick={handleHideOwned}></input>
+      <label>hide owned</label>
       <SearchPlant onSearchResult={handleSearchResult} />
-      <PlantList plants={filteredPlantList} session={session} />
+      <PlantList
+        hideOwned={hideOwned}
+        plants={filteredPlantList}
+        session={session}
+      />
     </>
   );
 }

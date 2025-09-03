@@ -2,7 +2,7 @@ import Card from "./Card";
 import styled from "styled-components";
 import useSWR, { mutate } from "swr";
 
-export default function PlantList({ plants, session }) {
+export default function PlantList({ plants, session, hideOwned }) {
   const userId = session?.user.id;
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
   const { data: ownedPlantIds } = useSWR(swrUrl);
@@ -34,6 +34,8 @@ export default function PlantList({ plants, session }) {
     <StyledPlantsList>
       {plants.map((plant) => {
         const isOwned = ownedPlantIds?.includes(plant._id);
+    
+        if(isOwned && hideOwned)return<></>
         return (
           <li key={plant._id}>
             <Card

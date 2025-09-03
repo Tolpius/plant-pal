@@ -33,8 +33,7 @@ export default function SearchPlant({onSearchResult}) {
     <>
     
 
-      <input type="checkbox"></input>
-      <label>hide owned</label>
+     
       <form onSubmit={handleSearch}>
         <input
           name="query"
