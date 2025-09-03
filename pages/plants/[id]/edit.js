@@ -1,8 +1,10 @@
-import PlantForm from "@/components/forms/PlantForm";
-import { ArrowCircleLeftIcon } from "@phosphor-icons/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+
+import Link from "next/link";
+
+import PlantForm from "@/components/forms/PlantForm";
+import { ArrowCircleLeftIcon } from "@phosphor-icons/react";
 
 export default function EditPage() {
   const router = useRouter();
@@ -20,8 +22,7 @@ export default function EditPage() {
 
   if (!isReady || isLoading || error) return <h2>Loading...</h2>;
 
-
-    async function editPlant(plant) {
+  async function editPlant(plant) {
     try {
       const response = await fetch(`/api/plants/${id}`, {
         method: "PUT",

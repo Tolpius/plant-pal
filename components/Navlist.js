@@ -7,22 +7,20 @@ import {
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
-import { signOut, signIn, useSession } from "next-auth/react";
-import FunFactDisplay from "./FunFact";
+import { signOut, signIn } from "next-auth/react";
+import FunFactDisplay from "./FunFactDisplay";
 
 export default function Navlist({
   onToggleNavlist,
   isExtendedNavList,
   session,
   currentPath,
-  handleClick,
 }) {
-
   return (
     <>
       <StyledNavlist>
-        {/* Linke Seite: Logo oder leer */}
-        <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
+        {/* The Navbar is empty except for the logo and the menu icon */}
+        <Logo href="/">🌱 PlantPal</Logo>
         <NavlistButton onClick={() => onToggleNavlist()}>
           <ListIcon
             size={28}
@@ -33,50 +31,37 @@ export default function Navlist({
       </StyledNavlist>
 
       <ExtendedMenu>
-        {!session ? (
-          <NavButton
-            onClick={() => signIn(undefined, { callbackUrl: "/owned" })}
-          >
-            <p>Login</p>
-            <SignInIcon size={28} weight="regular" aria-label="Login" />
+        <>
+          <NavLink onClick={() => onToggleNavlist()} href="/owned">
+            <StyledText>Home</StyledText>
+            <HouseIcon
+              size={28}
+              weight={currentPath === "/owned" ? "fill" : "regular"}
+              aria-label="My Plants"
+            />
+          </NavLink>
+
+          <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
+            <StyledText>Catalogue</StyledText>
+            <BookOpenTextIcon
+              size={28}
+              weight={currentPath === "/catalogue" ? "fill" : "regular"}
+              aria-label="Catalogue"
+            />
+          </NavLink>
+
+          <NavButton>
+            <FunFactDisplay
+              isExtendedNavList={isExtendedNavList}
+              aria-label="Fun Facts"
+            />
           </NavButton>
-        ) : (
-          <>
-            <NavLink onClick={() => onToggleNavlist()} href="/owned">
-              <StyledText>Home</StyledText>
-              <HouseIcon
-                size={28}
-                weight={currentPath === "/owned" ? "fill" : "regular"}
-                aria-label="My Plants"
-              />
-            </NavLink>
 
-            <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
-              Catalogue
-              <BookOpenTextIcon
-                size={28}
-                weight={currentPath === "/catalogue" ? "fill" : "regular"}
-                aria-label="Catalogue"
-              />
-            </NavLink>
-
-            <NavItem>
-              
-              <FunFactDisplay
-                isExtendedNavList={isExtendedNavList}
-                onClick={() => handleClick()}
-                size={26}
-                weight={currentPath === "/owned" ? "fill" : "regular"}
-                aria-label="Fun Facts"
-              />
-            </NavItem>
-
-            <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-              Log Out{" "}
-              <SignOutIcon size={26} weight="regular" aria-label="Logout" />
-            </NavButton>
-          </>
-        )}
+          <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
+            Log Out{" "}
+            <SignOutIcon size={26} weight="regular" aria-label="Logout" />
+          </NavButton>
+        </>
       </ExtendedMenu>
     </>
   );
@@ -89,8 +74,8 @@ const StyledNavlist = styled.nav`
   top: 0;
   left: 0;
   width: 100%;
-  background: var(--color-green-500);
-  border-bottom: 1px solid #e5e5e5;
+  background: var(--color-primary);
+  border-bottom: 1px solid var(--color-neutral-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -112,22 +97,24 @@ const ExtendedMenu = styled.div`
   padding: 12px 22px;
   gap: 1rem;
   flex-direction: column;
-  background-color: green;
-  height: 500px;
+  background-color: var(--color-primary);
+  height: auto;
   justify-content: right;
-  font-size: var(--fs-md);
+  font-size: var(--font-size-md);
 `;
 
 const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: end;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   transition: color 0.2s ease-in-out;
   text-decoration: none;
+  font-size: var(--font-size-lg);
   &:hover {
-    color: #000;
+    color: var(--color-black);
   }
+  border-bottom: 1px solid var(--color-neutral-dark);
 `;
 
 const NavButton = styled.button`
@@ -136,14 +123,14 @@ const NavButton = styled.button`
   justify-content: end;
   background: transparent;
   border: none;
-
+  font-size: var(--font-size-lg);
   padding: 0;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
-
+  border-bottom: 1px solid var(--color-neutral-dark);
   &:hover {
-    color: #000;
+    color: var(--color-black);
   }
 `;
 const NavlistButton = styled.button`
@@ -153,27 +140,16 @@ const NavlistButton = styled.button`
 
   background: transparent;
   border: none;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: #000;
-  }
-`;
-
-const NavItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  color: var(--color-beige-100);
-  transition: color 0.2s ease-in-out;
-
-  &:hover {
-    color: #000;
+    color: var(--color-black);
   }
 `;
 
 const StyledText = styled.p`
   padding: 0px, 25px;
+  font-size: var(--font-size-lg);
 `;

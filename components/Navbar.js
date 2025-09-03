@@ -3,13 +3,12 @@ import {
   HouseIcon,
   ListIcon,
   SignInIcon,
-  SignOutIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
-import { useRouter } from "next/router";
-import { signOut, signIn, useSession } from "next-auth/react";
-import FunFactDisplay from "./FunFact";
+
+import { signIn } from "next-auth/react";
+import FunFactDisplay from "./FunFactDisplay";
 
 export default function Navbar({
   onToggleNavlist,
@@ -19,10 +18,10 @@ export default function Navbar({
 }) {
   return (
     <StyledNavbar>
-      {/* Linke Seite: Logo oder leer */}
+      {/* Logo on the left side */}
       <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
 
-      {/* Rechte Seite */}
+      {/* Right side Menu */}
       <RightMenu>
         {!session ? (
           <NavButton
@@ -50,16 +49,8 @@ export default function Navbar({
             </NavLink>
 
             <NavItem>
-              <FunFactDisplay
-                size={28}
-                weight={currentPath === "/owned" ? "fill" : "regular"}
-                aria-label="Fun Facts"
-              />
+              <FunFactDisplay aria-label="Fun Facts" />
             </NavItem>
-
-            <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-              <SignOutIcon size={28} weight="regular" aria-label="Logout" />
-            </NavButton>
 
             <NavButton onClick={() => onToggleNavlist()}>
               <ListIcon
@@ -82,13 +73,13 @@ const StyledNavbar = styled.nav`
   top: 0;
   left: 0;
   width: 100%;
-  background: var(--color-green-500);
-  border-bottom: 1px solid #e5e5e5;
+  background: var(--color-primary);
+  border-bottom: 1px solid var(--color-neutral-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  z-index: 1000;
+  z-index: 10;
 `;
 
 const Logo = styled(Link)`
@@ -106,30 +97,18 @@ const RightMenu = styled.div`
   gap: 1rem;
 `;
 
-const NavLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-beige-100);
-  transition: color 0.2s ease-in-out;
-
-  &:hover {
-    color: #000;
-  }
-`;
-
 const NavButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
   border: none;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: #000;
+    color: var(--color-black);
   }
 `;
 
@@ -137,10 +116,22 @@ const NavItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
   transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: #000;
+    color: var(--color-black);
+  }
+`;
+
+const NavLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-secondary);
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: var(--color-black);
   }
 `;

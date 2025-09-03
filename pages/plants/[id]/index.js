@@ -1,16 +1,16 @@
-import BackButton from "@/components/BackButton";
-
-import { GearIcon } from "@phosphor-icons/react";
-
-import DeletePopUp from "@/components/DeletePopUp";
-
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import styled from "styled-components";
 import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+
+import Image from "next/image";
+import Link from "next/link";
+import styled from "styled-components";
+
+import { GearIcon } from "@phosphor-icons/react";
+
+import BackButton from "@/components/BackButton";
+import DeletePopUp from "@/components/DeletePopUp";
 
 const lightNeedMap = {
   1: "⛅",
@@ -125,9 +125,9 @@ const StyledHeadline = styled.div`
 `;
 
 const StyledDeleteButton = styled.button`
-  background-color: red;
-  color: white;
-  border-radius: 5px;
+  background-color: var(--color-alert);
+  color: var(--color-text-white);
+  border-radius: var(--radius-sm);
   height: 30px;
   margin-top: 30px;
 `;
@@ -139,24 +139,24 @@ const StyledImage = styled(Image)`
 `;
 
 const NameWrapper = styled.div`
-  font-family: var(--font-headline);
+  font-family: var(--font-primary);
   text-align: center;
 `;
 
 const StyledPlantName = styled.h3`
-  font-size: var(--fs-xl);
+  font-size: var(--font-size-xl);
   margin-bottom: 8px;
 `;
 
 const StyledBotanicalName = styled.p`
   margin-top: 8px;
   font-style: italic;
-  color: var(--color-gray-600);
-  font-size: var(--fs-sm);
+  color: var(--color-text-medium);
+  font-size: var(--font-size-sm);
 `;
 
 const StyledSection = styled.h4`
-  font-size: var(--fs-lg);
+  font-size: var(--font-size-lg);
 `;
 
 const StyledInfoRow = styled.div`

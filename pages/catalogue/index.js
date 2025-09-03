@@ -1,12 +1,14 @@
 import useSWR from "swr";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import styled from "styled-components";
 
 import PlantList from "@/components/PlantList";
-import { useState } from "react";
-
 import PlantFilter from "@/components/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
-import { useSession } from "next-auth/react";
+
 import SearchPlant from "@/components/search/SearchPlant";
+import PlantCounter from "@/components/PlantCounter";
 
 export default function Catalogue() {
   const { data: allPlants, isLoading } = useSWR("/api/plants");
@@ -61,6 +63,14 @@ export default function Catalogue() {
         plants={filteredPlantList}
         session={session}
       />
+      <StyledText>Browse to find and select your plants. </StyledText>
+      <PlantCounter length={filteredPlantList.length} />
     </>
   );
 }
+
+const StyledText = styled.p`
+  padding-top: 10px;
+  text-align: center;
+  font-size: var(--font-size-lg);
+`;
