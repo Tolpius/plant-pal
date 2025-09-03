@@ -2,8 +2,9 @@ import {
   BookOpenTextIcon,
   HouseIcon,
   ListIcon,
-  SignInIcon,
+  MoonIcon,
   SignOutIcon,
+  SunIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
@@ -13,7 +14,6 @@ import FunFactDisplay from "./FunFactDisplay";
 export default function Navlist({
   onToggleNavlist,
   isExtendedNavList,
-  session,
   currentPath,
 }) {
   return (
@@ -24,7 +24,7 @@ export default function Navlist({
         <NavlistButton onClick={() => onToggleNavlist()}>
           <ListIcon
             size={28}
-            weight={isExtendedNavList === "true" ? "fill" : "regular"}
+            weight="fill"
             aria-label="Extended Navlist"
           />
         </NavlistButton>
@@ -58,8 +58,21 @@ export default function Navlist({
           </NavButton>
 
           <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-            Log Out{" "}
+            Log Out
             <SignOutIcon size={26} weight="regular" aria-label="Logout" />
+          </NavButton>
+          <NavButton>
+            Dark Mode / Light Mode
+            <MoonIcon
+              size={32}
+              weight="regular"
+              aria-label="turn dark mode on"
+            />
+            <SunIcon
+              size={32}
+              weight="regular"
+              aria-label="turn dark mode off"
+            />
           </NavButton>
         </>
       </ExtendedMenu>
