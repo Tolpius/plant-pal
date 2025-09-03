@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Head from "next/head";
 import Navbar from "./Navbar.js";
-import SessionButton from "./session/SessionButton";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Navlist from "./Navlist.js";

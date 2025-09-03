@@ -3,7 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
 
-export default function FunFactDisplay() {
+export default function FunFactDisplay({ isExtendedNavList }) {
   const { data, isLoading } = useSWR(`/api/funfacts`);
   const [funFactPopUp, setFunFactPopUp] = useState(false);
   const [lastIndex, setLastIndex] = useState(null);
@@ -34,9 +34,16 @@ export default function FunFactDisplay() {
 
   return (
     <Wrapper>
-      <LightButton onClick={handleClick}>
-        <LightbulbIcon className="icon" size="24" weight="regular" />
-      </LightButton>
+      {isExtendedNavList === true ? (
+        <LightButton onClick={handleClick}>
+          FunFact
+          <LightbulbIcon size="24" weight="regular" />
+        </LightButton>
+      ) : (
+        <LightButton onClick={handleClick}>
+          <LightbulbIcon size="24" weight="regular" />
+        </LightButton>
+      )}
       {funFactPopUp && (
         <PopUpOverlay onClick={() => setFunFactPopUp(false)}>
           <StyledPopUpFunFact onClick={(event) => event.stopPropagation()}>
@@ -58,13 +65,22 @@ export default function FunFactDisplay() {
 const Wrapper = styled.div`
   position: relative;
   display: inline-block;
+  width: 100%;
 `;
 
 const LightButton = styled.button`
-  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: end;
   background: transparent;
   border: none;
-  color: var(--color-beige-100);
+  color: var(--color-secondary);
+  width: 100%;
+  font-size: var(--font-size-lg);
+  transition: color 0.2s ease-in-out;
+  &:hover {
+    color: var(--color-black);
+  }
 `;
 
 const PopUpOverlay = styled.button`
@@ -74,26 +90,26 @@ const PopUpOverlay = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 3;
+  z-index: 11;
 `;
 
 const CancelButton = styled.button`
   position: absolute;
   top: 10px;
   right: 12px;
-  color: white;
+  color: var(--color-white);
   width: 32px;
   height: 32px;
   font-size: 1.2rem;
   background-color: transparent;
   border: none;
-  z-index: 6;
+  z-index: 16;
 `;
 
 const StyledPopUpFunFact = styled.article`
   display: flex;
   justify-content: center;
-  font-size: medium;
+  font-size: var(--font-size-md);
   flex-direction: column;
   z-index: 5;
   position: fixed;
@@ -103,8 +119,8 @@ const StyledPopUpFunFact = styled.article`
   background-image: url("https://plus.unsplash.com/premium_photo-1664005877764-122a552ebf2e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
   background-size: cover;
   background-position: center;
-  border-radius: 25px;
-  box-shadow: 5px 5px 15px black;
-  color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--box-shadow-md);
+  color: var(--color-white);
   text-shadow: 0 1px 3px black;
 `;
