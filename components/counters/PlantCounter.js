@@ -14,6 +14,6 @@ export default function PlantCounter({ length }) {
 const StyledCounter = styled.p`
   text-align: center;
   font-style: italic;
-  color: grey;
+  color: var(--color-text-medium);
   margin-bottom: 0;
 `;

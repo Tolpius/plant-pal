@@ -1,9 +1,11 @@
 import useSWR from "swr";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import styled from "styled-components";
+
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
 import PlantCounter from "@/components/counters/PlantCounter";
-import { useSession } from "next-auth/react";
 
 export default function Owned() {
   const { data: session, status: sessionStatus } = useSession();
@@ -23,14 +25,12 @@ export default function Owned() {
 
   if (plantList.length == 0) {
     return (
-      <p>
-        You dont own any plants. <br />
-        Are you okay?
-        <br />
-        Go get some Plants!
-        <br />
-        They are good for you.
-      </p>
+      <TextWrapper>
+        <StyledText>You dont own any plants.</StyledText>
+        <StyledText>Are you okay?</StyledText>
+        <StyledText>Go get some Plants!</StyledText>
+        <StyledText>They are good for you.</StyledText>
+      </TextWrapper>
     );
   }
 
@@ -49,9 +49,20 @@ export default function Owned() {
 
   return (
     <>
+      <StyledText>My owned Plants</StyledText>
       <PlantFilter onFilter={setFilters} />
       <PlantCounter length={filteredPlantList.length} />
       <PlantList plants={filteredPlantList} session={session} isOwnedPlantList={true}/>
     </>
   );
 }
+
+const StyledText = styled.p`
+  padding-top: var(--padding-bg-sm);
+  text-align: center;
+  font-size: var(--font-size-xl);
+`;
+
+const TextWrapper = styled.div`
+  padding: 50px 0;
+`;
