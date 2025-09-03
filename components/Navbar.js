@@ -19,44 +19,47 @@ export default function Navbar({
   return (
     <StyledNavbar>
       {/* Logo on the left side */}
-      <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
+      <Logo href={session ? "/owned" : "/"} aria-label="Home">
+        🌱 PlantPal
+      </Logo>
 
       {/* Right side Menu */}
       <RightMenu>
         {!session ? (
           <NavButton
             onClick={() => signIn(undefined, { callbackUrl: "/owned" })}
+            aria-label="Login"
           >
             <p>Login</p>
-            <SignInIcon size={28} weight="regular" aria-label="Login" />
+            <SignInIcon size={28} weight="regular" />
           </NavButton>
         ) : (
           <>
-            <NavLink href="/owned">
+            <NavLink href="/owned" aria-label="My Plants">
               <HouseIcon
                 size={28}
                 weight={currentPath === "/owned" ? "fill" : "regular"}
-                aria-label="My Plants"
               />
             </NavLink>
 
-            <NavLink href="/catalogue">
+            <NavLink href="/catalogue" aria-label="Catalogue">
               <BookOpenTextIcon
                 size={28}
                 weight={currentPath === "/catalogue" ? "fill" : "regular"}
-                aria-label="Catalogue"
               />
             </NavLink>
 
-            <NavItem>
-              <FunFactDisplay size={28} aria-label="Fun Facts" />
+            <NavItem aria-label="Fun Facts">
+              <FunFactDisplay size={28} />
             </NavItem>
 
-            <NavButton onClick={() => onToggleNavlist()}>
+            <NavButton
+              onClick={() => onToggleNavlist()}
+              aria-label="Toggle Extended Navlist"
+            >
               <ListIcon
                 size={28}
                 weight={isExtendedNavList === "true" ? "fill" : "regular"}
-                aria-label="Extended Navlist"
               />
             </NavButton>
           </>

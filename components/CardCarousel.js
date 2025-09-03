@@ -12,7 +12,7 @@ export default function CardCarousel({ plant, grayScale }) {
       <CardWrapper>
         <StyledImage
           src={plant.imageUrl || "/defaultImage.png"}
-          alt={plant.name}
+          alt={plant.name ? `Image of ${plant.name}` : "Image of a plant"}
           fill
           grayScale={grayScale}
         />

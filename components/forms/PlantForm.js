@@ -26,7 +26,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} role="form">
       <Styledh2>
         {isEdit ? `Edit ${defaultData.name}` : `Add a new plant`}
       </Styledh2>
@@ -37,6 +37,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
           name="name"
           type="text"
           required
+          aria-required="true"
           defaultValue={isEdit ? defaultData.name : ""}
         />
       </Label>
@@ -47,6 +48,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
           name="botanicalName"
           type="text"
           required
+          aria-required="true"
           defaultValue={isEdit ? defaultData.botanicalName : ""}
         />
       </Label>
@@ -57,6 +59,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
           name="imageUrl"
           type="text"
           required
+          aria-required="true"
           defaultValue={isEdit ? defaultData.imageUrl : ""}
         />
       </Label>
@@ -70,11 +73,12 @@ export default function PlantForm({ defaultData, onSubmit }) {
           max="3"
           step="1"
           defaultValue={isEdit ? defaultData.waterNeed : "1"}
+          aria-label="Water need level"
         />
         <Scale>
-          <span>💧</span>
-          <span>💧💧</span>
-          <span>💧💧💧</span>
+          <span aria-label="Low water need">💧</span>
+          <span aria-label="Medium water need">💧💧</span>
+          <span aria-label="High water need">💧💧💧</span>
         </Scale>
       </Fieldset>
 
@@ -87,11 +91,12 @@ export default function PlantForm({ defaultData, onSubmit }) {
           max="3"
           step="1"
           defaultValue={isEdit ? defaultData.lightNeed : "1"}
+          aria-label="Light need level"
         />
         <Scale>
-          <span>☁️</span>
-          <span>🌥️</span>
-          <span>☀️</span>
+          <span aria-label="Low light need">☁️</span>
+          <span aria-label="Medium light need">🌥️</span>
+          <span aria-label="High light need">☀️</span>
         </Scale>
       </Fieldset>
 
@@ -105,6 +110,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
             defaultChecked={
               isEdit && defaultData.fertiliserSeasons.includes("spring")
             }
+            aria-label="Spring fertiliser season"
           />
           🌸
         </CheckboxLabel>
@@ -116,6 +122,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
             defaultChecked={
               isEdit && defaultData.fertiliserSeasons.includes("summer")
             }
+            aria-label="Summer fertiliser season"
           />
           ☀️
         </CheckboxLabel>
@@ -127,6 +134,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
             defaultChecked={
               isEdit && defaultData.fertiliserSeasons.includes("autumn")
             }
+            aria-label="Autumn fertiliser season"
           />
           🍁
         </CheckboxLabel>
@@ -138,6 +146,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
             defaultChecked={
               isEdit && defaultData.fertiliserSeasons.includes("winter")
             }
+            aria-label="Winter fertiliser season"
           />
           ❄️
         </CheckboxLabel>
@@ -149,11 +158,16 @@ export default function PlantForm({ defaultData, onSubmit }) {
           name="description"
           rows="4"
           required
+          aria-required="true"
           defaultValue={isEdit ? defaultData.description : ""}
         />
       </Label>
 
-      <Button type="submit" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        aria-label={isEdit ? "Submit changes to the plant" : "Add a new plant"}
+      >
         {isEdit ? "Edit Plant" : "Add Plant"}
       </Button>
     </Form>

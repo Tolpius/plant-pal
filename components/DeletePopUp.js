@@ -4,15 +4,23 @@ export default function DeletePopUp({ onDelete, onCancel }) {
   return (
     <WarningOverlay onClick={onCancel}>
       <StyledPopUpWarning onClick={(event) => event.stopPropagation()}>
-        <StyledWarningMessage>
+        <StyledWarningMessage aria-label="Warning Message">
           Are you sure you want to delete this plant? This decision is not
           reversible!
         </StyledWarningMessage>
         <ButtonWrapper>
-          <StyledButton $variant="secondary" onClick={onCancel}>
+          <StyledButton
+            $variant="secondary"
+            onClick={onCancel}
+            aria-label="Cancel deletion"
+          >
             cancel
           </StyledButton>
-          <StyledButton $variant="default" onClick={onDelete}>
+          <StyledButton
+            $variant="default"
+            onClick={onDelete}
+            aria-label="Delete plant"
+          >
             delete
           </StyledButton>
         </ButtonWrapper>

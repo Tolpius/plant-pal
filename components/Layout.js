@@ -28,6 +28,8 @@ export default function Layout({ children }) {
           isExtendedNavList={isExtendedNavList}
           session={session}
           currentPath={currentPath}
+          role="navigation"
+          aria-label="Main navigation"
         />
       </>
     );
@@ -42,8 +44,10 @@ export default function Layout({ children }) {
         isExtendedNavList={isExtendedNavList}
         session={session}
         currentPath={currentPath}
+        role="navigation"
+        aria-label="Main navigation"
       />
-      <Main>{children}</Main>
+      <Main role="main">{children}</Main>
     </>
   );
 }

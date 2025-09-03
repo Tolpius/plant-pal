@@ -1,6 +1,6 @@
 import { LightbulbIcon } from "@phosphor-icons/react";
 import { useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import useSWR from "swr";
 
 export default function FunFactDisplay(event) {
@@ -47,7 +47,10 @@ export default function FunFactDisplay(event) {
       {funFactPopUp && (
         <PopUpOverlay onClick={() => setFunFactPopUp(false)}>
           <StyledPopUpFunFact onClick={(event) => event.stopPropagation()}>
-            <CancelButton onClick={() => setFunFactPopUp(false)}>
+            <CancelButton
+              onClick={() => setFunFactPopUp(false)}
+              aria-label="Close fun fact pop-up"
+            >
               X
             </CancelButton>
             {!data || data.length === 0 ? (

@@ -21,12 +21,16 @@ export default function Navlist({
     <>
       <StyledNavlist>
         {/* The Navbar is empty except for the logo and the menu icon */}
-        <Logo href={session ? "/owned" : "/"}>🌱 PlantPal</Logo>
-        <NavlistButton onClick={() => onToggleNavlist()}>
+        <Logo href={session ? "/owned" : "/"} aria-label="Home">
+          🌱 PlantPal
+        </Logo>
+        <NavlistButton
+          onClick={() => onToggleNavlist()}
+          aria-label="Toggle Extended Navlist"
+        >
           <ListIcon
             size={28}
             weight={isExtendedNavList === "true" ? "fill" : "regular"}
-            aria-label="Extended Navlist"
           />
         </NavlistButton>
       </StyledNavlist>
@@ -35,42 +39,50 @@ export default function Navlist({
         {!session ? (
           <NavButton
             onClick={() => signIn(undefined, { callbackUrl: "/owned" })}
+            aria-label="Login"
           >
             <p>Login</p>
-            <SignInIcon size={28} weight="regular" aria-label="Login" />
+            <SignInIcon size={28} weight="regular" />
           </NavButton>
         ) : (
           <>
-            <NavLink onClick={() => onToggleNavlist()} href="/owned">
+            <NavLink
+              onClick={() => onToggleNavlist()}
+              href="/owned"
+              aria-label="My Plants"
+            >
               <StyledText>Home</StyledText>
               <HouseIcon
                 size={28}
                 weight={currentPath === "/owned" ? "fill" : "regular"}
-                aria-label="My Plants"
               />
             </NavLink>
 
-            <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
+            <NavLink
+              onClick={() => onToggleNavlist()}
+              href="/catalogue"
+              aria-label="Catalogue"
+            >
               <StyledText>Catalogue</StyledText>
               <BookOpenTextIcon
                 size={28}
                 weight={currentPath === "/catalogue" ? "fill" : "regular"}
-                aria-label="Catalogue"
               />
             </NavLink>
 
-            <NavButton>
+            <NavButton aria-label="Fun Facts">
               <FunFactDisplay
                 isExtendedNavList={isExtendedNavList}
                 onClick={() => handleClick()}
                 size={26}
-                aria-label="Fun Facts"
               />
             </NavButton>
 
-            <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-              Log Out{" "}
-              <SignOutIcon size={26} weight="regular" aria-label="Logout" />
+            <NavButton
+              onClick={() => signOut({ callbackUrl: "/" })}
+              aria-label="Logout"
+            >
+              Log Out <SignOutIcon size={26} weight="regular" />
             </NavButton>
           </>
         )}
