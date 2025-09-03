@@ -1,6 +1,5 @@
 import dbConnect from "@/db/dbConnect";
 import Plant from "@/db/models/Plant";
-import { getToken } from "next-auth/jwt";
 
 export default async function handler(request, response) {
   try {
