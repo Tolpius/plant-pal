@@ -1,18 +1,13 @@
 import useSWR from "swr";
-import { useState } from "react";
-import { useSession } from "next-auth/react";
-
 import styled from "styled-components";
-
 import MessageNoPlants from "@/components/MessageNoPlants";
 import PlantCarousel from "@/components/PlantsCarousel";
 
 export default function HomePage() {
   const { data, isLoading } = useSWR("/api/plants");
-  const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
-  const { data: session, status: sessionStatus } = useSession();
 
-  if (isLoading || sessionStatus === "loading") {
+
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 
@@ -24,21 +19,9 @@ export default function HomePage() {
     return <MessageNoPlants />;
   }
 
-  const filteredPlantList =
-    filters.lightNeed.length === 0 && filters.waterNeed.length === 0
-      ? data
-      : data.filter((plant) => {
-          const matchesLight =
-            filters.lightNeed.length === 0 ||
-            filters.lightNeed.includes(plant.lightNeed);
-          const matchesWater =
-            filters.waterNeed.length === 0 ||
-            filters.waterNeed.includes(plant.waterNeed);
-          return matchesLight && matchesWater;
-        });
   return (
     <PageContainer>
-      <PlantCarousel plants={filteredPlantList} />
+      <PlantCarousel plants={data} />
     </PageContainer>
   );
 }

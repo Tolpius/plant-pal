@@ -50,7 +50,7 @@ export default function Navbar({
             </NavLink>
 
             <NavItem aria-label="Fun Facts">
-              <FunFactDisplay size={28} />
+              <FunFactDisplay  />
             </NavItem>
 
             <NavButton

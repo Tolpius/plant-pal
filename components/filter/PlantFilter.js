@@ -57,7 +57,7 @@ const FilterContainer = styled.div`
           overflow: hidden;
         `
       : css`
-          border: none:
+          border: none;
         `};
 `;
 
@@ -84,7 +84,7 @@ const FilterButton = styled.button`
   width: 100%;
   padding: 10px 20px;
   background-color: var(--color-neutral-light);
-  border-radius: 15px;
+  border-radius: var(--radius-bg-md);
   font-size: var(--font-size-md);
   ${(props) =>
     props.$displayBorder
@@ -93,7 +93,7 @@ const FilterButton = styled.button`
           border-radius: 0;
         `
       : css`
-          border: 1px solid black;
+          border: var(--border-sm-dark);
         `};
 `;
 

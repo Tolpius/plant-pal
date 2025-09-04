@@ -1,16 +1,16 @@
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import { useState } from "react";
-import { useSession } from "next-auth/react";
-
-import Image from "next/image";
-import Link from "next/link";
-import styled from "styled-components";
+import BackButton from "@/components/BackButton";
 
 import { GearIcon } from "@phosphor-icons/react";
 
-import BackButton from "@/components/BackButton";
 import DeletePopUp from "@/components/DeletePopUp";
+
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import styled from "styled-components";
+import useSWR from "swr";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 const lightNeedMap = {
   1: "⛅",
@@ -34,11 +34,15 @@ const seasonMap = {
 export default function DetailsPage() {
   const router = useRouter();
   const { isReady } = router;
-  const { id } = router.query;
-
-  const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
-  const [showPopUp, setShowPopUp] = useState(false);
+  const { ownedPlantId } = router.query;
   const { data: session } = useSession();
+
+  const {
+    data: plant,
+    isLoading,
+    error,
+  } = useSWR(session ? `/api/user/${session.user.id}/owned/${ownedPlantId}` : null);
+  const [showPopUp, setShowPopUp] = useState(false);
 
   if (isLoading || !isReady) {
     return <h2>Loading...</h2>;
@@ -47,21 +51,27 @@ export default function DetailsPage() {
     return <h2>Error loading plant data</h2>;
   }
 
-  const seasons = plant.fertiliserSeasons;
+  const seasons = plant?.fertiliserSeasons;
 
   async function deletePlant() {
-    const response = await fetch(`/api/plants/${id}`, { method: "DELETE" });
+    const response = await fetch(
+      `/api/user/${session.user.id}/owned/${ownedPlantId}`,
+      { method: "DELETE" }
+    );
     if (response.ok) {
-      router.push("/");
+      router.push("/owned");
     }
   }
 
   return (
     <>
       <StyledHeadline>
-        <BackButton href={session ? "/catalogue" : "/"} aria-label="Go back"/>
-        {session?.user?.role === "admin" && (
-          <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
+        <BackButton href = "/owned"/>
+        {session && (
+          <Link
+            href={`/owned/${ownedPlantId}/edit`}
+            aria-label="Edit this plant"
+          >
             <GearIcon size={32} />
           </Link>
         )}
@@ -73,17 +83,11 @@ export default function DetailsPage() {
         height={0}
       />
       <NameWrapper>
-        <StyledPlantName aria-label={`Common name: ${plant.name}`}>
-          {plant.name}
-        </StyledPlantName>
-        <StyledBotanicalName
-          aria-label={`Botanical name: ${plant.botanicalName}`}
-        >
-          {plant.botanicalName}
-        </StyledBotanicalName>
+        <StyledPlantName>{plant.name}</StyledPlantName>
+        <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
       </NameWrapper>
-      <p aria-label="Description of the plant">{plant.description}</p>
-      <StyledSection aria-label="Care Information">Care</StyledSection>
+      <p>{plant.description}</p>
+      <StyledSection>Care</StyledSection>
       <StyledInfoRow>
         <StyledCareInfo>Plant likes:</StyledCareInfo>
         <StyledCareInfo>
@@ -98,22 +102,19 @@ export default function DetailsPage() {
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {seasons.map((season) => (
+        {seasons && seasons.map((season) => (
           <li key={season}>
-            <StyledCareInfo>
-              {seasonMap[season.toLowerCase()] ?? season}
-            </StyledCareInfo>
+            <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
           </li>
         ))}
       </StyledInfoRow>
-      {session?.user?.role === "admin" && (
+      {session && (
         <StyledDeleteButton
           onClick={() => {
             setShowPopUp(true);
           }}
-          aria-label="Delete this plant"
         >
-          Delete
+          Remove
         </StyledDeleteButton>
       )}
       {showPopUp && (
@@ -132,9 +133,9 @@ const StyledHeadline = styled.div`
 `;
 
 const StyledDeleteButton = styled.button`
-  background-color: var(--color-alert);
-  color: var(--color-text-white);
-  border-radius: var(--radius-sm);
+  background-color: red;
+  color: white;
+  border-radius: 5px;
   height: 30px;
   margin-top: 30px;
 `;
@@ -146,24 +147,24 @@ const StyledImage = styled(Image)`
 `;
 
 const NameWrapper = styled.div`
-  font-family: var(--font-primary);
+  font-family: var(--font-headline);
   text-align: center;
 `;
 
 const StyledPlantName = styled.h3`
-  font-size: var(--font-size-xl);
+  font-size: var(--fs-xl);
   margin-bottom: 8px;
 `;
 
 const StyledBotanicalName = styled.p`
   margin-top: 8px;
   font-style: italic;
-  color: var(--color-text-medium);
-  font-size: var(--font-size-sm);
+  color: var(--color-gray-600);
+  font-size: var(--fs-sm);
 `;
 
 const StyledSection = styled.h4`
-  font-size: var(--font-size-lg);
+  font-size: var(--fs-lg);
 `;
 
 const StyledInfoRow = styled.div`
