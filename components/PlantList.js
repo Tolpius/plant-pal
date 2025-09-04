@@ -9,7 +9,6 @@ export default function PlantList({ plants, session, isOwnedPlantList = false, }
 
   async function handleAddOwned(plantId) {
     //define fetch options for toggle
-    console.log("plantId from query:", plantId, typeof plantId);
     const fetchUrl = `/api/user/${userId}/owned/${plantId}`;
     const fetchOptions = {
       method: "POST",

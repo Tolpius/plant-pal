@@ -10,7 +10,7 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
     !isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null
   );
 
-  if (isLoading) return <></>;
+  if (isLoading) return null;
   return (
     <StyledLink
       href={isOwnedPlantList ? `/owned/${plant._id}` : `/plants/${plant._id}`}

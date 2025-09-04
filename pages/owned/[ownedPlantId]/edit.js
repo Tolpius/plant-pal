@@ -24,8 +24,6 @@ export default function EditPage() {
     return <h2>Error loading plant data</h2>;
   }
 
-  if (!isReady || isLoading || error) return <h2>Loading...</h2>;
-
   async function editPlant(ownedPlant) {
     try {
       const response = await fetch(

@@ -1,12 +1,10 @@
 import styled from "styled-components";
 
 export default function OwnedCounter({ length }) {
+  if (!length) return null  
   return (
     <StyledCounter>
-      {" "}
-      {length === 0
-        ? ``
-        : `You own ${length} plant${length === 1 ? "" : "s"} of this kind`}
+        {`You own ${length} plant${length === 1 ? "" : "s"} of this kind`}
     </StyledCounter>
   );
 }
