@@ -22,11 +22,7 @@ export default function Navlist({
         {/* The Navbar is empty except for the logo and the menu icon */}
         <Logo href="/">🌱 PlantPal</Logo>
         <NavlistButton onClick={() => onToggleNavlist()}>
-          <ListIcon
-            size={28}
-            weight="fill"
-            aria-label="Extended Navlist"
-          />
+          <ListIcon size={28} weight="fill" aria-label="Extended Navlist" />
         </NavlistButton>
       </StyledNavlist>
 
@@ -63,6 +59,7 @@ export default function Navlist({
           </NavButton>
           <NavButton>
             Dark Mode / Light Mode
+            {/* set a new boolean in the user. toggle the booleaan in a handlerfunction to change the boolean in the data base and also setBoolean to render new */}
             <MoonIcon
               size={32}
               weight="regular"
