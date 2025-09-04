@@ -6,7 +6,7 @@ import styled from "styled-components";
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
-import PlantCounter from "@/components/PlantCounter";
+import PlantCounter from "@/components/counters/PlantCounter";
 
 export default function Catalogue() {
   const { data, isLoading } = useSWR("/api/plants");
