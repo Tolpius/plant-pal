@@ -8,7 +8,7 @@ import PlantFilter from "@/components/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
 
 import SearchPlant from "@/components/search/SearchPlant";
-import PlantCounter from "@/components/PlantCounter";
+import PlantCounter from "@/components/counter/PlantCounter";
 
 export default function Catalogue() {
   const { data: allPlants, isLoading } = useSWR("/api/plants");
