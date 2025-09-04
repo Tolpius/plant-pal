@@ -5,34 +5,25 @@ import styled from "styled-components";
 
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
-import PlantCounter from "@/components/PlantCounter";
+import PlantCounter from "@/components/counters/PlantCounter";
 
 export default function Owned() {
-  const { data: plantList, isPlantsLoading } = useSWR("/api/plants");
   const { data: session, status: sessionStatus } = useSession();
-
-  const userId = session?.user.id;
-  const swrUrl = session ? `/api/user/${userId}/owned` : null;
-
   const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
-  const { data: ownedPlantIds, isLoading: isOwnedPlantIdsLoading } =
-    useSWR(swrUrl);
+  const userId = session?.user.id;
+  const { data: plantList, isPlantsLoading } = useSWR(
+    session ? `/api/user/${userId}/owned` : null
+  );
 
-  if (
-    (isPlantsLoading || sessionStatus === "loading", isOwnedPlantIdsLoading)
-  ) {
+  if (isPlantsLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
   }
 
-  if (!plantList || !ownedPlantIds) {
+  if (!plantList) {
     return <p>Failed to load plantList!</p>;
   }
 
-  const ownedData = ownedPlantIds
-    ? plantList.filter((plant) => ownedPlantIds.includes(plant._id))
-    : [];
-
-  if (ownedData.length == 0) {
+  if (plantList.length == 0) {
     return (
       <TextWrapper>
         <StyledText>You dont own any plants.</StyledText>
@@ -45,8 +36,8 @@ export default function Owned() {
 
   const filteredPlantList =
     filters.lightNeed.length === 0 && filters.waterNeed.length === 0
-      ? ownedData
-      : ownedData.filter((plant) => {
+      ? plantList
+      : plantList.filter((plant) => {
           const matchesLight =
             filters.lightNeed.length === 0 ||
             filters.lightNeed.includes(plant.lightNeed);
@@ -61,7 +52,7 @@ export default function Owned() {
       <StyledText>My owned Plants</StyledText>
       <PlantFilter onFilter={setFilters} />
       <PlantCounter length={filteredPlantList.length} />
-      <PlantList plants={filteredPlantList} session={session} />
+      <PlantList plants={filteredPlantList} session={session} isOwnedPlantList={true}/>
     </>
   );
 }

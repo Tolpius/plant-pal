@@ -1,29 +1,20 @@
 import styled from "styled-components";
-import { CheckCircleIcon, PlusSquareIcon } from "@phosphor-icons/react";
-
-export default function OwnedButton({ onToggleOwned, isOwned }) {
+import { PlusSquareIcon } from "@phosphor-icons/react";
+export default function OwnedButton({ onAddOwned }) {
   function onClick(event) {
     event.preventDefault();
     event.stopPropagation();
-    onToggleOwned();
+    onAddOwned();
   }
 
   return (
     <StyledOwnedButton
       type="button"
       onClick={onClick}
-      aria-label={
-        isOwned ? "Remove from owned plants list" : "Add to owned plants list"
-      }
+      aria-label={"Add to owned plants list"}
     >
-      {isOwned ? (
-        <CheckCircleIcon weight="fill" color="darkgreen" />
-      ) : (
-        <>
-          <PlusSquareIcon color="darkgreen" />
-          <span>Add</span>
-        </>
-      )}
+      <PlusSquareIcon color="darkgreen" />
+      <span>Add</span>
     </StyledOwnedButton>
   );
 }
@@ -39,4 +30,8 @@ const StyledOwnedButton = styled.button`
   border-radius: 3px;
   padding: var(--padding-small);
   z-index: 2;
+  &:hover{
+    cursor: pointer;
+    background: lightgray;
+  }
 `;
