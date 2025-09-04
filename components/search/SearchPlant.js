@@ -10,7 +10,7 @@ export default function SearchPlant({ onSearch }) {
   function handleSearch(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const { query } = Object.fromEntries(formData.entries());
+    const { query } = Object.fromEntries(formData);
     onSearch(query);
   }
 
