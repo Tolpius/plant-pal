@@ -1,12 +1,19 @@
 import Image from "next/image";
 import styled from "styled-components";
 import OwnedButton from "./OwnedButton";
+import OwnedCounter from "./counters/OwnedCounter";
 import Link from "next/link";
+import useSWR from "swr";
 
-export default function Card({ plant, onToggleOwned, isOwned, session }) {
+export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
+  const { data: count, isLoading } = useSWR(
+    !isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null
+  );
+
+  if (isLoading) return null;
   return (
     <StyledLink
-      href={`/plants/${plant._id}`}
+      href={isOwnedPlantList ? `/owned/${plant._id}` : `/plants/${plant._id}`}
       aria-label={`View details for ${plant.name}`}
     >
       <CardWrapper>
@@ -19,12 +26,14 @@ export default function Card({ plant, onToggleOwned, isOwned, session }) {
           />
         </ImageWrapper>
         <TextWrapper>
-          {session && (
-            <OwnedButton
-              isOwned={isOwned}
-              onToggleOwned={onToggleOwned}
-              aria-label={`Toggle owned for ${plant.name}`}
-            />
+          {!isOwnedPlantList && (
+            <>
+              <OwnedButton
+                onAddOwned={onAddOwned}
+                aria-label={`Add plant to owned for ${plant.name}`}
+              />
+              <OwnedCounter length={count} />
+            </>
           )}
           <StyledName>{plant.name}</StyledName>
           <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>

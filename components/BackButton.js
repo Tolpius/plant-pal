@@ -15,4 +15,7 @@ export default function BackButton({
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  &:visited {
+    color: inherit;
+  }
 `;
