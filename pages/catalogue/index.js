@@ -8,7 +8,7 @@ import PlantFilter from "@/components/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
 
 import SearchPlant from "@/components/search/SearchPlant";
-import PlantCounter from "@/components/counter/PlantCounter";
+import PlantCounter from "@/components/counters/PlantCounter";
 
 export default function Catalogue() {
   const { data: allPlants, isLoading } = useSWR("/api/plants");
@@ -54,16 +54,16 @@ export default function Catalogue() {
 
   return (
     <>
+      <StyledText>Browse to find and select your plants. </StyledText>
       <PlantFilter onFilter={setFilters} handleHideOwned={handleHideOwned} />
 
       <SearchPlant onSearchResult={handleSearchResult} />
+      <PlantCounter length={filteredPlantList.length} />
       <PlantList
         hideOwned={hideOwned}
         plants={filteredPlantList}
         session={session}
       />
-      <StyledText>Browse to find and select your plants. </StyledText>
-      <PlantCounter length={filteredPlantList.length} />
     </>
   );
 }
