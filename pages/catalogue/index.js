@@ -5,8 +5,9 @@ import styled from "styled-components";
 
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
-import AddLink from "@/components/AddLink";
+import { AddLink } from "@/components/AddLink";
 import MessageNoPlants from "@/components/MessageNoPlants";
+import PlantCounter from "@/components/counters/PlantCounter";
 
 export default function Catalogue() {
   const { data, isLoading } = useSWR("/api/plants");
@@ -42,7 +43,8 @@ export default function Catalogue() {
     <>
       <StyledText>Browse to find and select your plants. </StyledText>
       <PlantFilter onFilter={setFilters} />
-      <AddLink/>
+      <AddLink href="/add">Didnt find your Plant? Create your own!</AddLink>
+      <PlantCounter length={filteredPlantList.length} />
       <PlantList plants={filteredPlantList} session={session} />
     </>
   );

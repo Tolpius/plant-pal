@@ -1,12 +1,14 @@
-import PlantForm from "@/components/forms/PlantForm";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+
+import PlantForm from "@/components/forms/PlantForm";
 
 export default function Add() {
   const router = useRouter();
   const session = useSession();
   const userId = session?.data?.user?.id;
+
   async function addPlant(plant) {
     try {
       console.log(session);
@@ -32,10 +34,6 @@ export default function Add() {
       console.error("Error adding plant:", error);
       alert("Failed to add plant. Please try again.");
     }
-  }
-
-  if (!session) {
-    return <>loading....</>;
   }
 
   return <PlantForm onSubmit={addPlant} />;
