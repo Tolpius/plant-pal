@@ -1,25 +1,17 @@
 import { useSession } from "next-auth/react";
 
-export default function SearchPlant({ onSearchResult }) {
+export default function SearchPlant({ onSearch }) {
   const { data: session, status: sessionStatus } = useSession();
 
   if (sessionStatus === "loading") {
     return <p>Loading...</p>;
   }
 
-  async function handleSearch(event) {
+  function handleSearch(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const { query } = Object.fromEntries(formData.entries());
-    if (query.trim() === "") return onSearchResult([]);
-
-    const response = await fetch(`/api/plants/search?query=${query}`);
-    const searchResult = await response.json();
-
-    if (!response.ok) {
-      throw new Error(`Failed to search plant: ${response.statusText}`);
-    }
-    onSearchResult(searchResult);
+    onSearch(query);
   }
 
   return (

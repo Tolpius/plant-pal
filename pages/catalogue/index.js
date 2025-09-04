@@ -11,30 +11,33 @@ import SearchPlant from "@/components/search/SearchPlant";
 import PlantCounter from "@/components/counters/PlantCounter";
 
 export default function Catalogue() {
-  const { data: allPlants, isLoading } = useSWR("/api/plants");
-  const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
+  const [query, setQuery] = useState(null);
+  const { data, isLoading } = useSWR(
+    `/api/plants${query ? "/search?query=" + query : ""}`
+  );
+  const [filters, setFilters] = useState({
+    lightNeed: [],
+    waterNeed: [],
+    hideOwned: false,
+  });
   const { data: session, status: sessionStatus } = useSession();
-  const [plantList, setPlantList] = useState();
-  const [hideOwned, setHideOwned] = useState(false);
 
   if (isLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
   }
 
-  if (!allPlants) {
+  if (!data) {
     return <p>Failed to load plants!</p>;
   }
 
-  if (allPlants.length === 0) {
+  if (data.length === 0) {
     return <MessageNoPlants />;
   }
 
   const filteredPlantList =
     filters.lightNeed.length === 0 && filters.waterNeed.length === 0
-      ? !plantList
-        ? allPlants
-        : plantList
-      : (!plantList ? allPlants : plantList).filter((plant) => {
+      ? data
+      : data.filter((plant) => {
           const matchesLight =
             filters.lightNeed.length === 0 ||
             filters.lightNeed.includes(plant.lightNeed);
@@ -44,23 +47,27 @@ export default function Catalogue() {
           return matchesLight && matchesWater;
         });
 
-  function handleSearchResult(searchResult) {
-    setPlantList(searchResult);
+  function handleSearchResult(searchQuery) {
+    setQuery(searchQuery);
   }
 
-  function handleHideOwned(event) {
-    setHideOwned(event.target.checked);
+  function handleFilterReset() {
+    setQuery("");
   }
 
   return (
     <>
       <StyledText>Browse to find and select your plants. </StyledText>
-      <PlantFilter onFilter={setFilters} handleHideOwned={handleHideOwned} />
+      <PlantFilter
+        onFilter={setFilters}
+        onReset={handleFilterReset}
+        withOwnedFilter={true}
+      />
 
-      <SearchPlant onSearchResult={handleSearchResult} />
+      <SearchPlant onSearch={handleSearchResult} />
       <PlantCounter length={filteredPlantList.length} />
       <PlantList
-        hideOwned={hideOwned}
+        hideOwned={filters.hideOwned}
         plants={filteredPlantList}
         session={session}
       />

@@ -1,15 +1,16 @@
-import { useRef } from "react";
 import styled from "styled-components";
 
 export default function PlantFilterForm({
   onSubmit,
   onClear,
-  handleHideOwned,
+  withOwnedFilter,
 }) {
-  const formRef = useRef(null);
   return (
     <StyledFilterForm>
-      <form ref={formRef} onChange={() => onSubmit(formRef)}>
+      <form
+        onSubmit={onSubmit}
+        onChange={(event) => event.currentTarget.requestSubmit()}
+      >
         <StyledLightWrapper>
           <legend>Light Need:</legend>
           <label>
@@ -25,6 +26,7 @@ export default function PlantFilterForm({
             <span>☀️</span>
           </label>
         </StyledLightWrapper>
+
         <StyledWaterWrapper>
           <legend>Water Need:</legend>
           <label>
@@ -40,14 +42,13 @@ export default function PlantFilterForm({
             <span>💧💧💧</span>
           </label>
         </StyledWaterWrapper>
-        <StyledHideWrapper>
-          {handleHideOwned ? (
-            <>
-              <label>hide owned:</label>
-              <input type="checkbox" onClick={handleHideOwned}></input>
-            </>
-          ) : null}
-        </StyledHideWrapper>
+
+        {withOwnedFilter && (
+          <StyledHideWrapper>
+            <label htmlFor="hide-owned">hide owned:</label>
+            <input id="hide-owned" type="checkbox" name="hideOwned" />
+          </StyledHideWrapper>
+        )}
 
         <StyledButtonWrapper>
           <StyledButton type="reset" onClick={onClear}>
