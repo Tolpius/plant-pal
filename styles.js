@@ -21,6 +21,7 @@ export default createGlobalStyle`
     --color-primary-dark: #2D5D42;
 
     --color-secondary: #F5F1E6;
+    --color-secondary-rgba: rgba(245, 241, 230, 0.8);
     --color-secondary-dark: #E9E2D0;
 
     --color-white: #FFFFFF;
