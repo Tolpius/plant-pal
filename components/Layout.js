@@ -16,7 +16,7 @@ export default function Layout({ children }) {
   function onToggleNavlist() {
     setIsExtendedNavList(!isExtendedNavList);
   }
-  
+
   if (isExtendedNavList) {
     return (
       <>
@@ -44,10 +44,9 @@ export default function Layout({ children }) {
         isExtendedNavList={isExtendedNavList}
         session={session}
         currentPath={currentPath}
-        role="navigation"
         aria-label="Main navigation"
       />
-      <Main role="main">{children}</Main>
+      <Main>{children}</Main>
     </>
   );
 }

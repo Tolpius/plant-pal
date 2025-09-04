@@ -26,7 +26,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit} role="form">
+    <Form onSubmit={handleSubmit}>
       <Styledh2>
         {isEdit ? `Edit ${defaultData.name}` : `Add a new plant`}
       </Styledh2>
@@ -37,7 +37,6 @@ export default function PlantForm({ defaultData, onSubmit }) {
           name="name"
           type="text"
           required
-          aria-required="true"
           defaultValue={isEdit ? defaultData.name : ""}
         />
       </Label>
@@ -48,7 +47,6 @@ export default function PlantForm({ defaultData, onSubmit }) {
           name="botanicalName"
           type="text"
           required
-          aria-required="true"
           defaultValue={isEdit ? defaultData.botanicalName : ""}
         />
       </Label>
@@ -59,7 +57,6 @@ export default function PlantForm({ defaultData, onSubmit }) {
           name="imageUrl"
           type="text"
           required
-          aria-required="true"
           defaultValue={isEdit ? defaultData.imageUrl : ""}
         />
       </Label>
@@ -151,18 +148,15 @@ export default function PlantForm({ defaultData, onSubmit }) {
           ❄️
         </CheckboxLabel>
       </Fieldset>
-
       <Label>
         Description
         <Textarea
           name="description"
           rows="4"
           required
-          aria-required="true"
           defaultValue={isEdit ? defaultData.description : ""}
         />
       </Label>
-
       <Button
         type="submit"
         disabled={isSubmitting}

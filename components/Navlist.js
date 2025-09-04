@@ -35,7 +35,6 @@ export default function Navlist({
       </StyledNavlist>
 
       <ExtendedMenu>
-        <></>
         <NavLink
           onClick={() => onToggleNavlist()}
           href="/owned"
