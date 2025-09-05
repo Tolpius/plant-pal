@@ -81,9 +81,6 @@ export default function PlantFilterForm({
         )}
 
         <StyledButtonWrapper>
-          <StyledButton type="submit" aria-label="Apply changes">
-            apply
-          </StyledButton>
           <StyledButton
             type="reset"
             onClick={onClear}
