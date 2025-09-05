@@ -1,13 +1,22 @@
 import styled from "styled-components";
 
-export default function PlantFilterForm({ onSubmit, onClear }) {
+export default function PlantFilterForm({
+  onSubmit,
+  onClear,
+  values,
+  withOwnedFilter,
+}) {
   return (
     <StyledFilterForm>
-      <form onSubmit={onSubmit}>
+      <form
+        onSubmit={onSubmit}
+        onChange={(event) => event.currentTarget.requestSubmit()}
+      >
         <StyledLightWrapper>
           <legend>Light Need:</legend>
           <label>
             <input
+              defaultChecked={values.lightNeed.includes("1")}
               type="checkbox"
               name="lightNeed"
               value="1"
@@ -17,6 +26,7 @@ export default function PlantFilterForm({ onSubmit, onClear }) {
           </label>
           <label>
             <input
+              defaultChecked={values.lightNeed.includes("2")}
               type="checkbox"
               name="lightNeed"
               value="2"
@@ -26,6 +36,7 @@ export default function PlantFilterForm({ onSubmit, onClear }) {
           </label>
           <label>
             <input
+              defaultChecked={values.lightNeed.includes("3")}
               type="checkbox"
               name="lightNeed"
               value="3"
@@ -34,10 +45,12 @@ export default function PlantFilterForm({ onSubmit, onClear }) {
             <span aria-label="Sunny">☀️</span>
           </label>
         </StyledLightWrapper>
+
         <StyledWaterWrapper>
           <legend>Water Need:</legend>
           <label>
             <input
+              defaultChecked={values.waterNeed.includes("1")}
               type="checkbox"
               name="waterNeed"
               value="1"
@@ -47,6 +60,7 @@ export default function PlantFilterForm({ onSubmit, onClear }) {
           </label>
           <label>
             <input
+              defaultChecked={values.waterNeed.includes("2")}
               type="checkbox"
               name="waterNeed"
               value="2"
@@ -56,6 +70,7 @@ export default function PlantFilterForm({ onSubmit, onClear }) {
           </label>
           <label>
             <input
+              defaultChecked={values.waterNeed.includes("3")}
               type="checkbox"
               name="waterNeed"
               value="3"
@@ -64,16 +79,26 @@ export default function PlantFilterForm({ onSubmit, onClear }) {
             <span aria-label="high amount of water">💧💧💧</span>
           </label>
         </StyledWaterWrapper>
+
+        {withOwnedFilter && (
+          <StyledHideWrapper>
+            <label htmlFor="hide-owned">hide owned:</label>
+            <input
+              defaultChecked={values.hideOwned}
+              id="hide-owned"
+              type="checkbox"
+              name="hideOwned"
+            />
+          </StyledHideWrapper>
+        )}
+
         <StyledButtonWrapper>
-          <StyledButton type="submit" aria-label="Apply changes">
-            apply
-          </StyledButton>
           <StyledButton
             type="reset"
             onClick={onClear}
             aria-label="Clear all selections"
           >
-            clear
+            clear filter
           </StyledButton>
         </StyledButtonWrapper>
       </form>
@@ -96,6 +121,13 @@ const StyledLightWrapper = styled.div`
 `;
 
 const StyledWaterWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0 0 20px 50px;
+`;
+
+const StyledHideWrapper = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
