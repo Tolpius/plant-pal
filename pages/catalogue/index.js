@@ -52,16 +52,11 @@ export default function Catalogue() {
     setQuery(searchQuery);
   }
 
-  // function handleFilterReset() {
-  //   setQuery("");
-  // }
-
   return (
     <>
       <StyledText>Browse to find and select your plants. </StyledText>
       <PlantFilter
         onFilter={setFilters}
-        // onReset={handleFilterReset}
         withOwnedFilter={true}
         filterPlantList={filterPlantList}
       />
