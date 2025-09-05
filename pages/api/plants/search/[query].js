@@ -18,7 +18,7 @@ export default async function handler(request, response) {
         response
           .status(422)
           .json({ success: false, message: "Specify the 'query' parameter" });
-      //const pattern = query.replace(" ", "|");
+
       const keywords = query
         .trim() //entf. Leers am start u end
         .split(" "); //bricht string in einzelne Wörter
