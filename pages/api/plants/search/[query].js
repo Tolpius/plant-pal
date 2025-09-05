@@ -5,7 +5,6 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 export default async function handler(request, response) {
   try {
-    //every reqest method except "GET" is protected
     const session = await getServerSession(request, response, authOptions);
     if (!session) {
       return response.status(401).json({ error: "Not authenticated" });
@@ -19,11 +18,9 @@ export default async function handler(request, response) {
           .status(422)
           .json({ success: false, message: "Specify the 'query' parameter" });
 
-      const keywords = query
-        .trim() //entf. Leers am start u end
-        .split(" "); //bricht string in einzelne Wörter
+      const keywords = query.trim().split(" ");
 
-      const pattern = keywords.join("|"); // Monstera|Pothos
+      const pattern = keywords.join("|");
       const plants = await Plant.find({
         $or: [
           {
