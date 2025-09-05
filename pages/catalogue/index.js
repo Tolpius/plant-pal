@@ -27,18 +27,6 @@ export default function Catalogue() {
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
   const { data: ownedPlantIds } = useSWR(swrUrl);
 
-  if (isLoading || sessionStatus === "loading") {
-    return <p>Loading...</p>;
-  }
-
-  if (!data || !Array.isArray(data)) {
-    return <p>Failed to load plants!</p>;
-  }
-
-  if (data.length === 0) {
-    return <MessageNoPlants />;
-  }
-
   const filteredPlantList =
     filters.lightNeed.length === 0 && filters.waterNeed.length === 0
       ? data
@@ -78,8 +66,12 @@ export default function Catalogue() {
       />
 
       <SearchPlant onSearch={handleSearchResult} />
-      <PlantCounter length={fullyFilteredPlantList.length} />
-      <PlantList plants={fullyFilteredPlantList} session={session} />
+      {!isLoading && sessionStatus !== "loading" && (
+        <>
+          <PlantCounter length={fullyFilteredPlantList.length} />
+          <PlantList plants={fullyFilteredPlantList} session={session} />
+        </>
+      )}
     </>
   );
 }

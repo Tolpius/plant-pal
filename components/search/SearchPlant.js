@@ -20,7 +20,10 @@ export default function SearchPlant({ onSearch }) {
   }
 
   return (
-    <form onSubmit={handleSearch}>
+    <form
+      onSubmit={handleSearch}
+      onChange={(event) => event.currentTarget.requestSubmit()}
+    >
       <input
         name="query"
         type="text"
