@@ -22,7 +22,7 @@ export default async function handler(request, response) {
 
       const keywords = query
         .trim() //entf. Leers am start u end
-        .split(/\s+/); //bricht string in einzelne Wörter
+        .split(" "); //bricht string in einzelne Wörter
 
       const pattern = keywords.join("|"); // Monstera|Pothos
       const plants = await Plant.find({

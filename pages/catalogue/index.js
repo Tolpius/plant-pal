@@ -22,6 +22,10 @@ export default function Catalogue() {
   });
   const { data: session, status: sessionStatus } = useSession();
 
+  const userId = session?.user.id;
+  const swrUrl = session ? `/api/user/${userId}/owned` : null;
+  const { data: ownedPlantIds } = useSWR(swrUrl);
+
   if (isLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
   }
@@ -46,6 +50,13 @@ export default function Catalogue() {
             filters.waterNeed.includes(plant.waterNeed);
           return matchesLight && matchesWater;
         });
+  const fullyFilteredPlantList = filteredPlantList.filter((plant) => {
+    const isOwned = ownedPlantIds?.some(
+      (blossum) => blossum.cataloguePlantId === plant._id
+    );
+    if (isOwned && filters.hideOwned) return false;
+    return true;
+  });
 
   function handleSearchResult(searchQuery) {
     setQuery(searchQuery);
@@ -65,12 +76,8 @@ export default function Catalogue() {
       />
 
       <SearchPlant onSearch={handleSearchResult} />
-      <PlantCounter length={filteredPlantList.length} />
-      <PlantList
-        hideOwned={filters.hideOwned}
-        plants={filteredPlantList}
-        session={session}
-      />
+      <PlantCounter length={fullyFilteredPlantList.length} />
+      <PlantList plants={fullyFilteredPlantList} session={session} />
     </>
   );
 }
