@@ -36,9 +36,6 @@ export default function EditPage() {
         throw new Error(`Failed to edit plant: ${response.statusText}`);
       }
 
-      const updatedPlant = await response.json();
-      console.log("Plant edited successfully:", updatedPlant);
-
       router.push(`/plants/${id}`);
     } catch (error) {
       console.error("Error editing plant:", error);

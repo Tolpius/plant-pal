@@ -69,6 +69,7 @@ export const authOptions = {
           provider: account?.provider || "preview_credentials",
           providerAccountId: account?.providerAccountId || user.id,
           role: "user",
+          isDarkMode: false,
         });
       }
 

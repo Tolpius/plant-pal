@@ -10,12 +10,15 @@ import Link from "next/link";
 import styled from "styled-components";
 import { signOut, signIn } from "next-auth/react";
 import FunFactDisplay from "./FunFactDisplay";
+import DarkMode from "./DarkMode";
 
 export default function Navlist({
   onToggleNavlist,
   isExtendedNavList,
   currentPath,
 }) {
+
+  //Get isDarkMode Boolean from User collection
   return (
     <>
       <StyledNavlist>
@@ -68,8 +71,11 @@ export default function Navlist({
           <SignOutIcon size={26} weight="regular" />
         </NavButton>
         <NavButton>
+          <DarkMode/>
           Dark Mode / Light Mode
-          {/* set a new boolean in the user. toggle the booleaan in a handlerfunction to change the boolean in the data base and also setBoolean to render new */}
+          {/* toggle the booleaan in a handlerfunction 
+          to change the boolean in the data base and also setBoolean to render new, 
+          add a class to the body (dark) than new variables will be used */}
           <MoonIcon size={32} weight="regular" aria-label="turn dark mode on" />
           <SunIcon size={32} weight="regular" aria-label="turn dark mode off" />
         </NavButton>
