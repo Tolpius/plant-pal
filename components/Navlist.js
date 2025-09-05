@@ -1,5 +1,7 @@
 import {
   BookOpenTextIcon,
+  CalendarPlusIcon,
+  CalendarX,
   HouseIcon,
   ListIcon,
   SignInIcon,
@@ -47,6 +49,15 @@ export default function Navlist({
               size={28}
               weight={currentPath === "/catalogue" ? "fill" : "regular"}
               aria-label="Catalogue"
+            />
+          </NavLink>
+
+          <NavLink onClick={() => onToggleNavlist()} href="/reminders">
+            <StyledText>Reminders</StyledText>
+            <CalendarPlusIcon
+              size={28}
+              weight={currentPath === "/reminders" ? "fill" : "regular"}
+              aria-label="Reminders"
             />
           </NavLink>
 
