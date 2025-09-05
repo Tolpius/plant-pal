@@ -78,7 +78,7 @@ export default function Navlist({
   );
 }
 
-// ================= Styled Components =================
+// ================= Styled Components ====================
 
 const StyledNavlist = styled.nav`
   position: sticky;
