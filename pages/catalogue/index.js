@@ -27,27 +27,21 @@ export default function Catalogue() {
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
   const { data: ownedPlantIds } = useSWR(swrUrl);
 
-  function filterPlantList() {
-    if (isLoading || !data || !Array.isArray(data)) {
-      return [];
-    }
-    return data.filter((plant) => {
-      const isOwned = ownedPlantIds?.some(
-        (blossum) => blossum.cataloguePlantId === plant._id
-      );
-      if (isOwned && filters.hideOwned) return false;
-      const matchesLight =
-        filters.lightNeed.length === 0 ||
-        filters.lightNeed.includes(plant.lightNeed);
-      const matchesWater =
-        filters.waterNeed.length === 0 ||
-        filters.waterNeed.includes(plant.waterNeed);
-      return matchesLight && matchesWater;
-    });
-  }
-  const filteredPlantList = filterPlantList();
+  const showPlantList = !(isLoading || !data || !Array.isArray(data));
 
-  const showPlantList = !!filteredPlantList && !isLoading;
+  const filteredPlantList = data?.filter((plant) => {
+    const isOwned = ownedPlantIds?.some(
+      (blossum) => blossum.cataloguePlantId === plant._id
+    );
+    if (isOwned && filters.hideOwned) return false;
+    const matchesLight =
+      filters.lightNeed.length === 0 ||
+      filters.lightNeed.includes(plant.lightNeed);
+    const matchesWater =
+      filters.waterNeed.length === 0 ||
+      filters.waterNeed.includes(plant.waterNeed);
+    return matchesLight && matchesWater;
+  });
 
   function handleSearchResult(searchQuery) {
     setQuery(searchQuery);
@@ -59,15 +53,14 @@ export default function Catalogue() {
       <PlantFilter
         onFilter={setFilters}
         withOwnedFilter={true}
-        filterPlantList={filterPlantList}
+        values={filters}
       />
       <AddLink href="/add">Didnt find your Plant? Create your own!</AddLink>
 
-      <SearchPlant onSearch={handleSearchResult} />
-      {isLoading && <p>is loading...</p>}
+      <SearchPlant onSearch={handleSearchResult} value={query} />
       {showPlantList && (
         <>
-      <PlantCounter length={filteredPlantList.length} />
+          <PlantCounter length={filteredPlantList.length} />
           <PlantList plants={filteredPlantList} session={session} />
         </>
       )}

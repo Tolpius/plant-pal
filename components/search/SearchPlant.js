@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 
-export default function SearchPlant({ onSearch }) {
+export default function SearchPlant({ onSearch, value }) {
   const { data: session, status: sessionStatus } = useSession();
 
   if (sessionStatus === "loading") {
@@ -20,11 +20,9 @@ export default function SearchPlant({ onSearch }) {
   }
 
   return (
-    <form
-      onSubmit={handleSearch}
-      onChange={(event) => event.currentTarget.requestSubmit()}
-    >
+    <form onSubmit={handleSearch}>
       <input
+        defaultValue={value}
         name="query"
         type="text"
         placeholder="search for name/botanicalName"

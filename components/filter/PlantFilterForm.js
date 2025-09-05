@@ -3,6 +3,7 @@ import styled from "styled-components";
 export default function PlantFilterForm({
   onSubmit,
   onClear,
+  values,
   withOwnedFilter,
 }) {
   return (
@@ -15,6 +16,7 @@ export default function PlantFilterForm({
           <legend>Light Need:</legend>
           <label>
             <input
+              defaultChecked={values.lightNeed.includes("1")}
               type="checkbox"
               name="lightNeed"
               value="1"
@@ -24,6 +26,7 @@ export default function PlantFilterForm({
           </label>
           <label>
             <input
+              defaultChecked={values.lightNeed.includes("2")}
               type="checkbox"
               name="lightNeed"
               value="2"
@@ -33,6 +36,7 @@ export default function PlantFilterForm({
           </label>
           <label>
             <input
+              defaultChecked={values.lightNeed.includes("3")}
               type="checkbox"
               name="lightNeed"
               value="3"
@@ -46,6 +50,7 @@ export default function PlantFilterForm({
           <legend>Water Need:</legend>
           <label>
             <input
+              defaultChecked={values.waterNeed.includes("1")}
               type="checkbox"
               name="waterNeed"
               value="1"
@@ -55,6 +60,7 @@ export default function PlantFilterForm({
           </label>
           <label>
             <input
+              defaultChecked={values.waterNeed.includes("2")}
               type="checkbox"
               name="waterNeed"
               value="2"
@@ -64,6 +70,7 @@ export default function PlantFilterForm({
           </label>
           <label>
             <input
+              defaultChecked={values.waterNeed.includes("3")}
               type="checkbox"
               name="waterNeed"
               value="3"
@@ -76,7 +83,12 @@ export default function PlantFilterForm({
         {withOwnedFilter && (
           <StyledHideWrapper>
             <label htmlFor="hide-owned">hide owned:</label>
-            <input id="hide-owned" type="checkbox" name="hideOwned" />
+            <input
+              defaultChecked={values.hideOwned}
+              id="hide-owned"
+              type="checkbox"
+              name="hideOwned"
+            />
           </StyledHideWrapper>
         )}
 
