@@ -1,16 +1,13 @@
 import dbConnect from "@/db/dbConnect";
 import Plant from "@/db/models/Plant";
-import { getToken } from "next-auth/jwt";
-import { useRouter } from "next/router";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(request, response) {
   try {
     //every reqest method except "GET" is protected
-    const token = await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET,
-    });
-    if (!token) {
+    const session = await getServerSession(request, response, authOptions);
+    if (!session) {
       return response.status(401).json({ error: "Not authenticated" });
     }
     await dbConnect();
