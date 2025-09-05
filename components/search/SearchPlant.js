@@ -20,15 +20,13 @@ export default function SearchPlant({ onSearch }) {
   }
 
   return (
-    <>
-      <form onSubmit={handleSearch}>
-        <input
-          name="query"
-          type="text"
-          placeholder="search for name/botanicalName"
-        ></input>
-        <button type="submit">Search Plant</button>
-      </form>
-    </>
+    <form onSubmit={handleSearch}>
+      <input
+        name="query"
+        type="text"
+        placeholder="search for name/botanicalName"
+      ></input>
+      <button type="submit">Search Plant</button>
+    </form>
   );
 }
