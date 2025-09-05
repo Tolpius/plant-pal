@@ -32,7 +32,7 @@ export default async function handler(request, response) {
           { botanicalName: { $regex: pattern, $options: "i" } },
         ],
       });
-      return response.status(200).json(plants);
+      return response.status(200).json(plants ?? []);
     } else {
       return response
         .status(405)
