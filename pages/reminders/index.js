@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import styled from "styled-components";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 import ReminderCard from "@/components/ReminderCard";
 
@@ -35,7 +35,7 @@ function groupReminders(reminders) {
     const due = new Date(reminder.dueDate);
     due.setHours(0, 0, 0, 0);
 
-    if (due.getTime() === today.getTime()) groups.Today.push(reminder);
+    if (due <= today) groups.Today.push(reminder);
     else if (due.getTime() === tomorrow.getTime())
       groups.Tomorrow.push(reminder);
     else if (due > tomorrow && due <= endOfThisWeek)
@@ -56,26 +56,34 @@ export default function Reminders() {
   );
 
   const [todayReminders, setTodayReminders] = useState([]);
+  const [tomorrowReminders, setTomorrowReminders] = useState([]);
   const [otherReminders, setOtherReminders] = useState({});
 
   useEffect(() => {
     if (reminders) {
       const grouped = groupReminders(reminders);
       setTodayReminders(grouped.Today);
+      setTomorrowReminders(grouped.Tomorrow);
+
       const others = { ...grouped };
       delete others.Today;
+      delete others.Tomorrow;
       setOtherReminders(others);
     }
   }, [reminders]);
 
-  const handleDone = (id) => {
-    setTodayReminders((prev) => prev.filter((r) => r._id !== id));
+  const handleDoneToday = (id) => {
+    setTodayReminders((prev) => prev.filter((reminder) => reminder._id !== id));
+  };
+
+  const handleDoneTomorrow = (id) => {
+    setTomorrowReminders((prev) =>
+      prev.filter((reminder) => reminder._id !== id)
+    );
   };
 
   if (error) return <div>Failed to load reminders: {error.message}</div>;
   if (!reminders) return <div>Loading...</div>;
-
-  const grouped = groupReminders(reminders);
 
   return (
     <Container>
@@ -83,24 +91,42 @@ export default function Reminders() {
 
       <GroupTitle>Today</GroupTitle>
       {todayReminders.length ? (
-        todayReminders.map((r) => (
+        todayReminders.map((reminder) => (
           <ReminderCard
-            key={r._id}
-            reminder={r}
+            key={reminder._id}
+            reminder={reminder}
             showCheckbox
-            onDone={handleDone}
+            onDone={handleDoneToday}
           />
         ))
       ) : (
         <p>No reminders for today</p>
       )}
 
+      <GroupTitle>Tomorrow</GroupTitle>
+      {tomorrowReminders.length ? (
+        tomorrowReminders.map((reminder) => (
+          <ReminderCard
+            key={reminder._id}
+            reminder={reminder}
+            showCheckbox
+            onDone={handleDoneTomorrow}
+          />
+        ))
+      ) : (
+        <p>No reminders for tomorrow</p>
+      )}
+
       {Object.entries(otherReminders).map(([groupName, items]) =>
         items.length ? (
           <div key={groupName}>
             <GroupTitle>{groupName}</GroupTitle>
-            {items.map((r) => (
-              <ReminderCard key={r._id} reminder={r} showCheckbox={false} />
+            {items.map((reminder) => (
+              <ReminderCard
+                key={reminder._id}
+                reminder={reminder}
+                showCheckbox={false}
+              />
             ))}
           </div>
         ) : null

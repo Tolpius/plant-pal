@@ -7,7 +7,6 @@ import { getToken } from "next-auth/jwt";
 export default async function handler(req, res) {
   const { userId } = req.query;
 
-  // Auth prüfen
   const token = await getToken({
     req,
     secret: process.env.NEXTAUTH_SECRET,
@@ -23,7 +22,6 @@ export default async function handler(req, res) {
     if (!user) return res.status(404).json({ error: "User not found" });
 
     if (req.method === "GET") {
-      // Alle Reminders des Users
       const reminders = await Reminder.find({ userId })
         .populate({
           path: "plantId",
