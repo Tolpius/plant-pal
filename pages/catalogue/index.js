@@ -5,7 +5,6 @@ import styled from "styled-components";
 
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
-import MessageNoPlants from "@/components/MessageNoPlants";
 
 import SearchPlant from "@/components/search/SearchPlant";
 import PlantCounter from "@/components/counters/PlantCounter";
@@ -53,16 +52,16 @@ export default function Catalogue() {
     setQuery(searchQuery);
   }
 
-  function handleFilterReset() {
-    setQuery("");
-  }
+  // function handleFilterReset() {
+  //   setQuery("");
+  // }
 
   return (
     <>
       <StyledText>Browse to find and select your plants. </StyledText>
       <PlantFilter
         onFilter={setFilters}
-        onReset={handleFilterReset}
+        // onReset={handleFilterReset}
         withOwnedFilter={true}
         filterPlantList={filterPlantList}
       />
