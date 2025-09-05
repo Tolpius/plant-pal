@@ -47,7 +47,10 @@ export default function FunFactDisplay({ isExtendedNavList }) {
       {funFactPopUp && (
         <PopUpOverlay onClick={() => setFunFactPopUp(false)}>
           <StyledPopUpFunFact onClick={(event) => event.stopPropagation()}>
-            <CancelButton onClick={() => setFunFactPopUp(false)}>
+            <CancelButton
+              onClick={() => setFunFactPopUp(false)}
+              aria-label="Close fun fact pop-up"
+            >
               X
             </CancelButton>
             {!data || data.length === 0 ? (

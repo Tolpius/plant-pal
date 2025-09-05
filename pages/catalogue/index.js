@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
+import { AddLink } from "@/components/AddLink";
 
 import SearchPlant from "@/components/search/SearchPlant";
 import PlantCounter from "@/components/counters/PlantCounter";
@@ -60,12 +61,13 @@ export default function Catalogue() {
         withOwnedFilter={true}
         filterPlantList={filterPlantList}
       />
+      <AddLink href="/add">Didnt find your Plant? Create your own!</AddLink>
 
       <SearchPlant onSearch={handleSearchResult} />
       {isLoading && <p>is loading...</p>}
       {showPlantList && (
         <>
-          <PlantCounter length={filteredPlantList.length} />
+      <PlantCounter length={filteredPlantList.length} />
           <PlantList plants={filteredPlantList} session={session} />
         </>
       )}

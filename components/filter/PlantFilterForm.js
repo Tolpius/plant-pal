@@ -14,32 +14,62 @@ export default function PlantFilterForm({
         <StyledLightWrapper>
           <legend>Light Need:</legend>
           <label>
-            <input type="checkbox" name="lightNeed" value="1" />
-            <span>☁️</span>
+            <input
+              type="checkbox"
+              name="lightNeed"
+              value="1"
+              aria-label="Low light need"
+            />
+            <span aria-label="Full Shade">☁️</span>
           </label>
           <label>
-            <input type="checkbox" name="lightNeed" value="2" />
-            <span>🌥️</span>
+            <input
+              type="checkbox"
+              name="lightNeed"
+              value="2"
+              aria-label="Medium light need"
+            />
+            <span aria-label="Partly Shady">🌥️</span>
           </label>
           <label>
-            <input type="checkbox" name="lightNeed" value="3" />
-            <span>☀️</span>
+            <input
+              type="checkbox"
+              name="lightNeed"
+              value="3"
+              aria-label="High light need"
+            />
+            <span aria-label="Sunny">☀️</span>
           </label>
         </StyledLightWrapper>
 
         <StyledWaterWrapper>
           <legend>Water Need:</legend>
           <label>
-            <input type="checkbox" name="waterNeed" value="1" />
-            <span>💧</span>
+            <input
+              type="checkbox"
+              name="waterNeed"
+              value="1"
+              aria-label="Low water need"
+            />
+            <span aria-label="little amount of water">💧</span>
           </label>
           <label>
-            <input type="checkbox" name="waterNeed" value="2" />
-            <span>💧💧</span>
+            <input
+              type="checkbox"
+              name="waterNeed"
+              value="2"
+              aria-label="Medium water need"
+            />
+            <span aria-label="medium amount of water">💧💧</span>
           </label>
           <label>
-            <input type="checkbox" name="waterNeed" value="3" />
-            <span>💧💧💧</span>
+            <input
+              type="checkbox"
+              name="waterNeed"
+              value="3"
+              aria-label="High water need"
+            />
+            <span aria-label="high amount of water">💧💧💧</span>
           </label>
         </StyledWaterWrapper>
 
@@ -51,7 +81,14 @@ export default function PlantFilterForm({
         )}
 
         <StyledButtonWrapper>
-          <StyledButton type="reset" onClick={onClear}>
+          <StyledButton type="submit" aria-label="Apply changes">
+            apply
+          </StyledButton>
+          <StyledButton
+            type="reset"
+            onClick={onClear}
+            aria-label="Clear all selections"
+          >
             clear filter
           </StyledButton>
         </StyledButtonWrapper>

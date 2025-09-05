@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Navlist from "./Navlist.js";
 import { useRouter } from "next/router.js";
+import { ToastContainer } from "react-toastify";
 
 export default function Layout({ children }) {
   const { data: session } = useSession();
@@ -16,7 +17,7 @@ export default function Layout({ children }) {
   function onToggleNavlist() {
     setIsExtendedNavList(!isExtendedNavList);
   }
-  
+
   if (isExtendedNavList) {
     return (
       <>
@@ -28,6 +29,8 @@ export default function Layout({ children }) {
           isExtendedNavList={isExtendedNavList}
           session={session}
           currentPath={currentPath}
+          role="navigation"
+          aria-label="Main navigation"
         />
       </>
     );
@@ -42,8 +45,21 @@ export default function Layout({ children }) {
         isExtendedNavList={isExtendedNavList}
         session={session}
         currentPath={currentPath}
+        aria-label="Main navigation"
       />
       <Main>{children}</Main>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 }
