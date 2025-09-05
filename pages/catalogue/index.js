@@ -27,26 +27,27 @@ export default function Catalogue() {
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
   const { data: ownedPlantIds } = useSWR(swrUrl);
 
-  const filteredPlantList =
-    filters.lightNeed.length === 0 && filters.waterNeed.length === 0
-      ? data
-      : data.filter((plant) => {
-          const matchesLight =
-            filters.lightNeed.length === 0 ||
-            filters.lightNeed.includes(plant.lightNeed);
-          const matchesWater =
-            filters.waterNeed.length === 0 ||
-            filters.waterNeed.includes(plant.waterNeed);
-          return matchesLight && matchesWater;
-        });
+  function filterPlantList() {
+    if (isLoading || !data || !Array.isArray(data)) {
+      return [];
+    }
+    return data.filter((plant) => {
+      const isOwned = ownedPlantIds?.some(
+        (blossum) => blossum.cataloguePlantId === plant._id
+      );
+      if (isOwned && filters.hideOwned) return false;
+      const matchesLight =
+        filters.lightNeed.length === 0 ||
+        filters.lightNeed.includes(plant.lightNeed);
+      const matchesWater =
+        filters.waterNeed.length === 0 ||
+        filters.waterNeed.includes(plant.waterNeed);
+      return matchesLight && matchesWater;
+    });
+  }
+  const filteredPlantList = filterPlantList();
 
-  const fullyFilteredPlantList = filteredPlantList?.filter((plant) => {
-    const isOwned = ownedPlantIds?.some(
-      (blossum) => blossum.cataloguePlantId === plant._id
-    );
-    if (isOwned && filters.hideOwned) return false;
-    return true;
-  });
+  const showPlantList = !!filteredPlantList && !isLoading;
 
   function handleSearchResult(searchQuery) {
     setQuery(searchQuery);
@@ -63,13 +64,15 @@ export default function Catalogue() {
         onFilter={setFilters}
         onReset={handleFilterReset}
         withOwnedFilter={true}
+        filterPlantList={filterPlantList}
       />
 
       <SearchPlant onSearch={handleSearchResult} />
-      {!isLoading && sessionStatus !== "loading" && (
+      {isLoading && <p>is loading...</p>}
+      {showPlantList && (
         <>
-          <PlantCounter length={fullyFilteredPlantList.length} />
-          <PlantList plants={fullyFilteredPlantList} session={session} />
+          <PlantCounter length={filteredPlantList.length} />
+          <PlantList plants={filteredPlantList} session={session} />
         </>
       )}
     </>
