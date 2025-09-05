@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-export default function ReminderCard({ reminder }) {
+export default function ReminderCard({ reminder, showCheckbox, onDone }) {
   const [done, setDone] = useState(false);
 
   const handleCheckboxChange = () => {
-    setDone(!done);
+    setDone(true);
+    if (onDone) onDone(reminder._id);
   };
 
   return (
@@ -14,44 +15,52 @@ export default function ReminderCard({ reminder }) {
       <Content>
         <h3>{reminder.plantId.name}</h3>
         <p>
-          <strong>Task:</strong> {reminder.title}
+          <Label>Task:</Label> {reminder.title}
         </p>
         <p>
-          <strong>Description:</strong> {reminder.description}
+          <Label>Description:</Label> {reminder.description}
         </p>
         <p>
-          <strong>Due:</strong>{" "}
-          {new Date(reminder.dueDate).toLocaleDateString()}
+          <Label>Due:</Label> {new Date(reminder.dueDate).toLocaleDateString()}
         </p>
       </Content>
-      <CheckboxContainer>
-        <input type="checkbox" checked={done} onChange={handleCheckboxChange} />
-      </CheckboxContainer>
+      {showCheckbox && (
+        <CheckboxContainer>
+          <input
+            type="checkbox"
+            checked={done}
+            onChange={handleCheckboxChange}
+          />
+        </CheckboxContainer>
+      )}
     </Card>
   );
 }
 
 const Card = styled.div`
-  border: 1px solid #ccc;
-  padding: 10px;
+  border: var(--border-sm-dark);
+  padding: var(--padding-bg-sm);
   margin-bottom: 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   display: flex;
   gap: 10px;
   align-items: center;
-  background-color: ${({ done }) => (done ? "#e0ffe0" : "#fff")};
-  opacity: ${({ done }) => (done ? 0.6 : 1)};
+  background-color: var(--color-white);
 `;
 
 const Image = styled.img`
   width: 80px;
   height: 80px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 `;
 
 const Content = styled.div`
   flex: 1;
+`;
+
+const Label = styled.span`
+  font-weight: bold;
 `;
 
 const CheckboxContainer = styled.div`
