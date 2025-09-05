@@ -27,6 +27,9 @@ export default function PlantFilter({ onFilter }) {
           onClick={() => {
             setShowFilter(!showFilter);
           }}
+          aria-label={
+            showFilter ? "Hide filter options" : "Show filter options"
+          }
         >
           <TextWrapper $textPlace={showFilter}>
             <p>{!showFilter ? "Filter ⬇️" : "Filter ⬆️"}</p>

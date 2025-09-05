@@ -20,58 +20,59 @@ export default function Navlist({
     <>
       <StyledNavlist>
         {/* The Navbar is empty except for the logo and the menu icon */}
-        <Logo href="/">🌱 PlantPal</Logo>
-        <NavlistButton onClick={() => onToggleNavlist()}>
-          <ListIcon size={28} weight="fill" aria-label="Extended Navlist" />
+        <Logo href="/" aria-label="Home">
+          🌱 PlantPal
+        </Logo>
+        <NavlistButton
+          onClick={() => onToggleNavlist()}
+          aria-label="Toggle Extended Navlist"
+        >
+          <ListIcon
+            size={28}
+            weight={isExtendedNavList === "true" ? "fill" : "regular"}
+          />
         </NavlistButton>
       </StyledNavlist>
 
       <ExtendedMenu>
-        <>
-          <NavLink onClick={() => onToggleNavlist()} href="/owned">
-            <StyledText>Home</StyledText>
-            <HouseIcon
-              size={28}
-              weight={currentPath === "/owned" ? "fill" : "regular"}
-              aria-label="My Plants"
-            />
-          </NavLink>
+        <NavLink
+          onClick={() => onToggleNavlist()}
+          href="/owned"
+          aria-label="My Plants"
+        >
+          <StyledText>Home</StyledText>
+          <HouseIcon
+            size={28}
+            weight={currentPath === "/owned" ? "fill" : "regular"}
+          />
+        </NavLink>
 
-          <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
-            <StyledText>Catalogue</StyledText>
-            <BookOpenTextIcon
-              size={28}
-              weight={currentPath === "/catalogue" ? "fill" : "regular"}
-              aria-label="Catalogue"
-            />
-          </NavLink>
+        <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
+          <StyledText>Catalogue</StyledText>
+          <BookOpenTextIcon
+            size={28}
+            weight={currentPath === "/catalogue" ? "fill" : "regular"}
+            aria-label="Catalogue"
+          />
+        </NavLink>
 
-          <NavButton>
-            <FunFactDisplay
-              isExtendedNavList={isExtendedNavList}
-              aria-label="Fun Facts"
-            />
-          </NavButton>
+        <NavButton aria-label="Fun Facts">
+          <FunFactDisplay isExtendedNavList={isExtendedNavList} size={26} />
+        </NavButton>
 
-          <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-            Log Out
-            <SignOutIcon size={26} weight="regular" aria-label="Logout" />
-          </NavButton>
-          <NavButton>
-            Dark Mode / Light Mode
-            {/* set a new boolean in the user. toggle the booleaan in a handlerfunction to change the boolean in the data base and also setBoolean to render new */}
-            <MoonIcon
-              size={32}
-              weight="regular"
-              aria-label="turn dark mode on"
-            />
-            <SunIcon
-              size={32}
-              weight="regular"
-              aria-label="turn dark mode off"
-            />
-          </NavButton>
-        </>
+        <NavButton
+          onClick={() => signOut({ callbackUrl: "/" })}
+          aria-label="Logout"
+        >
+          Log Out
+          <SignOutIcon size={26} weight="regular" />
+        </NavButton>
+        <NavButton>
+          Dark Mode / Light Mode
+          {/* set a new boolean in the user. toggle the booleaan in a handlerfunction to change the boolean in the data base and also setBoolean to render new */}
+          <MoonIcon size={32} weight="regular" aria-label="turn dark mode on" />
+          <SunIcon size={32} weight="regular" aria-label="turn dark mode off" />
+        </NavButton>
       </ExtendedMenu>
     </>
   );

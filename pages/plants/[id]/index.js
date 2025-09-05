@@ -59,7 +59,7 @@ export default function DetailsPage() {
   return (
     <>
       <StyledHeadline>
-        <BackButton href={session ? "/catalogue" : "/"} />
+        <BackButton href={session ? "/catalogue" : "/"} aria-label="Go back"/>
         {session?.user?.role === "admin" && (
           <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
             <GearIcon size={32} />
@@ -73,11 +73,17 @@ export default function DetailsPage() {
         height={0}
       />
       <NameWrapper>
-        <StyledPlantName>{plant.name}</StyledPlantName>
-        <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
+        <StyledPlantName aria-label={`Common name: ${plant.name}`}>
+          {plant.name}
+        </StyledPlantName>
+        <StyledBotanicalName
+          aria-label={`Botanical name: ${plant.botanicalName}`}
+        >
+          {plant.botanicalName}
+        </StyledBotanicalName>
       </NameWrapper>
-      <p>{plant.description}</p>
-      <StyledSection>Care</StyledSection>
+      <p aria-label="Description of the plant">{plant.description}</p>
+      <StyledSection aria-label="Care Information">Care</StyledSection>
       <StyledInfoRow>
         <StyledCareInfo>Plant likes:</StyledCareInfo>
         <StyledCareInfo>
@@ -105,6 +111,7 @@ export default function DetailsPage() {
           onClick={() => {
             setShowPopUp(true);
           }}
+          aria-label="Delete this plant"
         >
           Delete
         </StyledDeleteButton>

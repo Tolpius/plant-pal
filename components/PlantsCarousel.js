@@ -28,7 +28,7 @@ export default function PlantCarousel({ plants }) {
   return (
     <>
       <CarouselOuterWrapper>
-        <CarouselWrapper>
+        <CarouselWrapper aria-label="Plant Carousel" tabIndex={0}>
           {plants.map((plant, i) => {
             const offset = getOffset(i);
 
@@ -48,6 +48,7 @@ export default function PlantCarousel({ plants }) {
                   filter: `grayscale(${grayScale})`,
                   transition: "transform 0.5s ease, filter 0.5s ease",
                 }}
+                aria-hidden={Math.abs(offset) > maxVisible}
               >
                 <CardCarousel plant={plant} grayScale={grayScale} />
               </CardWrapper>
@@ -57,9 +58,13 @@ export default function PlantCarousel({ plants }) {
       </CarouselOuterWrapper>
 
       <ButtonsWrapper>
-        <NavButton onClick={prev}>◀</NavButton>
+        <NavButton onClick={prev} aria-label="Previous plant">
+          ◀
+        </NavButton>
         <PlantName>{plants[activeIndex].name}</PlantName>
-        <NavButton onClick={next}>▶</NavButton>
+        <NavButton onClick={next} aria-label="Next plant">
+          ▶
+        </NavButton>
       </ButtonsWrapper>
     </>
   );
@@ -94,7 +99,7 @@ const ButtonsWrapper = styled.div`
 `;
 
 const NavButton = styled.button`
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--color-secondary-rgba);
   border: none;
   font-size: 1.5rem;
   padding: 0.3rem 0.8rem;
