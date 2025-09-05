@@ -22,36 +22,43 @@ export default function Navlist({
     <>
       <StyledNavlist>
         {/* The Navbar is empty except for the logo and the menu icon */}
-        <Logo href="/">🌱 PlantPal</Logo>
-        <NavlistButton onClick={() => onToggleNavlist()}>
+        <Logo href="/" aria-label="Home">
+          🌱 PlantPal
+        </Logo>
+        <NavlistButton
+          onClick={() => onToggleNavlist()}
+          aria-label="Toggle Extended Navlist"
+        >
           <ListIcon
             size={28}
             weight={isExtendedNavList === "true" ? "fill" : "regular"}
-            aria-label="Extended Navlist"
           />
         </NavlistButton>
       </StyledNavlist>
 
       <ExtendedMenu>
-        <>
-          <NavLink onClick={() => onToggleNavlist()} href="/owned">
-            <StyledText>Home</StyledText>
-            <HouseIcon
-              size={28}
-              weight={currentPath === "/owned" ? "fill" : "regular"}
-              aria-label="My Plants"
-            />
-          </NavLink>
+        <NavLink
+          onClick={() => onToggleNavlist()}
+          href="/owned"
+          aria-label="My Plants"
+        >
+          <StyledText>Home</StyledText>
+          <HouseIcon
+            size={28}
+            weight={currentPath === "/owned" ? "fill" : "regular"}
+          />
+        </NavLink>
 
-          <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
-            <StyledText>Catalogue</StyledText>
-            <BookOpenTextIcon
-              size={28}
-              weight={currentPath === "/catalogue" ? "fill" : "regular"}
-              aria-label="Catalogue"
-            />
-          </NavLink>
+        <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
+          <StyledText>Catalogue</StyledText>
+          <BookOpenTextIcon
+            size={28}
+            weight={currentPath === "/catalogue" ? "fill" : "regular"}
+            aria-label="Catalogue"
+          />
+        </NavLink>
 
+<<<<<<< HEAD
           <NavLink onClick={() => onToggleNavlist()} href="/reminders">
             <StyledText>Reminders</StyledText>
             <CalendarPlusIcon
@@ -67,12 +74,19 @@ export default function Navlist({
               aria-label="Fun Facts"
             />
           </NavButton>
+=======
+        <NavButton aria-label="Fun Facts">
+          <FunFactDisplay isExtendedNavList={isExtendedNavList} size={26} />
+        </NavButton>
+>>>>>>> main
 
-          <NavButton onClick={() => signOut({ callbackUrl: "/" })}>
-            Log Out{" "}
-            <SignOutIcon size={26} weight="regular" aria-label="Logout" />
-          </NavButton>
-        </>
+        <NavButton
+          onClick={() => signOut({ callbackUrl: "/" })}
+          aria-label="Logout"
+        >
+          Log Out
+          <SignOutIcon size={26} weight="regular" />
+        </NavButton>
       </ExtendedMenu>
     </>
   );
