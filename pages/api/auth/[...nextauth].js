@@ -83,6 +83,7 @@ export const authOptions = {
       if (dbUser) {
         token.id = dbUser._id.toString();
         token.role = dbUser.role;
+        token.isDarkMode = dbUser.isDarkMode;
       }
 
       return token;
@@ -91,6 +92,7 @@ export const authOptions = {
     async session({ session, token }) {
       session.user.id = token.id;
       session.user.role = token.role;
+      session.user.isDarkMode = token.isDarkMode;
       return session;
     },
   },

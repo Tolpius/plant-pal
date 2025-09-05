@@ -17,7 +17,6 @@ export default function Navlist({
   isExtendedNavList,
   currentPath,
 }) {
-
   //Get isDarkMode Boolean from User collection
   return (
     <>
@@ -70,15 +69,13 @@ export default function Navlist({
           Log Out
           <SignOutIcon size={26} weight="regular" />
         </NavButton>
-        <NavButton>
-          <DarkMode/>
-          Dark Mode / Light Mode
+        <NavItem>
+          <DarkMode />
+
           {/* toggle the booleaan in a handlerfunction 
           to change the boolean in the data base and also setBoolean to render new, 
           add a class to the body (dark) than new variables will be used */}
-          <MoonIcon size={32} weight="regular" aria-label="turn dark mode on" />
-          <SunIcon size={32} weight="regular" aria-label="turn dark mode off" />
-        </NavButton>
+        </NavItem>
       </ExtendedMenu>
     </>
   );
@@ -169,4 +166,21 @@ const NavlistButton = styled.button`
 const StyledText = styled.p`
   padding: 0px, 25px;
   font-size: var(--font-size-lg);
+`;
+
+const NavItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-lg);
+  padding: 0;
+  color: var(--color-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  border-bottom: 1px solid var(--color-neutral-dark);
+  &:hover {
+    color: var(--color-black);
+  }
 `;

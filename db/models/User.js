@@ -8,7 +8,7 @@ const UserSchema = new Schema(
     provider: String,
     providerAccountId: String,
     role: { type: String, enum: ["user", "admin"], default: "user" },
-    isDarkMode: Boolean,
+    isDarkMode: {type: Boolean, default: false},
   },
   { timestamps: true }
 );
