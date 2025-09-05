@@ -11,6 +11,11 @@ export default function SearchPlant({ onSearch }) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const { query } = Object.fromEntries(formData);
+    if (query.trim() === "") {
+      onSearch("");
+      return;
+    }
+
     onSearch(query);
   }
 

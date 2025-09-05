@@ -13,8 +13,9 @@ import PlantCounter from "@/components/counters/PlantCounter";
 export default function Catalogue() {
   const [query, setQuery] = useState(null);
   const { data, isLoading } = useSWR(
-    `/api/plants${query ? "/search?query=" + query : ""}`
+    !query ? "/api/plants" : `/api/plants/search/${query}`
   );
+
   const [filters, setFilters] = useState({
     lightNeed: [],
     waterNeed: [],
@@ -30,7 +31,7 @@ export default function Catalogue() {
     return <p>Loading...</p>;
   }
 
-  if (!data) {
+  if (!data || !Array.isArray(data)) {
     return <p>Failed to load plants!</p>;
   }
 
@@ -50,7 +51,8 @@ export default function Catalogue() {
             filters.waterNeed.includes(plant.waterNeed);
           return matchesLight && matchesWater;
         });
-  const fullyFilteredPlantList = filteredPlantList.filter((plant) => {
+
+  const fullyFilteredPlantList = filteredPlantList?.filter((plant) => {
     const isOwned = ownedPlantIds?.some(
       (blossum) => blossum.cataloguePlantId === plant._id
     );
