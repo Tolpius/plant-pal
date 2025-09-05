@@ -160,7 +160,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
   );
 }
 
-/* styled-components */
+
 const Form = styled.form`
   padding: 1.5rem;
   width: 100%;
