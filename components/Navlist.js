@@ -32,6 +32,7 @@ export default function Navlist({
           <ListIcon
             size={28}
             weight={isExtendedNavList === "true" ? "fill" : "regular"}
+            aria-label="Extended Navlist"
           />
         </NavlistButton>
       </StyledNavlist>
@@ -46,6 +47,7 @@ export default function Navlist({
           <HouseIcon
             size={28}
             weight={currentPath === "/owned" ? "fill" : "regular"}
+            aria-label="My Plants"
           />
         </NavLink>
 
@@ -58,34 +60,28 @@ export default function Navlist({
           />
         </NavLink>
 
-<<<<<<< HEAD
-          <NavLink onClick={() => onToggleNavlist()} href="/reminders">
-            <StyledText>Reminders</StyledText>
-            <CalendarPlusIcon
-              size={28}
-              weight={currentPath === "/reminders" ? "fill" : "regular"}
-              aria-label="Reminders"
-            />
-          </NavLink>
+        <NavLink onClick={() => onToggleNavlist()} href="/reminders">
+          <StyledText>Reminders</StyledText>
+          <CalendarPlusIcon
+            size={28}
+            weight={currentPath === "/reminders" ? "fill" : "regular"}
+            aria-label="Reminders"
+          />
+        </NavLink>
 
-          <NavButton>
-            <FunFactDisplay
-              isExtendedNavList={isExtendedNavList}
-              aria-label="Fun Facts"
-            />
-          </NavButton>
-=======
-        <NavButton aria-label="Fun Facts">
-          <FunFactDisplay isExtendedNavList={isExtendedNavList} size={26} />
+        <NavButton>
+          <FunFactDisplay
+            isExtendedNavList={isExtendedNavList}
+            aria-label="Fun Facts"
+          />
         </NavButton>
->>>>>>> main
 
         <NavButton
           onClick={() => signOut({ callbackUrl: "/" })}
           aria-label="Logout"
         >
           Log Out
-          <SignOutIcon size={26} weight="regular" />
+          <SignOutIcon size={26} weight="regular" aria-label="Logout" />
         </NavButton>
       </ExtendedMenu>
     </>
