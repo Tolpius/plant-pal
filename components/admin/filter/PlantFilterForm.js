@@ -27,7 +27,7 @@ export default function PlantFilterForm({ onSubmit }) {
   );
 }
 
-const StyledFilterForm = styled.div`
+const StyledFilterForm = styled.form`
   background-color: var(--color-white);
   border-radius: 0;
   overflow: hidden;
