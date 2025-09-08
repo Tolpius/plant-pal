@@ -48,6 +48,7 @@ export default function DetailsPage() {
     return <h2>Error loading plant data</h2>;
   }
 
+ if(plant.error) return (<>Error loading plant: {plant.error}</>)
   const seasons = plant.fertiliserSeasons;
 
   async function deletePlant() {
