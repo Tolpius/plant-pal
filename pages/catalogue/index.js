@@ -54,4 +54,5 @@ const StyledText = styled.p`
   padding-top: 10px;
   text-align: center;
   font-size: var(--font-size-lg);
+  color: var(--color-neutral-dark);
 `;

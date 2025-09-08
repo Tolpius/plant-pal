@@ -82,7 +82,7 @@ const ButtonContainer = styled.div`
 // while the form is open.
 const FilterButton = styled.button`
   width: 100%;
-  padding: 10px 20px;
+  padding: var(--padding-bg-sm);
   background-color: var(--color-neutral-light);
   border-radius: var(--radius-bg-md);
   font-size: var(--font-size-md);
