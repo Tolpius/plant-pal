@@ -2,10 +2,9 @@ import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import styled from "styled-components";
-
+import Link from "next/link";
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
-import { AddLink } from "@/components/AddLink";
 
 import SearchPlant from "@/components/search/SearchPlant";
 import PlantCounter from "@/components/counters/PlantCounter";
@@ -72,4 +71,16 @@ const StyledText = styled.p`
   padding-top: 10px;
   text-align: center;
   font-size: var(--font-size-lg);
+`;
+
+const AddLink = styled(Link)`
+  border: 1px solid #000000;
+  border-radius: 10px;
+  background: var(--color-green-300);
+  text-decoration: none;
+  text-align: center;
+  padding: var(--pd-sm);
+  &:visited {
+    color: inherit;
+  }
 `;

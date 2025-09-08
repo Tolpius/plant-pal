@@ -1,0 +1,28 @@
+import Card from "@/components/admin/AdminCatalogueCard";
+import styled from "styled-components";
+
+export default function PlantList({ plants }) {
+
+    if(plants.error) return (<>Error loading plants: {plants.error}</>)
+    if(plants.length === 0) return (<>No plants found. Check your filter.</>)
+  return (
+    <StyledPlantsList>
+      {plants.map((plant) => {
+        return (
+          <li key={plant._id}>
+            <Card plant={plant} />
+          </li>
+        );
+      })}
+    </StyledPlantsList>
+  );
+}
+
+const StyledPlantsList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  align-items: stretch;
+`;

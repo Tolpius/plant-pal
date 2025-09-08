@@ -6,15 +6,29 @@ export async function middleware(req) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const { pathname } = req.nextUrl;
 
-//Plant edit page gets redirected --> Login Page --> then redirect to requested page
+  //Plant edit page gets redirected --> Login Page --> then redirect to requested page
   if (pathname.startsWith("/plants/") && pathname.endsWith("/edit")) {
-  if (!token) {
-    const signInUrl = new URL("/api/auth/signin", req.url);
-    signInUrl.searchParams.set("callbackUrl", req.url);
-    return NextResponse.redirect(signInUrl);
+    if (!token) {
+      const signInUrl = new URL("/api/auth/signin", req.url);
+      signInUrl.searchParams.set("callbackUrl", req.url);
+      return NextResponse.redirect(signInUrl);
+    }
+    if (token.role !== "admin")
+      return NextResponse.redirect(new URL("/catalogue", req.url));
   }
-  if (token.role !== "admin")  return NextResponse.redirect(new URL("/catalogue", req.url))
-}
+
+  // Admin routes: only accessible for users with role 'admin'
+  if (pathname.startsWith("/admin")) {
+    if (!token) {
+      const signInUrl = new URL("/api/auth/signin", req.url);
+      signInUrl.searchParams.set("callbackUrl", req.url);
+      return NextResponse.redirect(signInUrl);
+    }
+    if (token.role !== "admin") {
+      // Optional: redirect to forbidden page (to be implemented)
+      return NextResponse.redirect(new URL("/catalogue", req.url));
+    }
+  }
 
   // Homepage and detailsPage free
   if (pathname === "/" || pathname.startsWith("/plants/")) {
