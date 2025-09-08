@@ -4,7 +4,6 @@ import styled from "styled-components";
 export default function PlantList({ plants }) {
 
     if(plants.error) return (<>Error loading plants: {plants.error}</>)
-console.log(plants)
   return (
     <StyledPlantsList>
       {plants.map((plant) => {
