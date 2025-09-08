@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import styled from "styled-components";
 import Link from "next/link";
-import PlantList from "@/components/PlantList";
+import PlantList from "@/components/admin/AdminPlantList";
 import PlantFilter from "@/components/admin/filter/PlantFilter";
 import MessageNoPlants from "@/components/MessageNoPlants";
 
@@ -31,7 +31,7 @@ export default function AdminCatalogue() {
 
   return (
     <>
-      <StyledText>Browse to find and select your plants. </StyledText>
+      <StyledHeadline>Browse to find and select your plants. </StyledHeadline>
       <PlantFilter onFilter={setFilter} />
       <AddLink href = "/"/>
       <PlantList plants={filteredPlantList} session={session} />
@@ -39,7 +39,7 @@ export default function AdminCatalogue() {
   );
 }
 
-const StyledText = styled.p`
+const StyledHeadline = styled.h2`
   padding-top: 10px;
   text-align: center;
   font-size: var(--font-size-lg);

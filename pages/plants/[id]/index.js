@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
@@ -35,7 +35,8 @@ export default function DetailsPage() {
   const router = useRouter();
   const { isReady } = router;
   const { id } = router.query;
-
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from") || "/";
   const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
   const [showPopUp, setShowPopUp] = useState(false);
   const { data: session } = useSession();
@@ -52,14 +53,14 @@ export default function DetailsPage() {
   async function deletePlant() {
     const response = await fetch(`/api/plants/${id}`, { method: "DELETE" });
     if (response.ok) {
-      router.push("/");
+      router.push(from);
     }
   }
 
   return (
     <>
       <StyledHeadline>
-        <BackButton href={session ? "/catalogue" : "/"} aria-label="Go back"/>
+        <BackButton href={from} aria-label="Go back" />
         {session?.user?.role === "admin" && (
           <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
             <GearIcon size={32} />
