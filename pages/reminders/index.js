@@ -74,7 +74,6 @@ export default function Reminders() {
       (prev) => prev.filter((reminder) => reminder._id !== id),
       false
     );
-    await mutate(`/api/user/${userId}/reminders`);
   };
 
   if (error) return <div>Failed to load reminders: {error.message}</div>;
