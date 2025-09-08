@@ -2,11 +2,11 @@ import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import styled from "styled-components";
-
+import Link from "next/link";
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/admin/filter/PlantFilter";
-import AddLink from "@/components/AddLink";
 import MessageNoPlants from "@/components/MessageNoPlants";
+
 
 export default function AdminCatalogue() {
   const { data, isLoading } = useSWR("/api/admin/catalogue");
@@ -33,7 +33,7 @@ export default function AdminCatalogue() {
     <>
       <StyledText>Browse to find and select your plants. </StyledText>
       <PlantFilter onFilter={setFilter} />
-      <AddLink />
+      <AddLink href = "/"/>
       <PlantList plants={filteredPlantList} session={session} />
     </>
   );
@@ -43,4 +43,16 @@ const StyledText = styled.p`
   padding-top: 10px;
   text-align: center;
   font-size: var(--font-size-lg);
+`;
+
+const AddLink = styled(Link)`
+  border: 1px solid #000000;
+  border-radius: 10px;
+  background: var(--color-green-300);
+  text-decoration: none;
+  text-align: center;
+  padding: var(--pd-sm);
+  &:visited {
+    color: inherit;
+  }
 `;
