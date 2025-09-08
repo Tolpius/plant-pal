@@ -3,7 +3,7 @@ import { PlusSquareIcon } from "@phosphor-icons/react";
 import { toast } from "react-toastify";
 
 export default function OwnedButton({ onAddOwned }) {
-  const notify = () => toast("Wow so easy !");
+  const notify = () => toast("Plant saved");
 
   function onClick(event) {
     notify();

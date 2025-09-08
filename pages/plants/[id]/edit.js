@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import PlantForm from "@/components/forms/PlantForm";
 import { ArrowCircleLeftIcon } from "@phosphor-icons/react";
+import { toast } from "react-toastify";
 
 export default function EditPage() {
   const router = useRouter();
@@ -33,11 +34,14 @@ export default function EditPage() {
       });
 
       if (!response.ok) {
+        toast("Failed. Please try again.");
         throw new Error(`Failed to edit plant: ${response.statusText}`);
       }
 
       const updatedPlant = await response.json();
       console.log("Plant edited successfully:", updatedPlant);
+
+      toast("Plant saved");
 
       router.push(`/plants/${id}`);
     } catch (error) {
