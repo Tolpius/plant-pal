@@ -11,6 +11,7 @@ import styled from "styled-components";
 import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 const lightNeedMap = {
   1: "⛅",
@@ -41,7 +42,9 @@ export default function DetailsPage() {
     data: plant,
     isLoading,
     error,
-  } = useSWR(session ? `/api/user/${session.user.id}/owned/${ownedPlantId}` : null);
+  } = useSWR(
+    session ? `/api/user/${session.user.id}/owned/${ownedPlantId}` : null
+  );
   const [showPopUp, setShowPopUp] = useState(false);
 
   if (isLoading || !isReady) {
@@ -59,14 +62,17 @@ export default function DetailsPage() {
       { method: "DELETE" }
     );
     if (response.ok) {
+      toast.success("Plant removed.");
       router.push("/owned");
+    } else {
+      toast.error("Failed to remove Plant.");
     }
   }
 
   return (
     <>
       <StyledHeadline>
-        <BackButton href = "/owned"/>
+        <BackButton href="/owned" />
         {session && (
           <Link
             href={`/owned/${ownedPlantId}/edit`}
@@ -102,11 +108,12 @@ export default function DetailsPage() {
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {seasons && seasons.map((season) => (
-          <li key={season}>
-            <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
-          </li>
-        ))}
+        {seasons &&
+          seasons.map((season) => (
+            <li key={season}>
+              <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
+            </li>
+          ))}
       </StyledInfoRow>
       {session && (
         <StyledDeleteButton
