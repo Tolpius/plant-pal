@@ -2,15 +2,12 @@ import styled from "styled-components";
 import { useState } from "react";
 
 export default function ReminderCard({ reminder, showCheckbox, onDone }) {
-  const [done, setDone] = useState(false);
-
   const handleCheckboxChange = () => {
-    setDone(true);
     if (onDone) onDone(reminder._id);
   };
 
   return (
-    <Card done={done}>
+    <Card>
       <Image src={reminder.plantId.imageUrl} alt={reminder.plantId.name} />
       <Content>
         <h3>{reminder.plantId.name}</h3>
@@ -26,11 +23,7 @@ export default function ReminderCard({ reminder, showCheckbox, onDone }) {
       </Content>
       {showCheckbox && (
         <CheckboxContainer>
-          <input
-            type="checkbox"
-            checked={done}
-            onChange={handleCheckboxChange}
-          />
+          <input type="checkbox" onChange={handleCheckboxChange} />
         </CheckboxContainer>
       )}
     </Card>

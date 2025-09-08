@@ -49,9 +49,10 @@ function groupReminders(reminders) {
 }
 
 export default function Reminders() {
-  const userId = "68b064b22ec9458653d1cafe"; // später vom Session-User
+  const { data: session } = useSession();
+  const userId = session?.user?.id; // später vom Session-User
   const { data: reminders, error } = useSWR(
-    `/api/user/${userId}/reminders`,
+    userId ? `/api/user/${userId}/reminders` : null,
     fetcher
   );
 
@@ -122,11 +123,7 @@ export default function Reminders() {
           <div key={groupName}>
             <GroupTitle>{groupName}</GroupTitle>
             {items.map((reminder) => (
-              <ReminderCard
-                key={reminder._id}
-                reminder={reminder}
-                showCheckbox={false}
-              />
+              <ReminderCard key={reminder._id} reminder={reminder} />
             ))}
           </div>
         ) : null
