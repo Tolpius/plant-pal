@@ -2,7 +2,12 @@ import styled from "styled-components";
 import Link from "next/link";
 export default function AdminCatalogueCard({ plant }) {
   return (
-    <Card href={{ pathname: "/plants/[id]", query: { id: plant._id, from: "/admin/catalogue" } }}>
+    <Card
+      href={{
+        pathname: "/plants/[id]",
+        query: { id: plant._id, from: "/admin/catalogue" },
+      }}
+    >
       <Image src={plant.imageUrl} alt={plant.name} />
       <Content>
         <h3>{plant.name}</h3>
@@ -20,6 +25,7 @@ const Card = styled(Link)`
   display: flex;
   gap: 10px;
   align-items: center;
+  color: var(--color-neutral-dark);
   background-color: var(--color-white);
   text-decoration: none;
   &:visited {
