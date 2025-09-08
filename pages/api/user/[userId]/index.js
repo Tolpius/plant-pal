@@ -16,16 +16,18 @@ export default async function handler(request, response) {
   try {
     await dbConnect();
     if (request.method === "PUT") {
-   
-       const userOldDarkMode = await User.findById(userId)
+      const userToToggleDarkMode = await User.findById(userId);
+      userToToggleDarkMode.isDarkMode = request.body.isDarkMode;
 
-      const editedUser = { ...userOldDarkMode, isDarkMode: request.body  };
-      const updatedUser = await User.findByIdAndUpdate(id, editedUser, {
-        new: true,
-        runValidators: true,
-      }); 
-      console.log('editedUser: ', editedUser);
-      
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        userToToggleDarkMode,
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
       if (!updatedUser) {
         return response
           .status(404)

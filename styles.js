@@ -66,19 +66,19 @@ export default createGlobalStyle`
   }
 
 .dark {
-    --color-primary: #3B7A57;
+    --color-primary: #1f402eff;
     --color-primary-light: #74C69D;
     --color-primary-dark: #2D5D42;
 
-    --color-secondary: #F5F1E6;
-    --color-secondary-dark: #E9E2D0;
+    --color-secondary: #93896eff;
+    --color-secondary-dark: #b2ad9fff;
 
     --color-white: #FFFFFF;
-    --color-black: #000000ff;
+    --color-black: #ffffffff; //name is unfitting tbh
 
     --color-neutral-dark: #333333;
     --color-neutral-medium: #bfbfbfff;
-    --color-neutral-light: #e3e3e3ff;
+    --color-neutral-light: #9b9b9bff;
 
     --color-text-white: #FFFFFF;
     --color-text-dark: #333333;

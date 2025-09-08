@@ -89,9 +89,7 @@ const Logo = styled(Link)`
   font-weight: bold;
   font-size: 1.25rem;
   text-decoration: none;
-  &:visited {
-    color: inherit;
-  }
+  color: var(--color-black);
 `;
 
 const RightMenu = styled.div`

@@ -1,23 +1,14 @@
 import { useSession } from "next-auth/react";
 import { MoonIcon, SunIcon } from "@phosphor-icons/react";
-import useSWR from "swr";
 import styled from "styled-components";
+import { useEffect } from "react";
 
 export default function DarkMode() {
-  const { data: session } = useSession();
-  console.log("session: ", session.user.id);
+  const { data: session, update } = useSession();
   const isDarkMode = session.user.isDarkMode;
   const userId = session.user.id;
-  console.log("isDarkMode: ", isDarkMode);
-
-  /* if clicked toggle isDarkmode
-    if is Dakr Mode is true set body dark(add a new class) on body dark
-    dark on body uses new variables which are dark (duh!) */
-  //WHERE DO I GET THE USER ID FROM? not query, thats the slug of whereever we are at..
-  //const { data: user, isLoading, error } = useSWR(`/api/user/${userId}`);
 
   async function toggleDarkMode() {
-    // <-- needs the updated user here!!
     try {
       const response = await fetch(`/api/user/${userId}`, {
         method: "PUT",
@@ -32,14 +23,13 @@ export default function DarkMode() {
           `Failed to edit Dark Mode in User: ${response.statusText}`
         );
       }
-
-      const updatedUser = await response.json();
-      console.log("User edited successfully:", updatedUser);
+      update();
     } catch (error) {
       console.error("Error changing User:", error);
       alert("Failed to change User. Please try again.");
     }
   }
+
   return (
     <>
       <NavButton onClick={toggleDarkMode}>
@@ -48,10 +38,25 @@ export default function DarkMode() {
         ) : (
           <MoonIcon size={32} weight="regular" aria-label="turn dark mode on" />
         )}
-        Dark Mode / Light Mode
+        {isDarkMode ? "Light Mode" : "Dark Mode"}
       </NavButton>
     </>
   );
+}
+
+//This is used in the Layout Component
+export function DarkModeHandler() {
+  const { data: session } = useSession();
+
+  const isDarkMode = session?.user?.isDarkMode;
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+  }, [isDarkMode]);
 }
 
 const NavButton = styled.button`
