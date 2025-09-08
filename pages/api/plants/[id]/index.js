@@ -6,7 +6,10 @@ export default async function handler(request, response) {
   try {
     await dbConnect();
     const { id } = request.query;
-
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
     if (request.method === "GET") {
       const plant = await Plant.findById(id);
       if (!plant) {
@@ -14,14 +17,15 @@ export default async function handler(request, response) {
           .status(404)
           .json({ success: false, message: "Plant not found" });
       }
+      //Private plants are only accessible by admins!
+      if (!plant.isPublic && token?.role !== "admin") {
+          return response.status(403).json({ error: "Forbidden" });
+      }
       return response.status(200).json(plant);
     }
 
     //every reqest method except "GET" is protected
-    const token = await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET,
-    });
+
     if (!token) {
       return response.status(401).json({ error: "Not authenticated" });
     }

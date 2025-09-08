@@ -4,12 +4,12 @@ import {
   CalendarX,
   HouseIcon,
   ListIcon,
-  SignInIcon,
   SignOutIcon,
+  TicketIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
-import { signOut, signIn } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import FunFactDisplay from "./FunFactDisplay";
 
 export default function Navlist({
@@ -60,21 +60,29 @@ export default function Navlist({
           />
         </NavLink>
 
+        <NavFunFactWrapper>
+          <FunFactDisplay isExtendedNavList={isExtendedNavList} size={26} />
+        </NavFunFactWrapper>
         <NavLink onClick={() => onToggleNavlist()} href="/reminders">
           <StyledText>Reminders</StyledText>
           <CalendarPlusIcon
             size={28}
             weight={currentPath === "/reminders" ? "fill" : "regular"}
             aria-label="Reminders"
-          />
+            />
         </NavLink>
+        
+            {session.user.role === "admin" && (
+              <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
+                <StyledText>Admin Catalogue</StyledText>
+                <TicketIcon
+                  size={28}
+                  weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
+                  aria-label="Admin Catalogue"
+                />
+              </NavLink>
+            )}
 
-        <NavButton>
-          <FunFactDisplay
-            isExtendedNavList={isExtendedNavList}
-            aria-label="Fun Facts"
-          />
-        </NavButton>
 
         <NavButton
           onClick={() => signOut({ callbackUrl: "/" })}
@@ -165,6 +173,19 @@ const NavlistButton = styled.button`
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 
+  &:hover {
+    color: var(--color-black);
+  }
+`;
+
+const NavFunFactWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  font-size: var(--font-size-lg);
+  color: var(--color-secondary);
+  border-bottom: 1px solid var(--color-neutral-dark);
+  transition: color 0.2s ease-in-out;
   &:hover {
     color: var(--color-black);
   }
