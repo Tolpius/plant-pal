@@ -49,7 +49,7 @@ export default function DetailsPage() {
     return <h2>Error loading plant data</h2>;
   }
 
- if(plant.error) return (<>Error loading plant: {plant.error}</>)
+  if (plant.error) return <>Error loading plant: {plant.error}</>;
   const seasons = plant.fertiliserSeasons;
 
   async function deletePlant() {
@@ -67,7 +67,13 @@ export default function DetailsPage() {
       <StyledHeadline>
         <BackButton href={from} aria-label="Go back" />
         {session?.user?.role === "admin" && (
-          <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
+          <Link
+            href={{
+              pathname: "/plants/[id]/edit",
+              query: { id: plant._id, from: `/plants/${plant._id}`, fromfrom: from},
+            }}
+            aria-label="Edit this plant"
+          >
             <GearIcon size={32} />
           </Link>
         )}
