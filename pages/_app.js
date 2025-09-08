@@ -20,14 +20,6 @@ export default function App({
         <Layout>
           <GlobalStyle />
           <Component {...pageProps} />
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick={false}
-            pauseOnHover
-          />
         </Layout>
       </SWRConfig>
     </SessionProvider>

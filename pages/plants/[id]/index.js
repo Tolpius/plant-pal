@@ -11,6 +11,7 @@ import { GearIcon } from "@phosphor-icons/react";
 
 import BackButton from "@/components/BackButton";
 import DeletePopUp from "@/components/DeletePopUp";
+import { toast } from "react-toastify";
 
 const lightNeedMap = {
   1: "⛅",
@@ -52,14 +53,18 @@ export default function DetailsPage() {
   async function deletePlant() {
     const response = await fetch(`/api/plants/${id}`, { method: "DELETE" });
     if (response.ok) {
+      console.log("testtoast");
+      toast("Plant removed.");
       router.push("/");
+    } else {
+      toast("Failed to remove Plant.");
     }
   }
 
   return (
     <>
       <StyledHeadline>
-        <BackButton href={session ? "/catalogue" : "/"} aria-label="Go back"/>
+        <BackButton href={session ? "/catalogue" : "/"} aria-label="Go back" />
         {session?.user?.role === "admin" && (
           <Link href={`/plants/${id}/edit`} aria-label="Edit this plant">
             <GearIcon size={32} />

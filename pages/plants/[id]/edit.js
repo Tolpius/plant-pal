@@ -34,16 +34,16 @@ export default function EditPage() {
       });
 
       if (!response.ok) {
-        toast("Failed. Please try again.");
-        throw new Error(`Failed to edit plant: ${response.statusText}`);
+        toast("ERROR: Failed. Please try again.");
+
+        return;
       }
 
       const updatedPlant = await response.json();
       console.log("Plant edited successfully:", updatedPlant);
 
-      toast("Plant saved");
-
       router.push(`/plants/${id}`);
+      toast("Plant saved");
     } catch (error) {
       console.error("Error editing plant:", error);
       alert("Failed to edit plant. Please try again.");
