@@ -53,7 +53,6 @@ export default function DetailsPage() {
   async function deletePlant() {
     const response = await fetch(`/api/plants/${id}`, { method: "DELETE" });
     if (response.ok) {
-      console.log("testtoast");
       toast("Plant removed.");
       router.push("/");
     } else {
