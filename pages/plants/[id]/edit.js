@@ -34,7 +34,7 @@ export default function EditPage() {
       });
 
       if (!response.ok) {
-        toast("ERROR: Failed. Please try again.");
+        toast.error("ERROR: Failed. Please try again.");
 
         return;
       }
@@ -43,10 +43,10 @@ export default function EditPage() {
       console.log("Plant edited successfully:", updatedPlant);
 
       router.push(`/plants/${id}`);
-      toast("Plant saved");
+      toast.success("Plant saved");
     } catch (error) {
       console.error("Error editing plant:", error);
-      alert("Failed to edit plant. Please try again.");
+      toast.error("Failed to edit plant. Please try again.");
     }
   }
 

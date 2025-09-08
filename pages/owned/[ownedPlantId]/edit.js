@@ -39,18 +39,18 @@ export default function EditPage() {
       );
 
       if (!response.ok) {
-        toast("Failed to edit Plant.");
+        toast.error("Failed to edit Plant.");
         return;
       }
 
       const updatedPlant = await response.json();
-      toast("Plant saved.");
+      toast.success("Plant saved.");
       console.log("Plant edited successfully:", updatedPlant);
 
       router.push(`/owned/${ownedPlantId}`);
     } catch (error) {
       console.error("Error editing plant:", error);
-      alert("Failed to edit plant. Please try again.");
+      toast.error("Failed to edit plant. Please try again.");
     }
   }
 

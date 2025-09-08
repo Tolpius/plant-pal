@@ -24,12 +24,12 @@ export default function Add() {
       }
 
       const newPlant = await response.json();
-      toast(
+      toast.success(
         "Your plant has been added to your list! An admin will review your plant and might add it to the catalogue."
       );
       router.push(`/owned`);
     } catch (error) {
-      alert("Failed to add plant. Please try again.");
+      toast.error("Failed to add plant. Please try again.");
     }
   }
 

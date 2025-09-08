@@ -62,10 +62,10 @@ export default function DetailsPage() {
       { method: "DELETE" }
     );
     if (response.ok) {
-      toast("Plant removed.");
+      toast.success("Plant removed.");
       router.push("/owned");
     } else {
-      toast("Failed to remove Plant.");
+      toast.error("Failed to remove Plant.");
     }
   }
 
