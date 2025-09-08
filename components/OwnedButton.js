@@ -4,7 +4,6 @@ export default function OwnedButton({ onAddOwned }) {
   function onClick(event) {
     event.preventDefault();
     event.stopPropagation();
-    console.log("Trying to add plant!");
     onAddOwned();
   }
 
@@ -31,4 +30,8 @@ const StyledOwnedButton = styled.button`
   border-radius: 3px;
   padding: var(--padding-small);
   z-index: 2;
+  &:hover{
+    cursor: pointer;
+    background: lightgray;
+  }
 `;

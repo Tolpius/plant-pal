@@ -10,7 +10,7 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
     !isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null
   );
 
-  if (isLoading) return <></>;
+  if (isLoading) return null;
   return (
     <StyledLink
       href={isOwnedPlantList ? `/owned/${plant._id}` : `/plants/${plant._id}`}
@@ -20,7 +20,7 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
         <ImageWrapper>
           <StyledImage
             src={plant.imageUrl || "/defaultImage.png"}
-            alt={plant.name}
+            alt={plant.name ? `Image of ${plant.name}` : "Image of a plant"}
             width={300}
             height={0}
           />
@@ -35,8 +35,14 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
               <OwnedCounter length={count} />
             </>
           )}
-          <StyledName>{plant.name}</StyledName>
-          <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
+          <StyledName aria-label={`Common name: ${plant.name}`}>
+            {plant.name}
+          </StyledName>
+          <StyledBotanicalName
+            aria-label={`Botanical name: ${plant.botanicalName}`}
+          >
+            {plant.botanicalName}
+          </StyledBotanicalName>
         </TextWrapper>
       </CardWrapper>
     </StyledLink>
