@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 export default function EditPage() {
   const { data: session } = useSession();
@@ -38,16 +39,18 @@ export default function EditPage() {
       );
 
       if (!response.ok) {
-        throw new Error(`Failed to edit plant: ${response.statusText}`);
+        toast.error("Failed to edit Plant.");
+        return;
       }
 
       const updatedPlant = await response.json();
+      toast.success("Plant saved.");
       console.log("Plant edited successfully:", updatedPlant);
 
       router.push(`/owned/${ownedPlantId}`);
     } catch (error) {
       console.error("Error editing plant:", error);
-      alert("Failed to edit plant. Please try again.");
+      toast.error("Failed to edit plant. Please try again.");
     }
   }
 
