@@ -2,7 +2,6 @@ import Layout from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { SWRConfig } from "swr";
 import { SessionProvider } from "next-auth/react";
-import { ToastContainer } from "react-toastify";
 
 export default function App({
   Component,

@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export default function OwnedButton({ onAddOwned }) {
   function onClick(event) {
-    toast.success("Plant saved");
+    toast.success("Plant added.");
     event.preventDefault();
     event.stopPropagation();
     onAddOwned();
