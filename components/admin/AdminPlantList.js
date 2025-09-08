@@ -1,7 +1,7 @@
 import Card from "@/components/admin/AdminCatalogueCard";
 import styled from "styled-components";
 
-export default function PlantList({ plants }) {
+export default function AdminPlantList({ plants }) {
 
     if(plants.error) return (<>Error loading plants: {plants.error}</>)
     if(plants.length === 0) return (<>No plants found. Check your filter.</>)
