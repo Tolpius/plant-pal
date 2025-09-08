@@ -1,5 +1,7 @@
 import {
   BookOpenTextIcon,
+  CalendarPlusIcon,
+  CalendarX,
   HouseIcon,
   ListIcon,
   SignOutIcon,
@@ -30,6 +32,7 @@ export default function Navlist({
           <ListIcon
             size={28}
             weight={isExtendedNavList === "true" ? "fill" : "regular"}
+            aria-label="Extended Navlist"
           />
         </NavlistButton>
       </StyledNavlist>
@@ -44,6 +47,7 @@ export default function Navlist({
           <HouseIcon
             size={28}
             weight={currentPath === "/owned" ? "fill" : "regular"}
+            aria-label="My Plants"
           />
         </NavLink>
 
@@ -59,30 +63,40 @@ export default function Navlist({
         <NavFunFactWrapper>
           <FunFactDisplay isExtendedNavList={isExtendedNavList} size={26} />
         </NavFunFactWrapper>
-        {session.user.role === "admin" && (
-          <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
-            <StyledText>Admin Catalogue</StyledText>
-            <TicketIcon
-              size={28}
-              weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
-              aria-label="Admin Catalogue"
+        <NavLink onClick={() => onToggleNavlist()} href="/reminders">
+          <StyledText>Reminders</StyledText>
+          <CalendarPlusIcon
+            size={28}
+            weight={currentPath === "/reminders" ? "fill" : "regular"}
+            aria-label="Reminders"
             />
-          </NavLink>
-        )}
+        </NavLink>
+        
+            {session.user.role === "admin" && (
+              <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
+                <StyledText>Admin Catalogue</StyledText>
+                <TicketIcon
+                  size={28}
+                  weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
+                  aria-label="Admin Catalogue"
+                />
+              </NavLink>
+            )}
+
 
         <NavButton
           onClick={() => signOut({ callbackUrl: "/" })}
           aria-label="Logout"
         >
           Log Out
-          <SignOutIcon size={26} weight="regular" />
+          <SignOutIcon size={26} weight="regular" aria-label="Logout" />
         </NavButton>
       </ExtendedMenu>
     </>
   );
 }
 
-// ================= Styled Components =================
+// ================= Styled Components ====================
 
 const StyledNavlist = styled.nav`
   position: sticky;
