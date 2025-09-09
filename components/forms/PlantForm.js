@@ -30,7 +30,30 @@ export default function PlantForm({ defaultData, onSubmit }) {
       <Styledh2>
         {isEdit ? `Edit ${defaultData.name}` : `Add a new plant`}
       </Styledh2>
-
+ <Fieldset>
+        <legend>Admin Settings</legend>
+        <CheckboxLabel>
+          <input
+            type="checkbox"
+            name="isPublic"
+            value="true"
+            defaultChecked={
+              isEdit && defaultData.isPublic
+            }
+            aria-label="Make public"
+          />
+          make public
+        </CheckboxLabel>
+        <CheckboxLabel>
+          <input
+            type="checkbox"
+            name="addOwned"
+            value="true"
+            aria-label="add to owned plants"
+          />
+          Add to owned plants
+        </CheckboxLabel>
+      </Fieldset>
       <Label>
         Name
         <Input
@@ -167,7 +190,6 @@ export default function PlantForm({ defaultData, onSubmit }) {
     </Form>
   );
 }
-
 
 const Form = styled.form`
   padding: 1.5rem;

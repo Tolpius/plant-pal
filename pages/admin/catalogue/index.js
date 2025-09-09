@@ -76,7 +76,14 @@ export default function AdminCatalogue() {
     <>
       <StyledHeadline>Browse to find and select your plants. </StyledHeadline>
       <PlantFilter onFilter={setFilter} />
-      <AddLink href="/" />
+      <AddLink
+        href={{
+          pathname: "/add",
+          query: { from: "/admin/catalogue" },
+        }}
+      >
+        Add a new plant
+      </AddLink>
       <AdminPlantList
         plants={filteredPlantList}
         session={session}
@@ -96,7 +103,7 @@ const StyledHeadline = styled.h2`
 const AddLink = styled(Link)`
   border: 1px solid #000000;
   border-radius: 10px;
-  background: var(--color-green-300);
+  background-color: var(--color-neutral-light);
   text-decoration: none;
   text-align: center;
   padding: var(--pd-sm);

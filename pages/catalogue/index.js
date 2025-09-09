@@ -54,7 +54,14 @@ export default function Catalogue() {
         withOwnedFilter={true}
         values={filters}
       />
-      <AddLink href="/add">Didnt find your Plant? Create your own!</AddLink>
+      <AddLink
+        href={{
+          pathname: "/add",
+          query: { from: "/catalogue" },
+        }}
+      >
+        Didnt find your Plant? Create your own!
+      </AddLink>
 
       <SearchPlant onSearch={handleSearchResult} value={query} />
       {showPlantList && (
@@ -76,10 +83,11 @@ const StyledText = styled.p`
 const AddLink = styled(Link)`
   border: 1px solid #000000;
   border-radius: 10px;
-  background: var(--color-green-300);
+  background: var(--color-neutral-light);
   text-decoration: none;
   text-align: center;
   padding: var(--pd-sm);
+  color: var(--color-black);
   &:visited {
     color: inherit;
   }
