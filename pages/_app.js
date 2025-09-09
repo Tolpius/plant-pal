@@ -10,6 +10,7 @@ export default function App({
 }) {
   return (
     <SessionProvider session={session}>
+      <GlobalStyle />
       <SWRConfig
         value={{
           refreshInterval: 3000,
@@ -17,9 +18,7 @@ export default function App({
             fetch(resource, init).then((response) => response.json()),
         }}
       >
-        <DarkModeHandler />
         <Layout>
-          <GlobalStyle />
           <Component {...pageProps} />
         </Layout>
       </SWRConfig>

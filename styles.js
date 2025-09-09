@@ -1,6 +1,13 @@
-import { createGlobalStyle } from "styled-components";
+import { useSession } from "next-auth/react";
+import { createGlobalStyle, css } from "styled-components";
 
-export default createGlobalStyle`
+export default function GlobalStyleWrapper() {
+  const { data: session} = useSession();
+  const isDarkMode = session?.user?.isDarkMode;
+  return <GlobalStyles isDarkMode={isDarkMode} />;
+}
+
+const GlobalStyles = createGlobalStyle`
   *,
   *::before,
   *::after {
@@ -64,53 +71,58 @@ export default createGlobalStyle`
     --padding-large: 24px ;
     --padding-extra-large: 32px ;
   }
+${(props) =>
+  props.isDarkMode &&
+  css`
+    :root {
+      --color-primary: #74c69d;
+      --color-primary-light: #a8e6cf;
+      --color-primary-dark: #3b7a57;
 
-.dark {
-  --color-primary: #74C69D;         
-  --color-primary-light: #A8E6CF;  
-  --color-primary-dark: #3B7A57;
+      --color-secondary: #292929ff;
+      --color-secondary-dark: #1f1f1fff;
+      --color-secondary-rgba: rgba(245, 241, 230, 0.8);
 
-  --color-secondary: #292929ff;       
-  --color-secondary-dark: #1f1f1fff; 
-    --color-secondary-rgba: rgba(245, 241, 230, 0.8);
+      --color-white: #ffffff;
+      --color-black: #000000;
 
-  --color-white: #FFFFFF;
-  --color-black: #000000;
+      --color-neutral-dark: #e0e0e0;
+      --color-neutral-medium: #a0a0a0;
+      --color-neutral-light: #74c69d;
 
-  --color-neutral-dark: #E0E0E0;    
-  --color-neutral-medium: #A0A0A0;  
-  --color-neutral-light: #74C69D;   
+      --color-text-white: #ffffff;
+      --color-text-dark: #f5f5f5;
+      --color-text-medium: #bdbdbd;
 
-  --color-text-white: #FFFFFF;
-  --color-text-dark: #F5F5F5;       
-  --color-text-medium: #BDBDBD;    
+      --color-light-grey: #444;
 
-  --color-light-grey: #444;        
+      --color-accent: #ffd166;
+      --color-alert: #ff6b6b;
 
-  --color-accent: #FFD166;          
-  --color-alert: #FF6B6B;           
+      --radius-lg: 25px;
+      --radius-bg-md: 15px;
+      --radius-md: 10px;
+      --radius-sm: 5px;
 
-  --radius-lg: 25px;
-  --radius-bg-md: 15px;
-  --radius-md: 10px;
-  --radius-sm: 5px;
+      --border-sm-dark: 1px solid #555;
 
-  --border-sm-dark: 1px solid #555;
+      --font-primary: "Playfair Display";
+      --font-secondary: "Nunito";
 
-  --font-primary: 'Playfair Display';
-  --font-secondary: 'Nunito';
+      --font-size-xl: 24px;
+      --font-size-lg: 20px;
+      --font-size-md: 16px;
+      --font-size-sm: 14px;
 
-  --font-size-xl: 24px;
-  --font-size-lg: 20px;
-  --font-size-md: 16px;
-  --font-size-sm: 14px;
+      --box-shadow-md: 0px 2px 10px rgba(0, 0, 0, 0.7);
 
-  --box-shadow-md: 0px 2px 10px rgba(0,0,0,0.7);
+      --padding-small: 8px;
+      --padding-bg-sm: 10px;
+      --padding-medium: 16px;
+      --padding-bg-md: 20px;
+      --padding-large: 24px;
+      --padding-extra-large: 32px;
+    }
+  `}
 
-  --padding-small: 8px;
-  --padding-bg-sm: 10px;
-  --padding-medium: 16px;
-  --padding-bg-md: 20px;
-  --padding-large: 24px;
-  --padding-extra-large: 32px;
-}`;
+`;

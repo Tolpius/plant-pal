@@ -1,7 +1,6 @@
 import { useSession } from "next-auth/react";
 import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 import styled from "styled-components";
-import { useEffect } from "react";
 
 export default function DarkMode() {
   const { data: session, update } = useSession();
@@ -42,21 +41,6 @@ export default function DarkMode() {
       </NavButton>
     </>
   );
-}
-
-//This is used in the Layout Component
-export function DarkModeHandler() {
-  const { data: session } = useSession();
-
-  const isDarkMode = session?.user?.isDarkMode;
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
-    }
-  }, [isDarkMode]);
 }
 
 const NavButton = styled.button`
