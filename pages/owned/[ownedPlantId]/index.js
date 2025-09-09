@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
@@ -42,6 +42,7 @@ export default function DetailsPage() {
     data: plant,
     isLoading,
     error,
+    mutate,
   } = useSWR(
     session ? `/api/user/${session.user.id}/owned/${ownedPlantId}` : null
   );
@@ -62,6 +63,7 @@ export default function DetailsPage() {
       { method: "DELETE" }
     );
     if (response.ok) {
+      mutate();
       toast.success("Plant removed.");
       router.push("/owned");
     } else {
