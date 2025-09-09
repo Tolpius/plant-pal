@@ -50,9 +50,17 @@ export default function Owned() {
   return (
     <>
       <StyledText>My owned Plants</StyledText>
-      <PlantFilter onFilter={setFilters} />
+      <PlantFilter
+        onFilter={setFilters}
+        withOwnedFilter={false}
+        values={filters}
+      />
       <PlantCounter length={filteredPlantList.length} />
-      <PlantList plants={filteredPlantList} session={session} isOwnedPlantList={true}/>
+      <PlantList
+        plants={filteredPlantList}
+        session={session}
+        isOwnedPlantList={true}
+      />
     </>
   );
 }
