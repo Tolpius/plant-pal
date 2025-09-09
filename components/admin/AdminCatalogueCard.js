@@ -1,6 +1,13 @@
 import styled from "styled-components";
 import Link from "next/link";
-export default function AdminCatalogueCard({ plant }) {
+import DeletePopUp from "@/components/DeletePopUp";
+import { useState } from "react";
+export default function AdminCatalogueCard({ plant, onDelete }) {
+  const [showPopUp, setShowPopUp] = useState(false);
+  async function deletePlant() {
+    setShowPopUp(false);
+    onDelete(plant._id);
+  }
   return (
     <Card>
       <LinkWrapper
@@ -25,9 +32,23 @@ export default function AdminCatalogueCard({ plant }) {
         >
           edit
         </Link>
-        <button className="delete">delete</button>
+        <button
+          className="delete"
+          onClick={() => {
+            setShowPopUp(true);
+          }}
+          aria-label="Delete this plant"
+        >
+          Delete
+        </button>
         <button className="makepublic">make public</button>
       </CRUDContent>
+      {showPopUp && (
+        <DeletePopUp
+          onDelete={deletePlant}
+          onCancel={() => setShowPopUp(false)}
+        />
+      )}
     </Card>
   );
 }
@@ -47,7 +68,7 @@ const Card = styled.div`
 const LinkWrapper = styled(Link)`
   display: flex;
   align-items: center;
-  width: "100%";
+  width: 100%;
   flex: 2;
   text-decoration: none;
   color: inherit;
