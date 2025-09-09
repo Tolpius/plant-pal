@@ -18,7 +18,7 @@ export default function AdminCatalogue() {
         data.filter((plant) => plant._id !== plantId),
         false
       );
-      const response = await fetch(`/api/plants/${plant._id}`, {
+      const response = await fetch(`/api/plants/${plantId}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -28,6 +28,7 @@ export default function AdminCatalogue() {
       }
       mutate();
     } catch (error) {
+      toast.error("Failed to remove Plant.");
       console.error(error);
     }
   }
