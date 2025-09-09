@@ -33,6 +33,29 @@ export default function AdminCatalogue() {
     }
   }
 
+  async function onTogglePublic(plantId) {
+    try {
+      mutate(
+        data.map(
+          (plant) => plant._id === plantId && (plant.isPublic = !plant.isPublic)
+        ),
+        false
+      );
+      const response = await fetch(`/api/plants/${plantId}`, {
+        method: "PATCH",
+      });
+      if (response.ok) {
+        toast.success(`Plant successfully toggled`);
+      } else {
+        toast.error("Failed to toggle Plant.");
+      }
+      mutate();
+    } catch (error) {
+      toast.error("Failed to toggle Plant.");
+      console.error(error);
+    }
+  }
+
   if (isLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
   }
@@ -58,6 +81,7 @@ export default function AdminCatalogue() {
         plants={filteredPlantList}
         session={session}
         onDelete={onDelete}
+        onTogglePublic={onTogglePublic}
       />
     </>
   );

@@ -24,46 +24,64 @@ export default async function handler(request, response) {
         }
         return response.status(200).json(plant);
       }
-      case "PUT": {
+      //From here on only admins can use the api methods
+      default: {
         if (!token) {
           return response.status(401).json({ error: "Not authenticated" });
         }
         if (token.role !== "admin") {
           return response.status(403).json({ error: "Forbidden" });
         }
-        const editedPlant = { ...request.body, isPublic: true };
-        const plant = await Plant.findByIdAndUpdate(id, editedPlant, {
-          new: true,
-          runValidators: true,
-        });
-        if (!plant) {
-          return response
-            .status(404)
-            .json({ success: false, message: "Plant not found" });
+
+        switch (request.method) {
+          //Use PUT for Edit Plant
+          case "PUT": {
+            const editedPlant = { ...request.body, isPublic: true };
+            const plant = await Plant.findByIdAndUpdate(id, editedPlant, {
+              new: true,
+              runValidators: true,
+            });
+            if (!plant) {
+              return response
+                .status(404)
+                .json({ success: false, message: "Plant not found" });
+            }
+            return response.status(200).json({ success: true, data: plant });
+          }
+          case "DELETE": {
+            const deleted = await Plant.findByIdAndDelete(id);
+            if (!deleted) {
+              return response
+                .status(404)
+                .json({ success: false, message: "Plant not found" });
+            }
+            return response
+              .status(200)
+              .json({ success: true, message: "Plant deleted" });
+          }
+          //Use PATCH for toggle isPublic
+          case "PATCH": {
+            const currentPlant = await Plant.findById(id);
+            if (!currentPlant) {
+              return response
+                .status(404)
+                .json({ success: false, message: "Plant not found" });
+            }
+            const updatedPlant = await Plant.findByIdAndUpdate(
+              id,
+              { isPublic: !currentPlant.isPublic },
+              { new: true, runValidators: true }
+            );
+            return response
+              .status(200)
+              .json({ success: true, data: updatedPlant });
+          }
+          default:
+            return response
+              .status(405)
+              .json({ success: false, message: "Method not allowed" });
         }
-        return response.status(200).json({ success: true, data: plant });
       }
-      case "DELETE": {
-        if (!token) {
-          return response.status(401).json({ error: "Not authenticated" });
-        }
-        if (token.role !== "admin") {
-          return response.status(403).json({ error: "Forbidden" });
-        }
-        const deleted = await Plant.findByIdAndDelete(id);
-        if (!deleted) {
-          return response
-            .status(404)
-            .json({ success: false, message: "Plant not found" });
-        }
-        return response
-          .status(200)
-          .json({ success: true, message: "Plant deleted" });
-      }
-      default:
-        return response
-          .status(405)
-          .json({ success: false, message: "Method not allowed" });
     }
   } catch (error) {
     return response.status(500).json({ success: false, error: error.message });

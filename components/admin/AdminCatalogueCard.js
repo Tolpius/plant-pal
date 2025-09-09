@@ -2,12 +2,21 @@ import styled from "styled-components";
 import Link from "next/link";
 import DeletePopUp from "@/components/DeletePopUp";
 import { useState } from "react";
-export default function AdminCatalogueCard({ plant, onDelete }) {
+export default function AdminCatalogueCard({
+  plant,
+  onDelete,
+  onTogglePublic,
+}) {
   const [showPopUp, setShowPopUp] = useState(false);
   async function deletePlant() {
     setShowPopUp(false);
     onDelete(plant._id);
   }
+
+  async function handleTogglePublic() {
+    onTogglePublic(plant._id);
+  }
+  
   return (
     <Card>
       <LinkWrapper
@@ -41,7 +50,9 @@ export default function AdminCatalogueCard({ plant, onDelete }) {
         >
           Delete
         </button>
-        <button className="makepublic">make public</button>
+        <button className="togglepublic" onClick={handleTogglePublic}>
+          make {plant.isPublic ? "private" : "public"}
+        </button>
       </CRUDContent>
       {showPopUp && (
         <DeletePopUp
@@ -93,7 +104,7 @@ const CRUDContent = styled.div`
   grid-template-rows: auto auto;
   grid-template-areas:
     "edit delete"
-    "makepublic makepublic";
+    "togglepublic togglepublic";
   gap: 10px;
   flex: 1;
   align-items: center;
@@ -117,7 +128,7 @@ const CRUDContent = styled.div`
   & > .delete {
     grid-area: delete;
   }
-  & > .makepublic {
-    grid-area: makepublic;
+  & > .togglepublic {
+    grid-area: togglepublic;
   }
 `;
