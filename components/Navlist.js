@@ -137,7 +137,7 @@ const NavLink = styled(Link)`
   &:hover {
     color: var(--color-black);
   }
-  border-bottom: 1px solid var(--color-neutral-dark);
+  border-bottom: 1px solid var(--color-neutral-base);
 `;
 
 const NavButton = styled.button`
@@ -151,7 +151,7 @@ const NavButton = styled.button`
   color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
-  border-bottom: 1px solid var(--color-neutral-dark);
+  border-bottom: 1px solid var(--color-neutral-base);
   &:hover {
     color: var(--color-black);
   }
@@ -178,7 +178,7 @@ const NavFunFactWrapper = styled.div`
   justify-content: end;
   font-size: var(--font-size-lg);
   color: var(--color-secondary);
-  border-bottom: 1px solid var(--color-neutral-dark);
+  border-bottom: 1px solid var(--color-neutral-base);
   transition: color 0.2s ease-in-out;
   &:hover {
     color: var(--color-black);
@@ -201,7 +201,7 @@ const NavItem = styled.div`
   color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
-  border-bottom: 1px solid var(--color-neutral-dark);
+  border-bottom: 1px solid var(--color-neutral-base);
   &:hover {
     color: var(--color-black);
   }

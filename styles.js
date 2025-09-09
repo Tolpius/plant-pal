@@ -38,16 +38,11 @@ const GlobalStyles = createGlobalStyle`
     --color-neutral-medium: #bfbfbfff;
     --color-neutral-highlight: #e3e3e3ff;
 
-    --color-neutral-light: #ff0000ff; //!!!!!!!!!!!!!!!
-    --color-neutral-dark: #ff0000ff;
-
     --color-text-white: #FFFFFF;
-    --color-text-dark: #333333;
+    --color-text-base: #333333;
     --color-text-medium: #555555;
-    
-    --color-grey: #ccc;
-    --color-light-grey: #ff0000ff;
 
+    --color-grey: #ccc;
 
     --color-accent: #FFD166;
     --color-alert: #ff0015ff;
@@ -94,17 +89,12 @@ ${(props) =>
       --color-neutral-base: #e0e0e0;
       --color-neutral-medium: #a0a0a0;
       --color-neutral-highlight: #74c69d;
-      
-      --color-neutral-light: #ff0000ff; //!!!!!!!!!!!!!!
-      --color-neutral-dark: #ff0000ff;
 
       --color-text-white: #ffffff;
-      --color-text-dark: #f5f5f5;
+      --color-text-base: #f5f5f5;
       --color-text-medium: #bdbdbd;
 
       --color-grey: #444;
-      --color-light-grey: #ff0000ff;
-
 
       --color-accent: #ffd166;
       --color-alert: #ff6b6b;

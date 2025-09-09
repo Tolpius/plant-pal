@@ -170,7 +170,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
 
 
 const Form = styled.form`
-  color: var(--color-neutral-dark);
+  color: var(--color-neutral-base);
   padding: 1.5rem;
   width: 100%;
 `;
@@ -191,7 +191,7 @@ const Input = styled.input`
   background-color: var(--color-secondary-dark);
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid var(--color-light-grey);
+  border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
 `;
 
@@ -205,7 +205,7 @@ const Textarea = styled.textarea`
   width: 100%;
   padding: 0.5rem;
   margin-top: 0.3rem;
-  border: 1px solid var(--color-light-grey);
+  border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
 `;
 

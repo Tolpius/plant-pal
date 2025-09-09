@@ -80,7 +80,7 @@ const StyledImage = styled(Image)`
 const TextWrapper = styled.div`
   padding: var(--padding-medium);
   font-family: var(--font-primary);
-  color: var(--color-neutral-dark);
+  color: var(--color-neutral-base);
   flex-grow: 1;
   display: flex;
   flex-direction: column;

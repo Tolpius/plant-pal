@@ -81,7 +81,7 @@ const StyledButton = styled.button`
   ${(props) =>
     props.$variant === "secondary" &&
     css`
-      background-color: var(--color-neutral-dark);
+      background-color: var(--color-neutral-base);
       color: var(--color-white);
     `}
 `;
