@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useMemo } from "react";
 import { useSession } from "next-auth/react";
 
-import ReminderCard from "@/components/ReminderCard";
+import ReminderCard from "@/components/reminder/ReminderCard";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
