@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
