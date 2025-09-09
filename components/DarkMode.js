@@ -2,10 +2,17 @@ import { useSession } from "next-auth/react";
 import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 import styled from "styled-components";
 
-export default function DarkMode() {
+export default function DarkMode({ onToggleNavlist }) {
   const { data: session, update } = useSession();
   const isDarkMode = session.user.isDarkMode;
   const userId = session.user.id;
+
+  //this way we can call two functions on the onClick of the DarkModeButton
+  //1. changing the DarkMode and 2. also closing the NavList
+  function handlerTwoFunctions() {
+    toggleDarkMode();
+    onToggleNavlist();
+  }
 
   async function toggleDarkMode() {
     try {
@@ -31,13 +38,13 @@ export default function DarkMode() {
 
   return (
     <>
-      <NavButton onClick={toggleDarkMode}>
-        {isDarkMode ? (
-          <SunIcon size={32} weight="regular" aria-label="turn dark mode off" />
-        ) : (
-          <MoonIcon size={32} weight="regular" aria-label="turn dark mode on" />
-        )}
+      <NavButton onClick={handlerTwoFunctions}>
         {isDarkMode ? "Light Mode" : "Dark Mode"}
+        {isDarkMode ? (
+          <SunIcon size={28} weight="regular" aria-label="turn dark mode off" />
+        ) : (
+          <MoonIcon size={28} weight="regular" aria-label="turn dark mode on" />
+        )}
       </NavButton>
     </>
   );
@@ -54,7 +61,6 @@ const NavButton = styled.button`
   color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
-  border-bottom: 1px solid var(--color-neutral-dark);
   &:hover {
     color: var(--color-black);
   }

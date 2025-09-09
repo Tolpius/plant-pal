@@ -31,7 +31,7 @@ export default function Navlist({
         >
           <ListIcon
             size={28}
-            weight={isExtendedNavList === "true" ? "fill" : "regular"}
+            weight={"fill"}
           />
         </NavlistButton>
       </StyledNavlist>
@@ -45,7 +45,7 @@ export default function Navlist({
           <StyledText>Home</StyledText>
           <HouseIcon
             size={28}
-            weight={currentPath === "/owned" ? "fill" : "regular"}
+            weight={"regular"}
           />
         </NavLink>
 
@@ -53,7 +53,7 @@ export default function Navlist({
           <StyledText>Catalogue</StyledText>
           <BookOpenTextIcon
             size={28}
-            weight={currentPath === "/catalogue" ? "fill" : "regular"}
+            weight={"regular"}
             aria-label="Catalogue"
           />
         </NavLink>
@@ -70,11 +70,7 @@ export default function Navlist({
           <SignOutIcon size={26} weight="regular" />
         </NavButton>
         <NavItem>
-          <DarkMode />
-
-          {/* toggle the booleaan in a handlerfunction 
-          to change the boolean in the data base and also setBoolean to render new, 
-          add a class to the body (dark) than new variables will be used */}
+          <DarkMode onToggleNavlist={onToggleNavlist}/>
         </NavItem>
       </ExtendedMenu>
     </>

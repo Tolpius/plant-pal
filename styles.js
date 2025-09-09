@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import { createGlobalStyle, css } from "styled-components";
 
 export default function GlobalStyleWrapper() {
-  const { data: session} = useSession();
+  const { data: session } = useSession();
   const isDarkMode = session?.user?.isDarkMode;
   return <GlobalStyles isDarkMode={isDarkMode} />;
 }
@@ -122,7 +122,6 @@ ${(props) =>
       --padding-bg-md: 20px;
       --padding-large: 24px;
       --padding-extra-large: 32px;
-    }
-  `}
-
+    }`
+  }
 `;
