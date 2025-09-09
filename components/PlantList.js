@@ -1,6 +1,7 @@
 import useSWR, { mutate } from "swr";
 import Card from "./Card";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 
 export default function PlantList({
   plants,
@@ -21,7 +22,9 @@ export default function PlantList({
 
     if (ownedPlantIds) {
       mutate(swrUrl, [...ownedPlantIds, plantId], false);
-      await fetch(fetchUrl, fetchOptions);
+      const response = await fetch(fetchUrl, fetchOptions);
+      if (!response.ok) toast.error("Error: Failed to add Plant.");
+      else toast.success("Plant added.");
       mutate(swrUrl);
     }
   }

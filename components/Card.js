@@ -13,9 +13,14 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
   } = useSWR(!isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null);
 
   async function handleAddOwned() {
-    await mutate(count + 1, false);
-    await onAddOwned();
-    await mutate();
+    const previousCount = count;
+    await mutate(previousCount + 1, false);
+    try {
+      await onAddOwned();
+      await mutate();
+    } catch (error) {
+      await mutate(previousCount, false);
+    }
   }
 
   if (isLoading) return null;
