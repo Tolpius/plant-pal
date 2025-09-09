@@ -18,7 +18,6 @@ export default function Navlist({
   session,
   currentPath,
 }) {
-  //Get isDarkMode Boolean from User collection
   return (
     <>
       <StyledNavlist>
