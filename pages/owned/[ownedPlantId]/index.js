@@ -42,7 +42,6 @@ export default function DetailsPage() {
     data: plant,
     isLoading,
     error,
-    mutate,
   } = useSWR(
     session ? `/api/user/${session.user.id}/owned/${ownedPlantId}` : null
   );
@@ -63,9 +62,8 @@ export default function DetailsPage() {
       { method: "DELETE" }
     );
     if (response.ok) {
-      mutate();
       toast.success("Plant removed.");
-      router.push("/owned");
+      router.push({ pathname: "/owned", query: { deleted: ownedPlantId } });
     } else {
       toast.error("Failed to remove Plant.");
     }

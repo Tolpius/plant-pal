@@ -2,6 +2,7 @@ import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import styled from "styled-components";
+import { useSearchParams } from "next/navigation";
 
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
@@ -11,9 +12,19 @@ export default function Owned() {
   const { data: session, status: sessionStatus } = useSession();
   const [filters, setFilters] = useState({ lightNeed: [], waterNeed: [] });
   const userId = session?.user.id;
-  const { data: plantList, isPlantsLoading } = useSWR(
-    session ? `/api/user/${userId}/owned` : null
-  );
+  const {
+    data: plantList,
+    isPlantsLoading,
+    mutate,
+  } = useSWR(session ? `/api/user/${userId}/owned` : null);
+  const searchParams = useSearchParams();
+  const deleted = searchParams.get("deleted") || undefined;
+  if (deleted) {
+    mutate(
+      plantList.filter((plant) => !(plant._id === deleted)),
+      true
+    );
+  }
 
   if (isPlantsLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
@@ -52,7 +63,11 @@ export default function Owned() {
       <StyledText>My owned Plants</StyledText>
       <PlantFilter onFilter={setFilters} />
       <PlantCounter length={filteredPlantList.length} />
-      <PlantList plants={filteredPlantList} session={session} isOwnedPlantList={true}/>
+      <PlantList
+        plants={filteredPlantList}
+        session={session}
+        isOwnedPlantList={true}
+      />
     </>
   );
 }

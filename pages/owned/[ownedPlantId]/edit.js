@@ -48,7 +48,6 @@ export default function EditPage() {
       const updatedPlant = await response.json();
       toast.success("Plant saved.");
       console.log("Plant edited successfully:", updatedPlant);
-      mutate();
 
       router.push(`/owned/${ownedPlantId}`);
     } catch (error) {

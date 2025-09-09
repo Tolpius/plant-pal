@@ -14,7 +14,7 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
 
   async function handleAddOwned() {
     const previousCount = count;
-    await mutate(previousCount + 1, false);
+    mutate(previousCount + 1, false);
     try {
       await onAddOwned();
       await mutate();

@@ -10,7 +10,7 @@ export default function PlantList({
 }) {
   const userId = session?.user.id;
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
-  const { data: ownedPlantIds } = useSWR(swrUrl);
+  const { data: ownedPlantIds, mutate } = useSWR(swrUrl);
 
   async function handleAddOwned(plantId) {
     if (!session) return;
@@ -21,12 +21,12 @@ export default function PlantList({
     };
 
     if (ownedPlantIds) {
-      mutate(swrUrl, [...ownedPlantIds, plantId], false);
+      mutate([...ownedPlantIds, plantId], false);
       try {
         const response = await fetch(fetchUrl, fetchOptions);
         if (!response.ok) toast.error("Error: Failed to add Plant.");
         else toast.success("Plant added.");
-        mutate(swrUrl);
+        mutate();
       } catch (error) {
         toast.error("Error: Faild to add Plant.");
         throw error;
