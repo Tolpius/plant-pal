@@ -64,7 +64,6 @@ export default async function handler(request, response) {
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "DELETE": {
-        console.log(request.body);
         const ownedPlant = await OwnedPlant.findByIdAndDelete(plantId);
         return response.status(200).json(ownedPlant);
       }

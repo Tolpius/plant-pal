@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { PlusSquareIcon } from "@phosphor-icons/react";
+import { toast } from "react-toastify";
+
 export default function OwnedButton({ onAddOwned }) {
   function onClick(event) {
+    toast.success("Plant added.");
     event.preventDefault();
     event.stopPropagation();
     onAddOwned();

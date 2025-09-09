@@ -2,22 +2,16 @@ import styled, { css } from "styled-components";
 import { useState } from "react";
 import PlantFilterForm from "./PlantFilterForm";
 
-export default function PlantFilter({ onFilter, values, withOwnedFilter = false }) {
+export default function PlantFilter({ onFilter }) {
   const [showFilter, setShowFilter] = useState(false);
 
   function handleFilterSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
-
-    const lightNeed = formData.getAll("lightNeed");
-    const waterNeed = formData.getAll("waterNeed");
-    const hideOwned = formData.get("hideOwned") !== null;
-
-    onFilter({ lightNeed, waterNeed, hideOwned });
-  }
-
-  function handleClearSubmit() {
-    onFilter({ lightNeed: [], waterNeed: [], hideOwned: false });
+    const isPublic = formData.getAll("isPublic");
+    const parsed =
+      isPublic[0] === "true" ? true : isPublic[0] === "false" ? false : "all";
+    onFilter({ isPublic: parsed });
   }
 
   return (
@@ -25,30 +19,22 @@ export default function PlantFilter({ onFilter, values, withOwnedFilter = false 
       <ButtonContainer $sizeOfButton={showFilter}>
         <FilterButton
           $displayBorder={showFilter}
-          onClick={() => setShowFilter((previousValue) => !previousValue)}
-          type="button"
-          aria-label={
-            showFilter ? "Hide filter options" : "Show filter options"
-          }
+          onClick={() => {
+            setShowFilter(!showFilter);
+          }}
         >
           <TextWrapper $textPlace={showFilter}>
             <p>{!showFilter ? "Filter ⬇️" : "Filter ⬆️"}</p>
           </TextWrapper>
         </FilterButton>
       </ButtonContainer>
-
-      {showFilter && (
-        <PlantFilterForm
-          onSubmit={handleFilterSubmit}
-          onClear={handleClearSubmit}
-          withOwnedFilter={withOwnedFilter}
-          values={values}
-        />
-      )}
+      {showFilter && <PlantFilterForm onSubmit={handleFilterSubmit} />}
     </FilterContainer>
   );
 }
 
+//Container around the whole Filter
+//display is only visible when the filter form is also visible
 const FilterContainer = styled.div`
   ${(props) =>
     props.$displayBorder
@@ -62,6 +48,9 @@ const FilterContainer = styled.div`
         `};
 `;
 
+//Container around the Filter-Button, sole purpose is to keep the
+// Filter text at the same spot when the filter form is opened.
+// Works together with the Textwrapper.
 const ButtonContainer = styled.div`
   display: grid;
   ${(props) =>
@@ -75,9 +64,12 @@ const ButtonContainer = styled.div`
         `};
 `;
 
+//Button opens and closes the filter form, also changes the
+// apperance of the border, so that the border is not visible
+// while the form is open.
 const FilterButton = styled.button`
   width: 100%;
-  padding: var(--padding-bg-sm);
+  padding: 10px 20px;
   background-color: var(--color-neutral-light);
   border-radius: var(--radius-bg-md);
   font-size: var(--font-size-md);
@@ -92,6 +84,9 @@ const FilterButton = styled.button`
         `};
 `;
 
+//Changing the grey box meant changing the Filter Text spot,
+// this way, the Text stays where it was and the box is still
+// completly grey and clickable.
 const TextWrapper = styled.div`
   display: grid;
   ${(props) =>
@@ -101,6 +96,6 @@ const TextWrapper = styled.div`
           gap: 3rem;
         `
       : css`
-          grid-template-columns: 1fr;
+          grid-template-columns: (1fr - 1rem);
         `};
 `;

@@ -168,7 +168,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
   );
 }
 
-/* styled-components */
+
 const Form = styled.form`
   color: var(--color-neutral-dark);
   padding: 1.5rem;

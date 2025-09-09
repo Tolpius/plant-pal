@@ -1,14 +1,17 @@
 import {
   BookOpenTextIcon,
+  CalendarPlusIcon,
+  CalendarX,
   HouseIcon,
   ListIcon,
   MoonIcon,
   SignOutIcon,
   SunIcon,
+  TicketIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import styled from "styled-components";
-import { signOut, signIn } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import FunFactDisplay from "./FunFactDisplay";
 import DarkMode from "./DarkMode";
 
@@ -32,6 +35,7 @@ export default function Navlist({
           <ListIcon
             size={28}
             weight={"fill"}
+            aria-label="Extended Navlist"
           />
         </NavlistButton>
       </StyledNavlist>
@@ -46,6 +50,7 @@ export default function Navlist({
           <HouseIcon
             size={28}
             weight={"regular"}
+            aria-label="My Plants"
           />
         </NavLink>
 
@@ -58,16 +63,36 @@ export default function Navlist({
           />
         </NavLink>
 
-        <NavButton aria-label="Fun Facts">
+        <NavFunFactWrapper>
           <FunFactDisplay isExtendedNavList={isExtendedNavList} size={26} />
-        </NavButton>
+        </NavFunFactWrapper>
+        <NavLink onClick={() => onToggleNavlist()} href="/reminders">
+          <StyledText>Reminders</StyledText>
+          <CalendarPlusIcon
+            size={28}
+            weight={currentPath === "/reminders" ? "fill" : "regular"}
+            aria-label="Reminders"
+            />
+        </NavLink>
+        
+            {session.user.role === "admin" && (
+              <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
+                <StyledText>Admin Catalogue</StyledText>
+                <TicketIcon
+                  size={28}
+                  weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
+                  aria-label="Admin Catalogue"
+                />
+              </NavLink>
+            )}
+
 
         <NavButton
           onClick={() => signOut({ callbackUrl: "/" })}
           aria-label="Logout"
         >
           Log Out
-          <SignOutIcon size={26} weight="regular" />
+          <SignOutIcon size={26} weight="regular" aria-label="Logout" />
         </NavButton>
         <NavItem>
           <DarkMode onToggleNavlist={onToggleNavlist}/>
@@ -77,7 +102,7 @@ export default function Navlist({
   );
 }
 
-// ================= Styled Components =================
+// ================= Styled Components ====================
 
 const StyledNavlist = styled.nav`
   position: sticky;
@@ -154,6 +179,19 @@ const NavlistButton = styled.button`
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 
+  &:hover {
+    color: var(--color-black);
+  }
+`;
+
+const NavFunFactWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  font-size: var(--font-size-lg);
+  color: var(--color-secondary);
+  border-bottom: 1px solid var(--color-neutral-dark);
+  transition: color 0.2s ease-in-out;
   &:hover {
     color: var(--color-black);
   }
