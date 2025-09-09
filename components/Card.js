@@ -6,14 +6,30 @@ import Link from "next/link";
 import useSWR from "swr";
 
 export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
-  const { data: count, isLoading } = useSWR(
-    !isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null
-  );
+  const {
+    data: count,
+    isLoading,
+    mutate,
+  } = useSWR(!isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null);
+
+  async function handleAddOwned() {
+    await mutate(count + 1, false);
+    await onAddOwned();
+    await mutate();
+  }
 
   if (isLoading) return null;
+
   return (
     <StyledLink
-      href={isOwnedPlantList ? `/owned/${plant._id}` : ({ pathname: "/plants/[id]", query: { id: plant._id, from: "/catalogue" } })}
+      href={
+        isOwnedPlantList
+          ? `/owned/${plant._id}`
+          : {
+              pathname: "/plants/[id]",
+              query: { id: plant._id, from: "/catalogue" },
+            }
+      }
       aria-label={`View details for ${plant.name}`}
     >
       <CardWrapper>
@@ -29,7 +45,7 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
           {!isOwnedPlantList && (
             <>
               <OwnedButton
-                onAddOwned={onAddOwned}
+                onAddOwned={handleAddOwned}
                 aria-label={`Add plant to owned for ${plant.name}`}
               />
               <OwnedCounter length={count} />
