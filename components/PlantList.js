@@ -22,10 +22,15 @@ export default function PlantList({
 
     if (ownedPlantIds) {
       mutate(swrUrl, [...ownedPlantIds, plantId], false);
-      const response = await fetch(fetchUrl, fetchOptions);
-      if (!response.ok) toast.error("Error: Failed to add Plant.");
-      else toast.success("Plant added.");
-      mutate(swrUrl);
+      try {
+        const response = await fetch(fetchUrl, fetchOptions);
+        if (!response.ok) toast.error("Error: Failed to add Plant.");
+        else toast.success("Plant added.");
+        mutate(swrUrl);
+      } catch (error) {
+        toast.error("Error: Faild to add Plant.");
+        throw error;
+      }
     }
   }
 
