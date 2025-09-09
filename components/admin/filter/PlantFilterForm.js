@@ -2,32 +2,30 @@ import styled from "styled-components";
 
 export default function PlantFilterForm({ onSubmit }) {
   return (
-    <StyledFilterForm>
-      <form onSubmit={onSubmit}>
-        <StyledVisibilityWrapper>
-          <legend>Public/Private:</legend>
-          <label>
-            <input type="radio" name="isPublic" value="true" />
-            <span>Show Public</span>
-          </label>
-          <label>
-            <input type="radio" name="isPublic" value="false" />
-            <span>Show Private</span>
-          </label>
-          <label>
-            <input type="radio" name="isPublic" value="all" defaultChecked />
-            <span>Show All</span>
-          </label>
-        </StyledVisibilityWrapper>
-        <StyledButtonWrapper>
-          <StyledButton type="submit">apply</StyledButton>
-        </StyledButtonWrapper>
-      </form>
+    <StyledFilterForm onSubmit={onSubmit}>
+      <StyledVisibilityWrapper>
+        <legend>Public/Private:</legend>
+        <label>
+          <input type="radio" name="isPublic" value="true" />
+          <span>Show Public</span>
+        </label>
+        <label>
+          <input type="radio" name="isPublic" value="false" />
+          <span>Show Private</span>
+        </label>
+        <label>
+          <input type="radio" name="isPublic" value="all" defaultChecked />
+          <span>Show All</span>
+        </label>
+      </StyledVisibilityWrapper>
+      <StyledButtonWrapper>
+        <StyledButton type="submit">apply</StyledButton>
+      </StyledButtonWrapper>
     </StyledFilterForm>
   );
 }
 
-const StyledFilterForm = styled.div`
+const StyledFilterForm = styled.form`
   background-color: var(--color-white);
   border-radius: 0;
   overflow: hidden;
