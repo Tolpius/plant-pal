@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import ReminderCard from "@/components/reminder/ReminderCard";
+import { PlusCircleIcon } from "@phosphor-icons/react";
 
 function groupReminders(reminders) {
   const today = new Date();
@@ -80,8 +81,14 @@ export default function Reminders() {
 
   return (
     <Container>
-      <Title>Reminders</Title>
-      <button onClick={() => router.push("/reminders/add")}>+</button>
+      <Header>
+        <Title>Reminders</Title>
+        <AddIcon
+          size={32}
+          onClick={() => router.push("/reminders/add")}
+          style={{ cursor: "pointer" }}
+        />
+      </Header>
 
       <GroupTitle>Today</GroupTitle>
       {todayReminders.length ? (
@@ -131,9 +138,22 @@ const Container = styled.div`
   padding: var(--padding-bg-md);
 `;
 
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+`;
+
 const Title = styled.h1`
   text-align: center;
-  margin-bottom: 20px;
+`;
+
+const AddIcon = styled(PlusCircleIcon)`
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const GroupTitle = styled.h2`
