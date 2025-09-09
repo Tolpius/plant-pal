@@ -1,9 +1,27 @@
 import styled from "styled-components";
-import { useState } from "react";
 
-export default function ReminderCard({ reminder, showCheckbox, onDone }) {
-  const handleCheckboxChange = () => {
-    if (onDone) onDone(reminder._id);
+export default function ReminderCard({
+  reminder,
+  showCheckbox,
+  onDone,
+  userId,
+}) {
+  const handleCheckboxChange = async () => {
+    try {
+      const response = await fetch(
+        `/api/user/${userId}/reminders/${reminder._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.ok) {
+        if (onDone) onDone(reminder._id);
+      } else {
+        console.error("Failed to delete reminder");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

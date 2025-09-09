@@ -1,6 +1,6 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { useSession } from "next-auth/react";
 
 import ReminderCard from "@/components/ReminderCard";
@@ -56,30 +56,23 @@ export default function Reminders() {
     fetcher
   );
 
-  const [todayReminders, setTodayReminders] = useState([]);
-  const [tomorrowReminders, setTomorrowReminders] = useState([]);
-  const [otherReminders, setOtherReminders] = useState({});
+  const groupedReminders = useMemo(
+    () => (reminders ? groupReminders(reminders) : {}),
+    [reminders]
+  );
 
-  useEffect(() => {
-    if (reminders) {
-      const grouped = groupReminders(reminders);
-      setTodayReminders(grouped.Today);
-      setTomorrowReminders(grouped.Tomorrow);
+  const {
+    Today: todayReminders = [],
+    Tomorrow: tomorrowReminders = [],
+    ...otherReminders
+  } = groupedReminders || {};
 
-      const others = { ...grouped };
-      delete others.Today;
-      delete others.Tomorrow;
-      setOtherReminders(others);
-    }
-  }, [reminders]);
-
-  const handleDoneToday = (id) => {
-    setTodayReminders((prev) => prev.filter((reminder) => reminder._id !== id));
-  };
-
-  const handleDoneTomorrow = (id) => {
-    setTomorrowReminders((prev) =>
-      prev.filter((reminder) => reminder._id !== id)
+  const handleDone = async (id) => {
+    // Optimistic update
+    mutate(
+      `/api/user/${userId}/reminders`,
+      (prev) => prev.filter((reminder) => reminder._id !== id),
+      false
     );
   };
 
@@ -97,7 +90,8 @@ export default function Reminders() {
             key={reminder._id}
             reminder={reminder}
             showCheckbox
-            onDone={handleDoneToday}
+            onDone={handleDone}
+            userId={userId}
           />
         ))
       ) : (
@@ -111,7 +105,8 @@ export default function Reminders() {
             key={reminder._id}
             reminder={reminder}
             showCheckbox
-            onDone={handleDoneTomorrow}
+            onDone={handleDone}
+            userId={userId}
           />
         ))
       ) : (
