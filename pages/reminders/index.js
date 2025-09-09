@@ -83,11 +83,7 @@ export default function Reminders() {
     <Container>
       <Header>
         <Title>Reminders</Title>
-        <AddIcon
-          size={32}
-          onClick={() => router.push("/reminders/add")}
-          style={{ cursor: "pointer" }}
-        />
+        <AddIcon size={32} onClick={() => router.push("/reminders/add")} />
       </Header>
 
       <GroupTitle>Today</GroupTitle>

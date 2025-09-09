@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import useSWR, { mutate } from "swr";
+import styled from "styled-components";
+import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
 
 export default function ReminderForm({ userId }) {
   const router = useRouter();
@@ -53,12 +55,20 @@ export default function ReminderForm({ userId }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>New Reminder</h2>
+    <Form onSubmit={handleSubmit}>
+      <Header>
+        <IconButton type="button" onClick={() => router.push("/reminders")}>
+          <XCircleIcon size={28} />
+        </IconButton>
+        <Title>New Reminder</Title>
+        <IconButton type="submit">
+          <CheckCircleIcon size={28} />
+        </IconButton>
+      </Header>
 
-      <label>
-        Plant:
-        <select
+      <Label>
+        Plant
+        <Select
           value={plantId}
           onChange={(event) => setPlantId(event.target.value)}
           required
@@ -69,90 +79,163 @@ export default function ReminderForm({ userId }) {
               {plant.name}
             </option>
           ))}
-        </select>
-      </label>
+        </Select>
+      </Label>
 
-      <label>
-        Title:
-        <input
+      <Label>
+        Title
+        <Input
           type="text"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
           required
         />
-      </label>
+        <QuickActions>
+          <QuickActionButton
+            type="button"
+            onClick={() => handleQuickAction("Water")}
+          >
+            Water
+          </QuickActionButton>
+          <QuickActionButton
+            type="button"
+            onClick={() => handleQuickAction("Fertilise")}
+          >
+            Fertilise
+          </QuickActionButton>
+        </QuickActions>
+      </Label>
 
-      <div>
-        <button type="button" onClick={() => handleQuickAction("Water")}>
-          Water
-        </button>
-        <button type="button" onClick={() => handleQuickAction("Fertilise")}>
-          Fertilise
-        </button>
-      </div>
-
-      <label>
-        Description:
-        <textarea
+      <Label>
+        Description
+        <Textarea
           value={description}
           onChange={(event) => setDescription(event.target.value)}
         />
-      </label>
+      </Label>
 
-      <label>
-        Due Date:
-        <input
+      <Label>
+        Due Date
+        <Input
           type="date"
           value={dueDate}
           onChange={(event) => setDueDate(event.target.value)}
           required
         />
-      </label>
+      </Label>
 
-      <label>
-        Time:
-        <input
+      <Label>
+        Time
+        <Input
           type="time"
           value={time}
           onChange={(event) => setTime(event.target.value)}
         />
-      </label>
+      </Label>
 
-      <label>
-        Recurring?
+      <Label>
         <input
           type="checkbox"
           checked={isRecurring}
           onChange={(event) => setIsRecurring(event.target.checked)}
         />
-      </label>
+        Recurring?
+      </Label>
 
       {isRecurring && (
-        <div>
-          <label>
-            Every:
-            <input
-              type="number"
-              min="1"
-              value={recurringInterval}
-              onChange={(event) => setRecurringInterval(event.target.value)}
-            />
-          </label>
-          <select
+        <Fieldset>
+          <label>Every</label>
+          <Input
+            type="number"
+            min="1"
+            value={recurringInterval}
+            onChange={(event) => setRecurringInterval(event.target.value)}
+          />
+
+          <Select
             value={recurringUnit}
             onChange={(event) => setRecurringUnit(event.target.value)}
           >
             <option value="days">Days</option>
             <option value="weeks">Weeks</option>
             <option value="months">Months</option>
-          </select>
-        </div>
+          </Select>
+        </Fieldset>
       )}
-
-      <button type="button" onClick={() => router.push("/reminders")}>
-        Cancel
-      </button>
-      <button type="submit">Done</button>
-    </form>
+    </Form>
   );
 }
+
+const Form = styled.form`
+  padding: var(--padding-bg-md);
+`;
+
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+`;
+
+const Title = styled.h2`
+  text-align: center;
+`;
+
+const IconButton = styled.button`
+  background: none;
+  border: none;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 1rem;
+`;
+
+const Input = styled.input`
+  display: block;
+  width: 100%;
+  padding: var(--padding-bg-sm);
+  border: 1px solid var(--color-light-grey);
+  border-radius: var(--radius-md);
+  margin-top: 0.3rem;
+`;
+
+const Select = styled.select`
+  display: block;
+  width: 100%;
+  padding: var(--padding-bg-sm);
+  border: 1px solid var(--color-light-grey);
+  border-radius: var(--radius-md);
+  margin-top: 0.3rem;
+`;
+
+const Textarea = styled.textarea`
+  display: block;
+  width: 100%;
+  padding: var(--padding-bg-sm);
+  margin-top: 0.3rem;
+  border: 1px solid var(--color-light-grey);
+  border-radius: var(--radius-md);
+`;
+
+const QuickActions = styled.div`
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+`;
+
+const QuickActionButton = styled.button`
+  background: var(--color-primary);
+  color: var(--color-text-white);
+  border: none;
+  padding: var(--padding-small);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+`;
+
+const Fieldset = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
