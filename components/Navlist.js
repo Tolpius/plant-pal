@@ -1,12 +1,9 @@
 import {
   BookOpenTextIcon,
   CalendarPlusIcon,
-  CalendarX,
   HouseIcon,
   ListIcon,
-  MoonIcon,
   SignOutIcon,
-  SunIcon,
   TicketIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
@@ -18,6 +15,7 @@ import DarkMode from "./DarkMode";
 export default function Navlist({
   onToggleNavlist,
   isExtendedNavList,
+  session,
   currentPath,
 }) {
   //Get isDarkMode Boolean from User collection
@@ -32,11 +30,7 @@ export default function Navlist({
           onClick={() => onToggleNavlist()}
           aria-label="Toggle Extended Navlist"
         >
-          <ListIcon
-            size={28}
-            weight={"fill"}
-            aria-label="Extended Navlist"
-          />
+          <ListIcon size={28} weight={"fill"} aria-label="Extended Navlist" />
         </NavlistButton>
       </StyledNavlist>
 
@@ -47,11 +41,7 @@ export default function Navlist({
           aria-label="My Plants"
         >
           <StyledText>Home</StyledText>
-          <HouseIcon
-            size={28}
-            weight={"regular"}
-            aria-label="My Plants"
-          />
+          <HouseIcon size={28} weight={"regular"} aria-label="My Plants" />
         </NavLink>
 
         <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
@@ -72,20 +62,19 @@ export default function Navlist({
             size={28}
             weight={currentPath === "/reminders" ? "fill" : "regular"}
             aria-label="Reminders"
-            />
+          />
         </NavLink>
-        
-            {session.user.role === "admin" && (
-              <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
-                <StyledText>Admin Catalogue</StyledText>
-                <TicketIcon
-                  size={28}
-                  weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
-                  aria-label="Admin Catalogue"
-                />
-              </NavLink>
-            )}
 
+        {session.user.role === "admin" && (
+          <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
+            <StyledText>Admin Catalogue</StyledText>
+            <TicketIcon
+              size={28}
+              weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
+              aria-label="Admin Catalogue"
+            />
+          </NavLink>
+        )}
 
         <NavButton
           onClick={() => signOut({ callbackUrl: "/" })}
@@ -95,7 +84,7 @@ export default function Navlist({
           <SignOutIcon size={26} weight="regular" aria-label="Logout" />
         </NavButton>
         <NavItem>
-          <DarkMode onToggleNavlist={onToggleNavlist}/>
+          <DarkMode onToggleNavlist={onToggleNavlist} />
         </NavItem>
       </ExtendedMenu>
     </>
