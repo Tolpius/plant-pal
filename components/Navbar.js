@@ -77,7 +77,7 @@ const StyledNavbar = styled.nav`
   left: 0;
   width: 100%;
   background: var(--color-primary);
-  border-bottom: 1px solid var(--color-neutral-light);
+  border-bottom: 1px solid var(--color-neutral-highlight);
   display: flex;
   justify-content: space-between;
   align-items: center;

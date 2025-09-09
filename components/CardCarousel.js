@@ -33,7 +33,7 @@ const CardWrapper = styled.div`
   border: var(--border-sm-dark);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background-color: var(--color-neutral-light);
+  background-color: var(--color-neutral-highlight);
 `;
 
 const StyledImage = styled(Image)`

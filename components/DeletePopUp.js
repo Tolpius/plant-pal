@@ -48,7 +48,7 @@ const StyledPopUpWarning = styled.article`
   width: 80%;
   height: 40%;
   padding: var(--padding-bg-md);
-  background-color: var(--color-neutral-light);
+  background-color: var(--color-neutral-highlight);
   border-radius: var(--radius-lg);
   box-shadow: 5px 5px 15px;
 `;
@@ -75,7 +75,7 @@ const StyledButton = styled.button`
   ${(props) =>
     props.$variant === "default" &&
     css`
-      background-color: var(--color-neutral-light);
+      background-color: var(--color-neutral-highlight);
     `}
 
   ${(props) =>

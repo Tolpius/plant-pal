@@ -77,10 +77,10 @@ const StyledText = styled.p`
 const AddLink = styled(Link)`
   border: 1px solid #000000;
   border-radius: 10px;
-  background: var(--color-green-300);
+  background: var(--color-primary);
   text-decoration: none;
   text-align: center;
-  padding: var(--pd-sm);
+  padding: var(--padding-small);
   &:visited {
     color: inherit;
   }

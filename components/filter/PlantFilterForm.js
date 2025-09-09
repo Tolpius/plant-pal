@@ -5,9 +5,7 @@ export default function PlantFilterForm({
   onClear,
   values,
   withOwnedFilter,
-}) {
-  console.log('values: ', values);
-  
+}) {  
   return (
     <StyledFilterForm>
       <form

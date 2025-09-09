@@ -34,15 +34,20 @@ const GlobalStyles = createGlobalStyle`
     --color-white: #FFFFFF;
     --color-black: #000000ff;
 
-    --color-neutral-dark: #333333;
+    --color-neutral-base: #333333;
     --color-neutral-medium: #bfbfbfff;
-    --color-neutral-light: #e3e3e3ff;
+    --color-neutral-highlight: #e3e3e3ff;
+
+    --color-neutral-light: #ff0000ff; //!!!!!!!!!!!!!!!
+    --color-neutral-dark: #ff0000ff;
 
     --color-text-white: #FFFFFF;
     --color-text-dark: #333333;
     --color-text-medium: #555555;
     
-    --color-light-grey: #ccc;
+    --color-grey: #ccc;
+    --color-light-grey: #ff0000ff;
+
 
     --color-accent: #FFD166;
     --color-alert: #ff0015ff;
@@ -86,15 +91,20 @@ ${(props) =>
       --color-white: #ffffff;
       --color-black: #000000;
 
-      --color-neutral-dark: #e0e0e0;
+      --color-neutral-base: #e0e0e0;
       --color-neutral-medium: #a0a0a0;
-      --color-neutral-light: red;
+      --color-neutral-highlight: #74c69d;
+      
+      --color-neutral-light: #ff0000ff; //!!!!!!!!!!!!!!
+      --color-neutral-dark: #ff0000ff;
 
       --color-text-white: #ffffff;
       --color-text-dark: #f5f5f5;
       --color-text-medium: #bdbdbd;
 
-      --color-light-grey: #444;
+      --color-grey: #444;
+      --color-light-grey: #ff0000ff;
+
 
       --color-accent: #ffd166;
       --color-alert: #ff6b6b;
@@ -122,6 +132,6 @@ ${(props) =>
       --padding-bg-md: 20px;
       --padding-large: 24px;
       --padding-extra-large: 32px;
-    }`
-  }
+    }
+  `}
 `;

@@ -4,7 +4,6 @@ import PlantFilterForm from "./PlantFilterForm";
 
 export default function PlantFilter({ onFilter, values, withOwnedFilter = false }) {
   const [showFilter, setShowFilter] = useState(false);
-  console.log('values: ', values);
   function handleFilterSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -78,7 +77,7 @@ const ButtonContainer = styled.div`
 const FilterButton = styled.button`
   width: 100%;
   padding: var(--padding-bg-sm);
-  background-color: var(--color-neutral-light);
+  background-color: var(--color-neutral-highlight);
   border-radius: var(--radius-bg-md);
   font-size: var(--font-size-md);
   ${(props) =>
