@@ -96,6 +96,6 @@ const TextWrapper = styled.div`
           gap: 3rem;
         `
       : css`
-          grid-template-columns: (1fr - 1rem);
+          grid-template-columns: 1fr;
         `};
 `;
