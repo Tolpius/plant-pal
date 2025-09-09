@@ -32,7 +32,7 @@ export default function Layout({ children }) {
           role="navigation"
           aria-label="Main navigation"
         />
-              <Main display="hidden">{children}</Main>
+              <Main style={{ display:"none"}}>{children}</Main>
       </>
     );
   }
