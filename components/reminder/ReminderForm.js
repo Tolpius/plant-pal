@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import styled from "styled-components";
 import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
 
@@ -10,34 +10,22 @@ export default function ReminderForm({ userId }) {
     userId ? `/api/user/${userId}/owned` : null
   );
 
-  const [plantId, setPlantId] = useState("");
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [time, setTime] = useState("");
   const [isRecurring, setIsRecurring] = useState(false);
-  const [recurringInterval, setRecurringInterval] = useState("");
-  const [recurringUnit, setRecurringUnit] = useState("days");
+
+  const quickActions = ["Water", "Fertilise", "Repot"];
 
   if (error) return <p>Failed to load plants</p>;
   if (!plants) return <p>Loading plants...</p>;
 
-  function handleQuickAction(action) {
-    setTitle(action);
-  }
-
   async function handleSubmit(event) {
     event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
 
     const newReminder = {
-      plantId,
-      title,
-      description,
-      dueDate,
-      time,
+      ...data,
       isRecurring,
-      recurringInterval,
-      recurringUnit,
     };
 
     const response = await fetch(`/api/user/${userId}/reminders`, {
@@ -47,10 +35,16 @@ export default function ReminderForm({ userId }) {
     });
 
     if (response.ok) {
-      await mutate(`/api/user/${userId}/reminders`);
       router.push("/reminders");
     } else {
       console.error("Failed to create reminder");
+    }
+  }
+
+  function handleQuickAction(action) {
+    const titleInput = document.querySelector("input[name='title']");
+    if (titleInput) {
+      titleInput.value = action;
     }
   }
 
@@ -68,11 +62,7 @@ export default function ReminderForm({ userId }) {
 
       <Label>
         Plant
-        <Select
-          value={plantId}
-          onChange={(event) => setPlantId(event.target.value)}
-          required
-        >
+        <Select name="plantId" required>
           <option value="">Select a plant</option>
           {plants.map((plant) => (
             <option key={plant._id} value={plant._id}>
@@ -86,51 +76,40 @@ export default function ReminderForm({ userId }) {
         Title
         <Input
           type="text"
+          name="title"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          required
         />
-        <QuickActions>
-          <QuickActionButton
-            type="button"
-            onClick={() => handleQuickAction("Water")}
-          >
-            Water
-          </QuickActionButton>
-          <QuickActionButton
-            type="button"
-            onClick={() => handleQuickAction("Fertilise")}
-          >
-            Fertilise
-          </QuickActionButton>
-        </QuickActions>
       </Label>
+
+      <QuickActionsContainer>
+        {quickActions.map((action) => (
+          <QuickActionLabel key={action}>
+            <input
+              type="radio"
+              name="titleRadio"
+              value={action}
+              checked={title === action}
+              onChange={() => setTitle(action)}
+            />
+            {action}
+          </QuickActionLabel>
+        ))}
+      </QuickActionsContainer>
 
       <Label>
         Description
-        <Textarea
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-        />
+        <Textarea name="description" />
       </Label>
 
       <Label>
         Due Date
-        <Input
-          type="date"
-          value={dueDate}
-          onChange={(event) => setDueDate(event.target.value)}
-          required
-        />
+        <Input type="date" name="dueDate" required />
       </Label>
 
       <Label>
         Time
-        <Input
-          type="time"
-          value={time}
-          onChange={(event) => setTime(event.target.value)}
-        />
+        <Input type="time" name="time" />
       </Label>
 
       <Label>
@@ -145,17 +124,8 @@ export default function ReminderForm({ userId }) {
       {isRecurring && (
         <Fieldset>
           <label>Every</label>
-          <Input
-            type="number"
-            min="1"
-            value={recurringInterval}
-            onChange={(event) => setRecurringInterval(event.target.value)}
-          />
-
-          <Select
-            value={recurringUnit}
-            onChange={(event) => setRecurringUnit(event.target.value)}
-          >
+          <Input type="number" name="recurringInterval" min="1" />
+          <Select name="recurringUnit" defaultValue="days">
             <option value="days">Days</option>
             <option value="weeks">Weeks</option>
             <option value="months">Months</option>
@@ -218,19 +188,27 @@ const Textarea = styled.textarea`
   border-radius: var(--radius-md);
 `;
 
-const QuickActions = styled.div`
-  margin-top: 0.5rem;
+const QuickActionsContainer = styled.div`
   display: flex;
   gap: 0.5rem;
+  margin: 0.5rem 0 1rem 0;
 `;
 
-const QuickActionButton = styled.button`
-  background: var(--color-primary);
-  color: var(--color-text-white);
-  border: none;
+const QuickActionLabel = styled.label`
   padding: var(--padding-small);
+  background-color: var(--color-light-grey);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
+  user-select: none;
+
+  input {
+    display: none;
+  }
+
+  &:has(input:checked) {
+    background-color: var(--color-primary);
+    color: white;
+  }
 `;
 
 const Fieldset = styled.div`

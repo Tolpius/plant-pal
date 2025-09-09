@@ -24,11 +24,18 @@ export default function ReminderCard({
     }
   };
 
+  const plant =
+    reminder.plantId && typeof reminder.plantId === "object"
+      ? reminder.plantId
+      : null;
+  const plantName = plant?.name || "Unknown plant";
+  const plantImage = plant?.imageUrl || "/defaultImage.png";
+
   return (
     <Card>
-      <Image src={reminder.plantId.imageUrl} alt={reminder.plantId.name} />
+      <Image src={plantImage} alt={plantName} />
       <Content>
-        <h3>{reminder.plantId.name}</h3>
+        <h3>{plantName}</h3>
         <p>
           <Label>Task:</Label> {reminder.title}
         </p>
