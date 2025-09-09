@@ -4,7 +4,7 @@ import PlantFilterForm from "./PlantFilterForm";
 
 export default function PlantFilter({ onFilter, values, withOwnedFilter = false }) {
   const [showFilter, setShowFilter] = useState(false);
-
+  console.log('values: ', values);
   function handleFilterSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);

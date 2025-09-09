@@ -4,12 +4,11 @@ import styled from "styled-components";
 
 export default function DarkMode({ onToggleNavlist }) {
   const { data: session, update } = useSession();
-  const isDarkMode = session.user.isDarkMode;
-  const userId = session.user.id;
+  const { isDarkMode, id: userId } = session.user;
 
   //this way we can call two functions on the onClick of the DarkModeButton
   //1. changing the DarkMode and 2. also closing the NavList
-  function handlerTwoFunctions() {
+  function handleToggleDarkMode() {
     toggleDarkMode();
     onToggleNavlist();
   }
@@ -21,7 +20,7 @@ export default function DarkMode({ onToggleNavlist }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ isDarkMode: !session.user.isDarkMode }),
+        body: JSON.stringify({ isDarkMode: !isDarkMode }),
       });
 
       if (!response.ok) {
@@ -38,12 +37,25 @@ export default function DarkMode({ onToggleNavlist }) {
 
   return (
     <>
-      <NavButton onClick={handlerTwoFunctions}>
-        {isDarkMode ? "Light Mode" : "Dark Mode"}
+      <NavButton onClick={handleToggleDarkMode}>
         {isDarkMode ? (
-          <SunIcon size={28} weight="regular" aria-label="turn dark mode off" />
+          <>
+            Light Mode{" "}
+            <SunIcon
+              size={28}
+              weight="regular"
+              aria-label="turn dark mode off"
+            />
+          </>
         ) : (
-          <MoonIcon size={28} weight="regular" aria-label="turn dark mode on" />
+          <>
+            Dark Mode{" "}
+            <MoonIcon
+              size={28}
+              weight="regular"
+              aria-label="turn dark mode on"
+            />
+          </>
         )}
       </NavButton>
     </>

@@ -29,7 +29,7 @@ export default function Navlist({
           onClick={() => onToggleNavlist()}
           aria-label="Toggle Extended Navlist"
         >
-          <ListIcon size={28} weight={"fill"} aria-label="Extended Navlist" />
+          <ListIcon size={28} weight={"fill"} />
         </NavlistButton>
       </StyledNavlist>
 

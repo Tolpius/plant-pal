@@ -81,14 +81,14 @@ ${(props) =>
 
       --color-secondary: #292929ff;
       --color-secondary-dark: #1f1f1fff;
-      --color-secondary-rgba: rgba(245, 241, 230, 0.8);
+      --color-secondary-rgba: rgba(31, 31, 31, 0.8);
 
       --color-white: #ffffff;
       --color-black: #000000;
 
       --color-neutral-dark: #e0e0e0;
       --color-neutral-medium: #a0a0a0;
-      --color-neutral-light: #74c69d;
+      --color-neutral-light: red;
 
       --color-text-white: #ffffff;
       --color-text-dark: #f5f5f5;
