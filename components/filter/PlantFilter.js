@@ -2,7 +2,11 @@ import styled, { css } from "styled-components";
 import { useState } from "react";
 import PlantFilterForm from "./PlantFilterForm";
 
-export default function PlantFilter({ onFilter, values, withOwnedFilter = false }) {
+export default function PlantFilter({
+  onFilter,
+  values,
+  withOwnedFilter = false,
+}) {
   const [showFilter, setShowFilter] = useState(false);
   function handleFilterSubmit(event) {
     event.preventDefault();
