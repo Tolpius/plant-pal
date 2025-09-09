@@ -1,5 +1,5 @@
+import ReminderForm from "@/components/reminder/ReminderForm";
 import { useSession } from "next-auth/react";
-import ReminderForm from "@/components/ReminderForm";
 
 export default function NewReminderPage() {
   const { data: session } = useSession();

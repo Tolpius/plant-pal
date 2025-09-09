@@ -2,10 +2,9 @@ import useSWR, { mutate } from "swr";
 import styled from "styled-components";
 import { useMemo } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 import ReminderCard from "@/components/reminder/ReminderCard";
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
 
 function groupReminders(reminders) {
   const today = new Date();
@@ -49,11 +48,11 @@ function groupReminders(reminders) {
 }
 
 export default function Reminders() {
+  const router = useRouter();
   const { data: session } = useSession();
   const userId = session?.user?.id; // später vom Session-User
   const { data: reminders, error } = useSWR(
-    userId ? `/api/user/${userId}/reminders` : null,
-    fetcher
+    userId ? `/api/user/${userId}/reminders` : null
   );
 
   const groupedReminders = useMemo(
@@ -82,6 +81,7 @@ export default function Reminders() {
   return (
     <Container>
       <Title>Reminders</Title>
+      <button onClick={() => router.push("/reminders/add")}>+</button>
 
       <GroupTitle>Today</GroupTitle>
       {todayReminders.length ? (

@@ -45,22 +45,29 @@ export default async function handler(request, response) {
         recurringUnit,
       } = request.body;
 
+      if (!plantId || !title || !dueDate) {
+        return response.status(400).json({ error: "Missing required fields" });
+      }
+
+      const due = time ? new Date(`${dueDate}T${time}`) : new Date(dueDate);
+
       const newReminder = await Reminder.create({
         userId: queryUserId,
         plantId,
         title,
         description,
-        dueDate,
-        time,
-        isRecurring,
-        recurringInterval,
-        recurringUnit,
+        dueDate: due,
+        isRecurring: Boolean(isRecurring),
+        recurringInterval: recurringInterval ? Number(recurringInterval) : null,
+        recurringUnit: recurringUnit || null,
       });
+
       return response.status(201).json(newReminder);
     }
 
     return response.status(405).json({ error: "Method not allowed" });
-  } catch (error) {
-    return response.status(500).json({ error: "Internal Server Error" });
+  } catch (err) {
+    console.error("Error in reminder handler:", err);
+    return response.status(500).json({ error: err.message });
   }
 }

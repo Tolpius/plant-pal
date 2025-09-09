@@ -2,13 +2,10 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import useSWR, { mutate } from "swr";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
-
-export default function RemindeForm({ userId }) {
+export default function ReminderForm({ userId }) {
   const router = useRouter();
   const { data: plants, error } = useSWR(
-    userId ? `/api/user/${userId}/ownedPlants` : null,
-    fetcher
+    userId ? `/api/user/${userId}/owned` : null
   );
 
   const [plantId, setPlantId] = useState("");
@@ -46,6 +43,7 @@ export default function RemindeForm({ userId }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newReminder),
     });
+
     if (response.ok) {
       await mutate(`/api/user/${userId}/reminders`);
       router.push("/reminders");
