@@ -1,6 +1,13 @@
-import { createGlobalStyle } from "styled-components";
+import { useSession } from "next-auth/react";
+import { createGlobalStyle, css } from "styled-components";
 
-export default createGlobalStyle`
+export default function GlobalStyleWrapper() {
+  const { data: session } = useSession();
+  const isDarkMode = session?.user?.isDarkMode;
+  return <GlobalStyles isDarkMode={isDarkMode} />;
+}
+
+const GlobalStyles = createGlobalStyle`
   *,
   *::before,
   *::after {
@@ -27,15 +34,15 @@ export default createGlobalStyle`
     --color-white: #FFFFFF;
     --color-black: #000000ff;
 
-    --color-neutral-dark: #333333;
+    --color-neutral-base: #333333;
     --color-neutral-medium: #bfbfbfff;
-    --color-neutral-light: #e3e3e3ff;
+    --color-neutral-highlight: #e3e3e3ff;
 
     --color-text-white: #FFFFFF;
-    --color-text-dark: #333333;
+    --color-text-base: #333333;
     --color-text-medium: #555555;
-    
-    --color-light-grey: #ccc;
+
+    --color-grey: #ccc;
 
     --color-accent: #FFD166;
     --color-alert: #ff0015ff;
@@ -63,4 +70,58 @@ export default createGlobalStyle`
     --padding-bg-md: 20px;
     --padding-large: 24px ;
     --padding-extra-large: 32px ;
-  }`;
+  }
+${(props) =>
+  props.isDarkMode &&
+  css`
+    :root {
+      --color-primary: #74c69d;
+      --color-primary-light: #a8e6cf;
+      --color-primary-dark: #3b7a57;
+
+      --color-secondary: #292929ff;
+      --color-secondary-dark: #1f1f1fff;
+      --color-secondary-rgba: rgba(31, 31, 31, 0.8);
+
+      --color-white: #ffffff;
+      --color-black: #000000;
+
+      --color-neutral-base: #e0e0e0;
+      --color-neutral-medium: #a0a0a0;
+      --color-neutral-highlight: #74c69d;
+
+      --color-text-white: #ffffff;
+      --color-text-base: #f5f5f5;
+      --color-text-medium: #bdbdbd;
+
+      --color-grey: #444;
+
+      --color-accent: #ffd166;
+      --color-alert: #ff6b6b;
+
+      --radius-lg: 25px;
+      --radius-bg-md: 15px;
+      --radius-md: 10px;
+      --radius-sm: 5px;
+
+      --border-sm-dark: 1px solid #555;
+
+      --font-primary: "Playfair Display";
+      --font-secondary: "Nunito";
+
+      --font-size-xl: 24px;
+      --font-size-lg: 20px;
+      --font-size-md: 16px;
+      --font-size-sm: 14px;
+
+      --box-shadow-md: 0px 2px 10px rgba(0, 0, 0, 0.7);
+
+      --padding-small: 8px;
+      --padding-bg-sm: 10px;
+      --padding-medium: 16px;
+      --padding-bg-md: 20px;
+      --padding-large: 24px;
+      --padding-extra-large: 32px;
+    }
+  `}
+`;

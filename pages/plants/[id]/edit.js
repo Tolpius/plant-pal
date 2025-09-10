@@ -39,9 +39,6 @@ export default function EditPage() {
         return;
       }
 
-      const updatedPlant = await response.json();
-      console.log("Plant edited successfully:", updatedPlant);
-
       router.push(`/plants/${id}`);
       toast.success("Plant saved");
     } catch (error) {

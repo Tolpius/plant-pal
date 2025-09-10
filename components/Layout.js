@@ -40,6 +40,7 @@ export default function Layout({ children }) {
       <Head>
         <title>Plant Pal</title>
       </Head>
+
       <Navbar
         onToggleNavlist={onToggleNavlist}
         isExtendedNavList={isExtendedNavList}

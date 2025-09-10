@@ -8,7 +8,6 @@ export default function PlantFilter({
   withOwnedFilter = false,
 }) {
   const [showFilter, setShowFilter] = useState(false);
-
   function handleFilterSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -81,8 +80,8 @@ const ButtonContainer = styled.div`
 
 const FilterButton = styled.button`
   width: 100%;
-  padding: 10px 20px;
-  background-color: var(--color-neutral-light);
+  padding: var(--padding-bg-sm);
+  background-color: var(--color-neutral-highlight);
   border-radius: var(--radius-bg-md);
   font-size: var(--font-size-md);
   ${(props) =>

@@ -100,7 +100,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
       <Fieldset>
         <legend>Fertiliser Season</legend>
         <CheckboxLabel>
-          <input
+          <StyledCheckBox
             type="checkbox"
             name="fertiliserSeason"
             value="spring"
@@ -112,7 +112,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
           🌸
         </CheckboxLabel>
         <CheckboxLabel>
-          <input
+          <StyledCheckBox
             type="checkbox"
             name="fertiliserSeason"
             value="summer"
@@ -124,7 +124,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
           ☀️
         </CheckboxLabel>
         <CheckboxLabel>
-          <input
+          <StyledCheckBox
             type="checkbox"
             name="fertiliserSeason"
             value="autumn"
@@ -136,7 +136,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
           🍁
         </CheckboxLabel>
         <CheckboxLabel>
-          <input
+          <StyledCheckBox
             type="checkbox"
             name="fertiliserSeason"
             value="winter"
@@ -170,6 +170,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
 
 
 const Form = styled.form`
+  color: var(--color-neutral-base);
   padding: 1.5rem;
   width: 100%;
 `;
@@ -187,22 +188,29 @@ const Label = styled.label`
 
 const Input = styled.input`
   display: block;
+  background-color: var(--color-secondary-dark);
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid var(--color-light-grey);
+  border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
+`;
+
+const StyledCheckBox = styled.input.attrs({ type: "checkbox" })`
+  accent-color: var(--color-primary);
 `;
 
 const Textarea = styled.textarea`
   display: block;
+  background-color: var(--color-secondary-dark);
   width: 100%;
   padding: 0.5rem;
   margin-top: 0.3rem;
-  border: 1px solid var(--color-light-grey);
+  border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
 `;
 
-const Slider = styled.input`
+const Slider = styled.input.attrs({ type: "range" })`
+  background-color: var(--color-primary);
   width: 100%;
   margin: 0.5rem 0;
 `;

@@ -29,7 +29,7 @@ const StyledOwnedButton = styled.button`
   border-width: 1px;
   width: auto;
   height: auto;
-  background: white;
+  background: var(--color-neutral-highlight);
   border-radius: 3px;
   padding: var(--padding-small);
   z-index: 2;
