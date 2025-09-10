@@ -36,7 +36,13 @@ export default async function handler(request, response) {
         switch (request.method) {
           //Use PUT for Edit Plant
           case "PUT": {
-            const editedPlant = { ...request.body, isPublic: true };
+            const { addOwned, isPublic, ...editedPlant } = request.body;
+            //Admins can choose, if the plant will be public
+            if (isPublic === "true") {
+              editedPlant.isPublic = true;
+            } else {
+              editedPlant.isPublic = false;
+            }
             const plant = await Plant.findByIdAndUpdate(id, editedPlant, {
               new: true,
               runValidators: true,

@@ -44,7 +44,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
           />
           make public
         </CheckboxLabel>
-        <CheckboxLabel>
+       {!isEdit && <CheckboxLabel>
           <input
             type="checkbox"
             name="addOwned"
@@ -52,7 +52,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
             aria-label="add to owned plants"
           />
           Add to owned plants
-        </CheckboxLabel>
+        </CheckboxLabel>}
       </Fieldset>
       <Label>
         Name
