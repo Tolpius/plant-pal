@@ -18,12 +18,12 @@ export default function Layout({ children }) {
     setIsExtendedNavList(!isExtendedNavList);
   }
 
-  if (isExtendedNavList) {
-    return (
-      <>
-        <Head>
-          <title>Plant Pal</title>
-        </Head>
+  return (
+    <>
+      <Head>
+        <title>Plant Pal</title>
+      </Head>
+      {isExtendedNavList ? (
         <Navlist
           onToggleNavlist={onToggleNavlist}
           isExtendedNavList={isExtendedNavList}
@@ -32,22 +32,15 @@ export default function Layout({ children }) {
           role="navigation"
           aria-label="Main navigation"
         />
-      </>
-    );
-  }
-  return (
-    <>
-      <Head>
-        <title>Plant Pal</title>
-      </Head>
-
-      <Navbar
-        onToggleNavlist={onToggleNavlist}
-        isExtendedNavList={isExtendedNavList}
-        session={session}
-        currentPath={currentPath}
-        aria-label="Main navigation"
-      />
+      ) : (
+        <Navbar
+          onToggleNavlist={onToggleNavlist}
+          isExtendedNavList={isExtendedNavList}
+          session={session}
+          currentPath={currentPath}
+          aria-label="Main navigation"
+        />
+      )}
       <Main>{children}</Main>
       <ToastContainer
         position="bottom-right"
