@@ -41,6 +41,7 @@ export default function EditPage() {
       );
 
       if (!response.ok) {
+        mutate();
         toast.error("Failed to edit Plant.");
         return;
       }
@@ -51,6 +52,7 @@ export default function EditPage() {
 
       router.push(`/owned/${ownedPlantId}`);
     } catch (error) {
+      mutate()
       console.error("Error editing plant:", error);
       toast.error("Failed to edit plant. Please try again.");
     }

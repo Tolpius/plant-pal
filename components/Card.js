@@ -17,9 +17,9 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
     mutate(previousCount + 1, false);
     try {
       await onAddOwned();
-      await mutate();
+      mutate();
     } catch (error) {
-      await mutate(previousCount, false);
+      mutate();
     }
   }
 
