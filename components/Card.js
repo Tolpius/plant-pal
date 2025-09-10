@@ -16,7 +16,10 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
       href={
         isOwnedPlantList
           ? `/owned/${plant._id}`
-          : `/plants/${plant._id}`
+          : {
+              pathname: "/plants/[id]",
+              query: { id: plant._id, from: "/catalogue" },
+            }
       }
       aria-label={`View details for ${plant.name}`}
     >

@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
@@ -36,8 +35,7 @@ export default function DetailsPage() {
   const router = useRouter();
   const { isReady } = router;
   const { id } = router.query;
-  const searchParams = useSearchParams();
-  const from = searchParams.get("from") || "/";
+  const from = router.query.from;
   const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
   const [showPopUp, setShowPopUp] = useState(false);
   const { data: session } = useSession();
@@ -65,10 +63,10 @@ export default function DetailsPage() {
   return (
     <>
       <StyledHeadline>
-        <BackButton/>
+        <BackButton href={from || undefined} />
         {session?.user?.role === "admin" && (
           <Link href={`/plants/${plant._id}/edit`} aria-label="Edit this plant">
-            <GearIcon size={32} color="var(--color-text-base)"/>
+            <GearIcon size={32} color="var(--color-text-base)" />
           </Link>
         )}
       </StyledHeadline>

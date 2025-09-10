@@ -6,7 +6,11 @@ import Link from "next/link";
 export default function CardCarousel({ plant, grayScale }) {
   return (
     <StyledLink
-      href={`/plants/${plant._id}`}
+      href={{
+        pathname: "/plants/[id]",
+
+        query: { id: plant._id, from: "/" },
+      }}
       aria-label={`View details for ${plant.name}`}
     >
       <CardWrapper>

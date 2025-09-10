@@ -11,7 +11,12 @@ export default function AdminCatalogueCard({
 
   return (
     <Card>
-      <LinkWrapper href={`/plants/${plant._id}`}>
+      <LinkWrapper
+        href={{
+          pathname: "/plants/[id]",
+          query: { id: plant._id, from: "/admin/catalogue" },
+        }}
+      >
         <Image src={plant.imageUrl} alt={plant.name} />
         <NameContent>
           <h3>{plant.name}</h3>
