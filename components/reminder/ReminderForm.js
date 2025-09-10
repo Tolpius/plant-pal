@@ -24,7 +24,6 @@ export default function ReminderForm({ userId }) {
 
     const newReminder = {
       ...data,
-      isRecurring,
     };
 
     const response = await fetch(`/api/user/${userId}/reminders`, {
