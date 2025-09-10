@@ -165,7 +165,7 @@ const Input = styled.input`
   display: block;
   width: 100%;
   padding: var(--padding-bg-sm);
-  border: 1px solid var(--color-light-grey);
+  border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
   margin-top: 0.3rem;
 `;
@@ -174,7 +174,7 @@ const Select = styled.select`
   display: block;
   width: 100%;
   padding: var(--padding-bg-sm);
-  border: 1px solid var(--color-light-grey);
+  border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
   margin-top: 0.3rem;
 `;
@@ -184,7 +184,7 @@ const Textarea = styled.textarea`
   width: 100%;
   padding: var(--padding-bg-sm);
   margin-top: 0.3rem;
-  border: 1px solid var(--color-light-grey);
+  border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
 `;
 
@@ -196,7 +196,7 @@ const QuickActionsContainer = styled.div`
 
 const QuickActionLabel = styled.label`
   padding: var(--padding-small);
-  background-color: var(--color-light-grey);
+  background-color: var(--color-grey);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   user-select: none;
