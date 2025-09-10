@@ -9,7 +9,7 @@ export default function EditPage() {
   const router = useRouter();
   const { isReady } = router;
   const { id } = router.query;
-  const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
+  const { data: plant, isLoading, error, mutate } = useSWR(`/api/plants/${id}`);
 
   if (isLoading || !isReady) {
     return <h2>Loading...</h2>;
@@ -20,14 +20,18 @@ export default function EditPage() {
 
   if (!isReady || isLoading || error) return <h2>Loading...</h2>;
 
-  async function editPlant(plant) {
+  async function editPlant(plantToUpdate) {
     try {
+      mutate(
+        { ...plantToUpdate, isPublic: plantToUpdate.isPublic === "true" },
+        false
+      );
       const response = await fetch(`/api/plants/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(plant),
+        body: JSON.stringify(plantToUpdate),
       });
 
       if (!response.ok) {
@@ -38,7 +42,7 @@ export default function EditPage() {
 
       const updatedPlant = await response.json();
       console.log("Plant edited successfully:", updatedPlant);
-
+      mutate();
       router.back();
       toast.success("Plant saved");
     } catch (error) {
@@ -50,7 +54,7 @@ export default function EditPage() {
   return (
     <>
       <h2 id="edit-plant">Edit Plant</h2>
-      <BackButton/>
+      <BackButton />
       <PlantForm defaultData={plant} onSubmit={editPlant} />
     </>
   );
