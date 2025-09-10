@@ -16,6 +16,7 @@ export default function EditPage() {
     data: ownedPlant,
     isLoading,
     error,
+    mutate,
   } = useSWR(`/api/user/${userId}/owned/${ownedPlantId}`);
 
   if (isLoading || !isReady) {
@@ -25,8 +26,9 @@ export default function EditPage() {
     return <h2>Error loading plant data</h2>;
   }
 
-  async function editPlant(ownedPlant) {
+  async function editPlant(newPlant) {
     try {
+      mutate(newPlant, false);
       const response = await fetch(
         `/api/user/${userId}/owned/${ownedPlantId}`,
         {
@@ -34,11 +36,12 @@ export default function EditPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(ownedPlant),
+          body: JSON.stringify(newPlant),
         }
       );
 
       if (!response.ok) {
+        mutate();
         toast.error("Failed to edit Plant.");
         return;
       }
@@ -49,6 +52,7 @@ export default function EditPage() {
 
       router.push(`/owned/${ownedPlantId}`);
     } catch (error) {
+      mutate();
       console.error("Error editing plant:", error);
       toast.error("Failed to edit plant. Please try again.");
     }

@@ -4,13 +4,44 @@ import OwnedButton from "./OwnedButton";
 import OwnedCounter from "./counters/OwnedCounter";
 import Link from "next/link";
 import useSWR from "swr";
+import { toast } from "react-toastify";
 
-export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
-  const { data: count, isLoading } = useSWR(
-    !isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null
-  );
+export default function Card({ plant, isOwnedPlantList, session }) {
+  const userId = session?.user.id;
+  const swrUrl = session ? `/api/user/${userId}/owned` : null;
+  const { data: ownedPlants, mutate: mutatePlants } = useSWR(swrUrl);
+  const {
+    data: count,
+    isLoading,
+    mutate: mutateCount,
+  } = useSWR(!isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null);
+
+  async function handleAddOwned() {
+    if (!session) return;
+    const previousCount = count;
+    mutateCount(previousCount + 1, false);
+    mutatePlants([...(ownedPlants ?? []), plant], false);
+    try {
+      const userId = session?.user.id;
+      const fetchUrl = `/api/user/${userId}/owned/${plant._id}`;
+      const fetchOptions = {
+        method: "POST",
+      };
+      const response = await fetch(fetchUrl, fetchOptions);
+      if (!response.ok) {
+        mutateCount();
+        mutatePlants();
+        toast.error("Error: Failed to add Plant.");
+      } else toast.success("Plant added.");
+    } catch (error) {
+      mutateCount();
+      mutatePlants();
+      toast.error("Error: Faild to add Plant.");
+    }
+  }
 
   if (isLoading) return null;
+
   return (
     <StyledLink
       href={
@@ -36,7 +67,7 @@ export default function Card({ plant, onAddOwned, isOwnedPlantList }) {
           {!isOwnedPlantList && (
             <>
               <OwnedButton
-                onAddOwned={onAddOwned}
+                onAddOwned={handleAddOwned}
                 aria-label={`Add plant to owned for ${plant.name}`}
               />
               <OwnedCounter length={count} />

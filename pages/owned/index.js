@@ -2,7 +2,6 @@ import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import styled from "styled-components";
-
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
 import PlantCounter from "@/components/counters/PlantCounter";
