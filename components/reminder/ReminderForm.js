@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import styled from "styled-components";
 import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
+import Link from "next/link";
+import { toast } from "react-toastify";
 
 export default function ReminderForm({ userId }) {
   const router = useRouter();
@@ -20,7 +22,7 @@ export default function ReminderForm({ userId }) {
   async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
+    const data = Object.fromEntries(formData);
 
     const newReminder = {
       ...data,
@@ -33,27 +35,21 @@ export default function ReminderForm({ userId }) {
     });
 
     if (response.ok) {
+      toast.success("Reminder created successfully.");
       router.push("/reminders");
     } else {
-      console.error("Failed to create reminder");
-    }
-  }
-
-  function handleQuickAction(action) {
-    const titleInput = document.querySelector("input[name='title']");
-    if (titleInput) {
-      titleInput.value = action;
+      toast.error("Failed to create reminder.");
     }
   }
 
   return (
     <Form onSubmit={handleSubmit}>
       <Header>
-        <IconButton type="button" onClick={() => router.push("/reminders")}>
+        <StyledLink href="/reminders" aria-label="cancel">
           <XCircleIcon size={28} />
-        </IconButton>
+        </StyledLink>
         <Title>New Reminder</Title>
-        <IconButton type="submit">
+        <IconButton type="submit" aria-label="save reminder">
           <CheckCircleIcon size={28} />
         </IconButton>
       </Header>
@@ -128,9 +124,15 @@ const Title = styled.h2`
   text-align: center;
 `;
 
+const StyledLink = styled(Link)`
+  color: var(--color-black);
+  cursor: pointer;
+`;
+
 const IconButton = styled.button`
   background: none;
   border: none;
+  cursor: pointer;
 `;
 
 const Label = styled.label`
@@ -186,11 +188,4 @@ const QuickActionLabel = styled.label`
     background-color: var(--color-primary);
     color: white;
   }
-`;
-
-const Fieldset = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  margin-bottom: 1rem;
 `;

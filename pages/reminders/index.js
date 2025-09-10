@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 
 import ReminderCard from "@/components/reminder/ReminderCard";
 import { PlusCircleIcon } from "@phosphor-icons/react";
+import Link from "next/link";
 
 function groupReminders(reminders) {
   const today = new Date();
@@ -83,7 +84,9 @@ export default function Reminders() {
     <Container>
       <Header>
         <Title>Reminders</Title>
-        <AddIcon size={32} onClick={() => router.push("/reminders/add")} />
+        <StyledLink href="/reminders/add" aria-label="create reminder">
+          <AddIcon size={32} />
+        </StyledLink>
       </Header>
 
       <GroupTitle>Today</GroupTitle>
@@ -143,6 +146,11 @@ const Header = styled.div`
 
 const Title = styled.h1`
   text-align: center;
+`;
+
+const StyledLink = styled(Link)`
+  color: var(--color-black);
+  cursor: pointer;
 `;
 
 const AddIcon = styled(PlusCircleIcon)`
