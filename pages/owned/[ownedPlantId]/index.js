@@ -1,9 +1,6 @@
 import BackButton from "@/components/BackButton";
-
 import { GearIcon } from "@phosphor-icons/react";
-
 import DeletePopUp from "@/components/DeletePopUp";
-
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -12,6 +9,7 @@ import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import { mutate } from "swr";
 
 const lightNeedMap = {
   1: "⛅",
@@ -37,6 +35,7 @@ export default function DetailsPage() {
   const { isReady } = router;
   const { ownedPlantId } = router.query;
   const { data: session } = useSession();
+  const userId = session?.user.id;
 
   const {
     data: plant,
@@ -57,15 +56,27 @@ export default function DetailsPage() {
   const seasons = plant?.fertiliserSeasons;
 
   async function deletePlant() {
-    const response = await fetch(
-      `/api/user/${session.user.id}/owned/${ownedPlantId}`,
-      { method: "DELETE" }
-    );
-    if (response.ok) {
-      toast.success("Plant removed.");
-      router.push("/owned");
-    } else {
-      toast.error("Failed to remove Plant.");
+    try {
+      mutate(
+        `/api/user/${userId}/owned`,
+        (plantList) =>
+          plantList.filter((plant) => !(plant._id === ownedPlantId)),
+        false
+      );
+      const response = await fetch(
+        `/api/user/${session.user.id}/owned/${ownedPlantId}`,
+        { method: "DELETE" }
+      );
+      if (response.ok) {
+        toast.success("Plant removed.");
+        router.push("/owned");
+      } else {
+        mutate();
+        toast.error("Failed to remove Plant.");
+      }
+    } catch (error) {
+      mutate();
+      toast.error("Failed to delete plant. Please try again.");
     }
   }
 
