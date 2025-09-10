@@ -52,7 +52,7 @@ export default function EditPage() {
 
       router.push(`/owned/${ownedPlantId}`);
     } catch (error) {
-      mutate()
+      mutate();
       console.error("Error editing plant:", error);
       toast.error("Failed to edit plant. Please try again.");
     }

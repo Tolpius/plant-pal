@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { PlusSquareIcon } from "@phosphor-icons/react";
-import { toast } from "react-toastify";
 
 export default function OwnedButton({ onAddOwned }) {
   function onClick(event) {
