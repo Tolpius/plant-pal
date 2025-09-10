@@ -1,3 +1,5 @@
+import { GearIcon } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 import styled from "styled-components";
 
 export default function ReminderCard({
@@ -51,6 +53,9 @@ export default function ReminderCard({
           <input type="checkbox" onChange={handleCheckboxChange} />
         </CheckboxContainer>
       )}
+      <StyledLink href={`reminders/${reminder._id}`}>
+        <GearIcon size={28} />
+      </StyledLink>
     </Card>
   );
 }
@@ -64,6 +69,7 @@ const Card = styled.div`
   gap: 10px;
   align-items: center;
   background-color: var(--color-white);
+  position: relative;
 `;
 
 const Image = styled.img`
@@ -85,4 +91,22 @@ const CheckboxContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const StyledLink = styled(Link)`
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  background-color: var(--color-white);
+  border-radius: 50%;
+  padding: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  color: var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: var(--color-primary);
+  }
 `;
