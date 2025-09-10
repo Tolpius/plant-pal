@@ -19,7 +19,7 @@ export default async function handler(request, response) {
             .json({ success: false, message: "Plant not found" });
         }
         //Private plants are only accessible by admins!
-        if (!plant.isPublic && token?.role !== "admin") {
+        if (!plant.isPublic && (!token || token?.role !== "admin")) {
           return response.status(403).json({ error: "Forbidden" });
         }
         return response.status(200).json(plant);
@@ -61,17 +61,18 @@ export default async function handler(request, response) {
           }
           //Use PATCH for toggle isPublic
           case "PATCH": {
-            const currentPlant = await Plant.findById(id);
-            if (!currentPlant) {
+            const updatedPlant = await Plant.findByIdAndUpdate(
+              id,
+              [
+                { $set: { isPublic: { $not: "$isPublic" } } }
+              ],
+              { new: true, runValidators: true }
+            );
+            if (!updatedPlant) {
               return response
                 .status(404)
                 .json({ success: false, message: "Plant not found" });
             }
-            const updatedPlant = await Plant.findByIdAndUpdate(
-              id,
-              { isPublic: !currentPlant.isPublic },
-              { new: true, runValidators: true }
-            );
             return response
               .status(200)
               .json({ success: true, data: updatedPlant });

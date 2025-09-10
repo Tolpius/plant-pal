@@ -15,20 +15,20 @@ export default async function handler(request, response) {
       return response.status(403).json({ error: "Forbidden" });
     }
     await dbConnect();
-
-    if (request.method === "GET") {
-      const plants = await Plant.find();
-      return response.status(200).json(plants);
-    }
-    
-    if (request.method === "POST") {
-      const newPlant = { ...request.body, isPublic: true };
-      const plant = await Plant.create(newPlant);
-      return response.status(201).json({ success: true, data: plant });
-    } else {
-      return response
-        .status(405)
-        .json({ success: false, message: "Method not allowed" });
+    switch (request.method) {
+      case "GET": {
+        const plants = await Plant.find();
+        return response.status(200).json(plants);
+      }
+      case "POST": {
+        const newPlant = { ...request.body, isPublic: true };
+        const plant = await Plant.create(newPlant);
+        return response.status(201).json({ success: true, data: plant });
+      }
+      default:
+        return response
+          .status(405)
+          .json({ success: false, message: "Method not allowed" });
     }
   } catch (error) {
     return response.status(500).json({ success: false, error: error.message });
