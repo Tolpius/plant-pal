@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import BackButton from "@/components/BackButton";
-import { useSearchParams } from "next/navigation";
 
 import PlantForm from "@/components/forms/PlantForm";
 import { toast } from "react-toastify";
@@ -10,9 +9,6 @@ export default function EditPage() {
   const router = useRouter();
   const { isReady } = router;
   const { id } = router.query;
-  const searchParams = useSearchParams();
-  const from = searchParams.get("from") || `/plants/${id}`;
-  const fromfrom = searchParams.get("fromfrom") || `/`;
   const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
 
   if (isLoading || !isReady) {
@@ -43,10 +39,7 @@ export default function EditPage() {
       const updatedPlant = await response.json();
       console.log("Plant edited successfully:", updatedPlant);
 
-      router.push({
-        pathname: from,
-        query: { from: fromfrom },
-      });
+      router.back();
       toast.success("Plant saved");
     } catch (error) {
       console.error("Error editing plant:", error);
@@ -57,13 +50,7 @@ export default function EditPage() {
   return (
     <>
       <h2 id="edit-plant">Edit Plant</h2>
-      <BackButton
-        href={{
-          pathname: from,
-          query: { from: fromfrom },
-        }}
-        aria-label="Go back"
-      />
+      <BackButton/>
       <PlantForm defaultData={plant} onSubmit={editPlant} />
     </>
   );

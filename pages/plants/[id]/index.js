@@ -65,15 +65,9 @@ export default function DetailsPage() {
   return (
     <>
       <StyledHeadline>
-        <BackButton href={from} aria-label="Go back" />
+        <BackButton/>
         {session?.user?.role === "admin" && (
-          <Link
-            href={{
-              pathname: "/plants/[id]/edit",
-              query: { id: plant._id, from: `/plants/${plant._id}`, fromfrom: from},
-            }}
-            aria-label="Edit this plant"
-          >
+          <Link href={`/plants/${plant._id}/edit`} aria-label="Edit this plant">
             <GearIcon size={32} />
           </Link>
         )}

@@ -8,23 +8,10 @@ export default function AdminCatalogueCard({
   onTogglePublic,
 }) {
   const [showPopUp, setShowPopUp] = useState(false);
-  async function deletePlant() {
-    setShowPopUp(false);
-    onDelete(plant._id);
-  }
 
-  async function handleTogglePublic() {
-    onTogglePublic(plant._id);
-  }
-  
   return (
     <Card>
-      <LinkWrapper
-        href={{
-          pathname: "/plants/[id]",
-          query: { id: plant._id, from: "/admin/catalogue" },
-        }}
-      >
+      <LinkWrapper href={`/plants/${plant._id}`}>
         <Image src={plant.imageUrl} alt={plant.name} />
         <NameContent>
           <h3>{plant.name}</h3>
@@ -32,13 +19,7 @@ export default function AdminCatalogueCard({
         </NameContent>
       </LinkWrapper>
       <CRUDContent>
-        <Link
-          className="edit"
-          href={{
-            pathname: "/plants/[id]/edit",
-            query: { id: plant._id, from: "/admin/catalogue" },
-          }}
-        >
+        <Link className="edit" href={`/plants/${plant._id}/edit`}>
           edit
         </Link>
         <button
@@ -50,13 +31,19 @@ export default function AdminCatalogueCard({
         >
           Delete
         </button>
-        <button className="togglepublic" onClick={handleTogglePublic}>
+        <button
+          className="togglepublic"
+          onClick={() => onTogglePublic(plant._id)}
+        >
           make {plant.isPublic ? "private" : "public"}
         </button>
       </CRUDContent>
       {showPopUp && (
         <DeletePopUp
-          onDelete={deletePlant}
+          onDelete={() => {
+            setShowPopUp(false);
+            onDelete(plant._id);
+          }}
           onCancel={() => setShowPopUp(false)}
         />
       )}

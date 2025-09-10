@@ -55,10 +55,7 @@ export default function Catalogue() {
         values={filters}
       />
       <AddLink
-        href={{
-          pathname: "/add",
-          query: { from: "/catalogue" },
-        }}
+        href={"/add"}
       >
         Didnt find your Plant? Create your own!
       </AddLink>

@@ -36,9 +36,12 @@ export default function AdminCatalogue() {
   async function onTogglePublic(plantId) {
     try {
       mutate(
-        data.map(
-          (plant) => plant._id === plantId && (plant.isPublic = !plant.isPublic)
-        ),
+        data.map((plant) => {
+          if (plant._id === plantId) {
+            return { ...plant, isPublic: !plant.isPublic };
+          }
+          return plant;
+        }),
         false
       );
       const response = await fetch(`/api/plants/${plantId}`, {
@@ -77,10 +80,7 @@ export default function AdminCatalogue() {
       <StyledHeadline>Browse to find and select your plants. </StyledHeadline>
       <PlantFilter onFilter={setFilter} />
       <AddLink
-        href={{
-          pathname: "/add",
-          query: { from: "/admin/catalogue" },
-        }}
+        href={"/add"}
       >
         Add a new plant
       </AddLink>
