@@ -68,7 +68,7 @@ export default function DetailsPage() {
         <BackButton/>
         {session?.user?.role === "admin" && (
           <Link href={`/plants/${plant._id}/edit`} aria-label="Edit this plant">
-            <GearIcon size={32} />
+            <GearIcon size={32} color="var(--color-text-base)"/>
           </Link>
         )}
       </StyledHeadline>

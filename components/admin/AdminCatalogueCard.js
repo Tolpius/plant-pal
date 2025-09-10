@@ -60,7 +60,7 @@ const Card = styled.div`
   gap: 10px;
   align-items: center;
   color: var(--color-neutral-base);
-  background-color: var(--color-white);
+  background-color: var(--color-secondary-dark);
 `;
 
 const LinkWrapper = styled(Link)`
@@ -101,7 +101,7 @@ const CRUDContent = styled.div`
     padding: var(--padding-small) 0;
     border-radius: var(--radius-md);
     border: var(--border-sm-dark);
-    background: var(--color-white);
+    background: var(--color-secondary);
     color: var(--color-text-dark);
     font-size: var(--font-size-md);
     text-align: center;
