@@ -103,10 +103,10 @@ const StyledHeadline = styled.h2`
 const AddLink = styled(Link)`
   border: 1px solid #000000;
   border-radius: 10px;
-  background-color: var(--color-neutral-light);
+  background: var(--color-primary);
   text-decoration: none;
   text-align: center;
-  padding: var(--pd-sm);
+  padding: var(--padding-small);
   &:visited {
     color: inherit;
   }

@@ -58,8 +58,8 @@ const Card = styled.div`
   border-radius: var(--radius-md);
   display: flex;
   gap: 10px;
-  align-items: stretch;
-  color: var(--color-neutral-dark);
+  align-items: center;
+  color: var(--color-neutral-base);
   background-color: var(--color-white);
 `;
 

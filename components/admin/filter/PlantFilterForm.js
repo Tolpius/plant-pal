@@ -47,6 +47,6 @@ const StyledButtonWrapper = styled.div`
 
 const StyledButton = styled.button`
   padding: 5px 15px;
-  border: 1px solid var(--color-light-grey);
+  border: 1px solid var(--color-grey);
   border-radius: var(--radius-sm);
 `;

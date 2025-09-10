@@ -66,6 +66,7 @@ export default function Owned() {
 }
 
 const StyledText = styled.p`
+  color: var(--color-neutral-base);
   padding-top: var(--padding-bg-sm);
   text-align: center;
   font-size: var(--font-size-xl);

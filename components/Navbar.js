@@ -77,7 +77,7 @@ const StyledNavbar = styled.nav`
   left: 0;
   width: 100%;
   background: var(--color-primary);
-  border-bottom: 1px solid var(--color-neutral-light);
+  border-bottom: 1px solid var(--color-neutral-highlight);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -89,9 +89,7 @@ const Logo = styled(Link)`
   font-weight: bold;
   font-size: 1.25rem;
   text-decoration: none;
-  &:visited {
-    color: inherit;
-  }
+  color: var(--color-black);
 `;
 
 const RightMenu = styled.div`
