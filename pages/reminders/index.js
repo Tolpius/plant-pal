@@ -51,7 +51,7 @@ function groupReminders(reminders) {
 export default function Reminders() {
   const router = useRouter();
   const { data: session } = useSession();
-  const userId = session?.user?.id; // später vom Session-User
+  const userId = session?.user?.id;
   const { data: reminders, error } = useSWR(
     userId ? `/api/user/${userId}/reminders` : null
   );

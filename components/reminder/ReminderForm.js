@@ -11,7 +11,6 @@ export default function ReminderForm({ userId }) {
   );
 
   const [title, setTitle] = useState("");
-  const [isRecurring, setIsRecurring] = useState(false);
 
   const quickActions = ["Water", "Fertilise", "Repot"];
 
@@ -111,27 +110,6 @@ export default function ReminderForm({ userId }) {
         Time
         <Input type="time" name="time" />
       </Label>
-
-      <Label>
-        <input
-          type="checkbox"
-          checked={isRecurring}
-          onChange={(event) => setIsRecurring(event.target.checked)}
-        />
-        Recurring?
-      </Label>
-
-      {isRecurring && (
-        <Fieldset>
-          <label>Every</label>
-          <Input type="number" name="recurringInterval" min="1" />
-          <Select name="recurringUnit" defaultValue="days">
-            <option value="days">Days</option>
-            <option value="weeks">Weeks</option>
-            <option value="months">Months</option>
-          </Select>
-        </Fieldset>
-      )}
     </Form>
   );
 }

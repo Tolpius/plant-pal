@@ -10,9 +10,6 @@ const reminderSchema = new Schema(
     description: { type: String },
     dueDate: { type: Date, required: true },
     time: { type: String, required: false },
-    isRecurring: { type: Boolean, default: false },
-    recurringInterval: { type: Number, required: false },
-    recurringUnit: { type: String, required: false },
   },
   { timestamps: true }
 );

@@ -34,16 +34,7 @@ export default async function handler(request, response) {
     }
 
     if (request.method === "POST") {
-      const {
-        plantId,
-        title,
-        description,
-        dueDate,
-        time,
-        isRecurring,
-        recurringInterval,
-        recurringUnit,
-      } = request.body;
+      const { plantId, title, description, dueDate, time } = request.body;
 
       if (!plantId || !title || !dueDate) {
         return response.status(400).json({ error: "Missing required fields" });
@@ -57,9 +48,6 @@ export default async function handler(request, response) {
         title,
         description,
         dueDate: due,
-        isRecurring: Boolean(isRecurring),
-        recurringInterval: recurringInterval ? Number(recurringInterval) : null,
-        recurringUnit: recurringUnit || null,
       });
 
       return response.status(201).json(newReminder);
