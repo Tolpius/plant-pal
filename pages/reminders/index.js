@@ -2,10 +2,11 @@ import useSWR, { mutate } from "swr";
 import styled from "styled-components";
 import { useMemo } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
-import ReminderCard from "@/components/ReminderCard";
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import ReminderCard from "@/components/reminder/ReminderCard";
+import { PlusCircleIcon } from "@phosphor-icons/react";
+import Link from "next/link";
 
 function groupReminders(reminders) {
   const today = new Date();
@@ -49,11 +50,11 @@ function groupReminders(reminders) {
 }
 
 export default function Reminders() {
+  const router = useRouter();
   const { data: session } = useSession();
-  const userId = session?.user?.id; // später vom Session-User
+  const userId = session?.user?.id;
   const { data: reminders, error } = useSWR(
-    userId ? `/api/user/${userId}/reminders` : null,
-    fetcher
+    userId ? `/api/user/${userId}/reminders` : null
   );
 
   const groupedReminders = useMemo(
@@ -81,7 +82,12 @@ export default function Reminders() {
 
   return (
     <Container>
-      <Title>Reminders</Title>
+      <Header>
+        <Title>Reminders</Title>
+        <StyledLink href="/reminders/add" aria-label="create reminder">
+          <AddIcon size={32} />
+        </StyledLink>
+      </Header>
 
       <GroupTitle>Today</GroupTitle>
       {todayReminders.length ? (
@@ -131,9 +137,27 @@ const Container = styled.div`
   padding: var(--padding-bg-md);
 `;
 
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+`;
+
 const Title = styled.h1`
   text-align: center;
-  margin-bottom: 20px;
+`;
+
+const StyledLink = styled(Link)`
+  color: var(--color-black);
+  cursor: pointer;
+`;
+
+const AddIcon = styled(PlusCircleIcon)`
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const GroupTitle = styled.h2`
