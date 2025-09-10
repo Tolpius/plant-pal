@@ -184,6 +184,7 @@ const Label = styled.label`
   display: block;
   margin-bottom: 1rem;
   font-weight: 500;
+  
 `;
 
 const Input = styled.input`
@@ -193,6 +194,8 @@ const Input = styled.input`
   padding: 0.5rem;
   border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
+  
+  color: var(--color-neutral-base)
 `;
 
 const StyledCheckBox = styled.input.attrs({ type: "checkbox" })`
@@ -207,6 +210,7 @@ const Textarea = styled.textarea`
   margin-top: 0.3rem;
   border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
+    color: var(--color-neutral-base)
 `;
 
 const Slider = styled.input.attrs({ type: "range" })`
