@@ -1,7 +1,6 @@
 import {
   BookOpenTextIcon,
   CalendarPlusIcon,
-  CalendarX,
   HouseIcon,
   ListIcon,
   SignOutIcon,
@@ -11,6 +10,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import { signOut } from "next-auth/react";
 import FunFactDisplay from "./FunFactDisplay";
+import DarkMode from "./DarkMode";
 
 export default function Navlist({
   onToggleNavlist,
@@ -29,11 +29,7 @@ export default function Navlist({
           onClick={() => onToggleNavlist()}
           aria-label="Toggle Extended Navlist"
         >
-          <ListIcon
-            size={28}
-            weight={isExtendedNavList === "true" ? "fill" : "regular"}
-            aria-label="Extended Navlist"
-          />
+          <ListIcon size={28} weight={"fill"} />
         </NavlistButton>
       </StyledNavlist>
 
@@ -44,18 +40,14 @@ export default function Navlist({
           aria-label="My Plants"
         >
           <StyledText>Home</StyledText>
-          <HouseIcon
-            size={28}
-            weight={currentPath === "/owned" ? "fill" : "regular"}
-            aria-label="My Plants"
-          />
+          <HouseIcon size={28} weight={"regular"} aria-label="My Plants" />
         </NavLink>
 
         <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
           <StyledText>Catalogue</StyledText>
           <BookOpenTextIcon
             size={28}
-            weight={currentPath === "/catalogue" ? "fill" : "regular"}
+            weight={"regular"}
             aria-label="Catalogue"
           />
         </NavLink>
@@ -69,20 +61,19 @@ export default function Navlist({
             size={28}
             weight={currentPath === "/reminders" ? "fill" : "regular"}
             aria-label="Reminders"
-            />
+          />
         </NavLink>
-        
-            {session.user.role === "admin" && (
-              <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
-                <StyledText>Admin Catalogue</StyledText>
-                <TicketIcon
-                  size={28}
-                  weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
-                  aria-label="Admin Catalogue"
-                />
-              </NavLink>
-            )}
 
+        {session.user.role === "admin" && (
+          <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
+            <StyledText>Admin Catalogue</StyledText>
+            <TicketIcon
+              size={28}
+              weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
+              aria-label="Admin Catalogue"
+            />
+          </NavLink>
+        )}
 
         <NavButton
           onClick={() => signOut({ callbackUrl: "/" })}
@@ -91,6 +82,9 @@ export default function Navlist({
           Log Out
           <SignOutIcon size={26} weight="regular" aria-label="Logout" />
         </NavButton>
+        <NavItem>
+          <DarkMode onToggleNavlist={onToggleNavlist} />
+        </NavItem>
       </ExtendedMenu>
     </>
   );
@@ -104,7 +98,7 @@ const StyledNavlist = styled.nav`
   left: 0;
   width: 100%;
   background: var(--color-primary);
-  border-bottom: 1px solid var(--color-neutral-light);
+  border-bottom: 1px solid var(--color-neutral-highlight);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -143,7 +137,7 @@ const NavLink = styled(Link)`
   &:hover {
     color: var(--color-black);
   }
-  border-bottom: 1px solid var(--color-neutral-dark);
+  border-bottom: 1px solid var(--color-neutral-base);
 `;
 
 const NavButton = styled.button`
@@ -157,7 +151,7 @@ const NavButton = styled.button`
   color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s ease-in-out;
-  border-bottom: 1px solid var(--color-neutral-dark);
+  border-bottom: 1px solid var(--color-neutral-base);
   &:hover {
     color: var(--color-black);
   }
@@ -184,7 +178,7 @@ const NavFunFactWrapper = styled.div`
   justify-content: end;
   font-size: var(--font-size-lg);
   color: var(--color-secondary);
-  border-bottom: 1px solid var(--color-neutral-dark);
+  border-bottom: 1px solid var(--color-neutral-base);
   transition: color 0.2s ease-in-out;
   &:hover {
     color: var(--color-black);
@@ -194,4 +188,21 @@ const NavFunFactWrapper = styled.div`
 const StyledText = styled.p`
   padding: 0px, 25px;
   font-size: var(--font-size-lg);
+`;
+
+const NavItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-lg);
+  padding: 0;
+  color: var(--color-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  border-bottom: 1px solid var(--color-neutral-base);
+  &:hover {
+    color: var(--color-black);
+  }
 `;

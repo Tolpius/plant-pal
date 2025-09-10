@@ -9,6 +9,7 @@ export default function App({
 }) {
   return (
     <SessionProvider session={session}>
+      <GlobalStyle />
       <SWRConfig
         value={{
           refreshInterval: 3000,
@@ -17,7 +18,6 @@ export default function App({
         }}
       >
         <Layout>
-          <GlobalStyle />
           <Component {...pageProps} />
         </Layout>
       </SWRConfig>

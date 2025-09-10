@@ -25,7 +25,7 @@ const Card = styled(Link)`
   display: flex;
   gap: 10px;
   align-items: center;
-  color: var(--color-neutral-dark);
+  color: var(--color-neutral-base);
   background-color: var(--color-white);
   text-decoration: none;
   &:visited {

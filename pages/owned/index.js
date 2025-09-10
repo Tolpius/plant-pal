@@ -50,14 +50,23 @@ export default function Owned() {
   return (
     <>
       <StyledText>My owned Plants</StyledText>
-      <PlantFilter onFilter={setFilters} />
+      <PlantFilter
+        onFilter={setFilters}
+        withOwnedFilter={false}
+        values={filters}
+      />
       <PlantCounter length={filteredPlantList.length} />
-      <PlantList plants={filteredPlantList} session={session} isOwnedPlantList={true}/>
+      <PlantList
+        plants={filteredPlantList}
+        session={session}
+        isOwnedPlantList={true}
+      />
     </>
   );
 }
 
 const StyledText = styled.p`
+  color: var(--color-neutral-base);
   padding-top: var(--padding-bg-sm);
   text-align: center;
   font-size: var(--font-size-xl);
