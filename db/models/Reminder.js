@@ -9,6 +9,7 @@ const reminderSchema = new Schema(
     title: { type: String, required: true },
     description: { type: String },
     dueDate: { type: Date, required: true },
+    time: { type: String, required: false },
   },
   { timestamps: true }
 );
