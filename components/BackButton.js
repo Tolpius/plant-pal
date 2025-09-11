@@ -21,6 +21,7 @@ export default function BackButton({ href, ariaLabel = "Go back" }) {
 const StyledButton = styled.button`
   text-decoration: none;
   border: none;
+  cursor: pointer;
   background-color: inherit;
   max-width: 3rem;
 `;
