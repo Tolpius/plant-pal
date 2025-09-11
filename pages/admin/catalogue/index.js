@@ -13,11 +13,11 @@ export default function AdminCatalogue() {
   const [filter, setFilter] = useState({ isPublic: "all" });
   const { data: session, status: sessionStatus } = useSession();
   async function onDelete(plantId) {
+    mutate(
+      data.filter((plant) => plant._id !== plantId),
+      false
+    );
     try {
-      mutate(
-        data.filter((plant) => plant._id !== plantId),
-        false
-      );
       const response = await fetch(`/api/plants/${plantId}`, {
         method: "DELETE",
       });
@@ -26,24 +26,27 @@ export default function AdminCatalogue() {
       } else {
         toast.error("Failed to remove Plant.");
       }
-      mutate();
+
     } catch (error) {
       toast.error("Failed to remove Plant.");
       console.error(error);
     }
+    finally {
+      mutate();
+    }
   }
 
   async function onTogglePublic(plantId) {
+    mutate(
+      data.map((plant) => {
+        if (plant._id === plantId) {
+          return { ...plant, isPublic: !plant.isPublic };
+        }
+        return plant;
+      }),
+      false
+    );
     try {
-      mutate(
-        data.map((plant) => {
-          if (plant._id === plantId) {
-            return { ...plant, isPublic: !plant.isPublic };
-          }
-          return plant;
-        }),
-        false
-      );
       const response = await fetch(`/api/plants/${plantId}`, {
         method: "PATCH",
       });
@@ -52,10 +55,12 @@ export default function AdminCatalogue() {
       } else {
         toast.error("Failed to toggle Plant.");
       }
-      mutate();
     } catch (error) {
       toast.error("Failed to toggle Plant.");
       console.error(error);
+    }
+    finally{
+      mutate();
     }
   }
 
