@@ -24,24 +24,22 @@ export default function AdminCatalogueCard({
         </NameContent>
       </LinkWrapper>
       <CRUDContent>
-        <Link className="edit" href={`/plants/${plant._id}/edit`}>
+        <EditLink href={`/plants/${plant._id}/edit`}>
           edit
-        </Link>
-        <button
-          className="delete"
+        </EditLink>
+        <DeleteButton
           onClick={() => {
             setShowPopUp(true);
           }}
           aria-label="Delete this plant"
         >
           Delete
-        </button>
-        <button
-          className="togglepublic"
+        </DeleteButton>
+        <TogglePublicButton
           onClick={() => onTogglePublic(plant._id)}
         >
           make {plant.isPublic ? "private" : "public"}
-        </button>
+        </TogglePublicButton>
       </CRUDContent>
       {showPopUp && (
         <DeletePopUp
@@ -113,14 +111,16 @@ const CRUDContent = styled.div`
     text-decoration: none;
     display: block;
   }
-
-  & > .edit {
-    grid-area: edit;
-  }
-  & > .delete {
-    grid-area: delete;
-  }
-  & > .togglepublic {
-    grid-area: togglepublic;
-  }
 `;
+
+const EditLink = styled(Link)`
+    grid-area: edit;`
+;
+
+const DeleteButton = styled.button`
+    grid-area: delete;`
+;
+
+const TogglePublicButton = styled.button`
+    grid-area: togglepublic;`
+;
