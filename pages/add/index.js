@@ -7,7 +7,7 @@ import PlantForm from "@/components/forms/PlantForm";
 
 export default function Add() {
   const router = useRouter();
-  const session = useSession();
+  const {data: session} = useSession();
   const userId = session?.data?.user?.id;
   async function addPlant(plant) {
     try {
@@ -24,7 +24,7 @@ export default function Add() {
       }
 
       const newPlant = await response.json();
-      if (session.user.role === "admin") {
+      if (session?.user?.role === "admin") {
         toast.success(`New Plant has been added to catalogue and is marked as ${newPlant.isPublic ? "Public" : "Private"}`);
       } else {
         toast.success(
