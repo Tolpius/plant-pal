@@ -12,7 +12,6 @@ export default function App({
       <GlobalStyle />
       <SWRConfig
         value={{
-          refreshInterval: 3000,
           fetcher: (resource, init) =>
             fetch(resource, init).then((response) => response.json()),
         }}
