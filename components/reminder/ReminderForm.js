@@ -16,8 +16,8 @@ export default function ReminderForm({ userId, reminderId }) {
   );
 
   const quickActions = ["Water", "Fertilise", "Repot"];
-  const [title, setTitle] = useState("");
-  const [plantId, setPlantId] = useState("");
+  const [title, setTitle] = useState(reminder?.title ?? "");
+  const [plantId, setPlantId] = useState(reminder?.plantId ?? "");
 
   useEffect(() => {
     if (reminder) {
