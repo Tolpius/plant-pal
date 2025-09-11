@@ -15,10 +15,18 @@ export default async function handler(request, response) {
 
   try {
     await dbConnect();
-
-    if (request.method === "GET") {
-      const count = await OwnedPlant.countDocuments({ userId, cataloguePlantId: id });
-      return response.status(200).json(count);
+    switch (request.method) {
+      case "GET": {
+        const count = await OwnedPlant.countDocuments({
+          userId,
+          cataloguePlantId: id,
+        });
+        return response.status(200).json(count);
+      }
+      default:
+        return response
+          .status(405)
+          .json({ success: false, message: "Method not allowed" });
     }
   } catch (error) {
     response.status(500).json({ success: false, error: error.message });

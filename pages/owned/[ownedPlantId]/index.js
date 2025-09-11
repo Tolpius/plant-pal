@@ -83,7 +83,7 @@ export default function DetailsPage() {
   return (
     <>
       <StyledHeadline>
-        <BackButton href="/owned" />
+        <BackButton href="/owned"/>
         {session && (
           <Link
             href={`/owned/${ownedPlantId}/edit`}
