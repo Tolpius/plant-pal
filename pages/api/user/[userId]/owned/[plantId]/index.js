@@ -26,8 +26,12 @@ export default async function handler(request, response) {
       // GET: returns the owned plant of userId and plantId
       // HERE THE PLANT ID OF THE OWNED PLANT IS USED
       case "GET": {
-        const ownedPlant = await OwnedPlant.findById(plantId);
-        return response.status(200).json(ownedPlant)
+        const ownedPlant = await OwnedPlant.findById(plantId).populate(
+          "cataloguePlantId"
+        );
+        if (!ownedPlant)
+          return response.status(404).json({ error: "Owned plant not found" });
+        return response.status(200).json(ownedPlant);
       }
       // POST: Add Plant from Catalogue to OwnedList
       // HERE THE PLANT ID OF THE CATALOGUE IS USED
@@ -37,30 +41,32 @@ export default async function handler(request, response) {
           return response.status(404).json({ error: "Plant not found" });
         }
         const ownedPlant = new OwnedPlant({
-          cataloguePlantId: plantId,
-          userId: userId,
-          name: plant.name,
-          botanicalName: plant.botanicalName,
-          imageUrl: plant.imageUrl,
-          waterNeed: plant.waterNeed,
-          lightNeed: plant.lightNeed,
-          fertiliserSeasons: plant.fertiliserSeasons,
-          description: plant.description,
+          cataloguePlantId: plant._id,
+          userId,
+          nickname: request.body.nickname || "",
+          location: request.body.location || "",
+          acquiredDate: request.body.acquiredDate || null,
+          userImageUrl: request.body.userImageUrl || "",
+          notes: request.body.notes || "",
         });
         await ownedPlant.save();
+        await ownedPlant.populate("cataloguePlantId");
         return response.status(200).json(ownedPlant);
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "PUT": {
-        const updatedOwnedPlant = request.body
-        updatedOwnedPlant.cataloguePlantId = plantId;
-        updatedOwnedPlant.userId = userId;
-        const ownedPlant = await OwnedPlant.findByIdAndUpdate(
+        const updatedOwnedPlant = await OwnedPlant.findByIdAndUpdate(
           plantId,
-          updatedOwnedPlant,
+          {
+            nickname: request.body.nickname || "",
+            location: request.body.location || "",
+            acquiredDate: request.body.acquiredDate || null,
+            userImageUrl: request.body.userImageUrl || "",
+            notes: request.body.notes || "",
+          },
           { new: true, runValidators: true }
-        );
-        return response.status(200).json(ownedPlant);
+        ).populate("cataloguePlantId");
+        return response.status(200).json(updatedOwnedPlant);
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "DELETE": {
