@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/db/dbConnect";
 import Plant from "@/lib/db/models/Plant";
+import { getSignedImageUrl } from "@/lib/s3/s3Client";
 import { getToken } from "next-auth/jwt";
 
 export default async function handler(request, response) {
@@ -12,11 +13,16 @@ export default async function handler(request, response) {
     });
     switch (request.method) {
       case "GET": {
-        const plant = await Plant.findById(id);
+        const plant = await Plant.findById(id).lean();
         if (!plant) {
           return response
             .status(404)
             .json({ success: false, message: "Plant not found" });
+        }
+        if (plant.imageStoragePath) {
+          plant.storedImageUrl = await getSignedImageUrl(
+            plant.imageStoragePath
+          );
         }
         //Private plants are only accessible by admins!
         if (!plant.isPublic && (!token || token?.role !== "admin")) {
