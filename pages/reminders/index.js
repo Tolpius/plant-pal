@@ -89,12 +89,10 @@ export default function Reminders() {
       }
 
       if (!("Notification" in window)) {
-        console.warn("Browser doesn't support notifications.");
         return;
       }
 
       if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-        console.log("Push service not supported by this browser.");
         return;
       }
 
