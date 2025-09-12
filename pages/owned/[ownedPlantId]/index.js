@@ -82,6 +82,11 @@ export default function DetailsPage() {
     <>
       <StyledHeadline>
         <BackButton href="/owned" />
+        <h2>
+          {plant.nickname && plant.nickname.trim() !== ""
+            ? plant.nickname
+            : plant.cataloguePlantId?.name || "Unknown Plant"}
+        </h2>
         {session && (
           <Link
             href={`/owned/${ownedPlantId}/edit`}
@@ -132,6 +137,14 @@ export default function DetailsPage() {
             </li>
           ))}
       </StyledInfoRow>
+
+      {plant.nickname && <p>Nickname: {plant.nickname}</p>}
+      {plant.location && <p>Location: {plant.location}</p>}
+      {plant.acquiredDate && (
+        <p>Acquired: {new Date(plant.acquiredDate).toLocaleDateString()}</p>
+      )}
+      {plant.notes && <p>Notes: {plant.notes}</p>}
+
       {session && (
         <StyledDeleteButton
           onClick={() => {

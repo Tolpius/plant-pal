@@ -29,7 +29,10 @@ export default async function handler(request, response) {
         const ownedPlant = await OwnedPlant.findOne({
           _id: plantId,
           userId,
-        }).populate("cataloguePlantId", "name botanicalName imageUrl");
+        }).populate(
+          "cataloguePlantId",
+          "name botanicalName description imageUrl lightNeed waterNeed fertiliserSeasons"
+        );
         if (!ownedPlant)
           return response.status(404).json({ error: "Owned plant not found" });
         return response.status(200).json(ownedPlant);
