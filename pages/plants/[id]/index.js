@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-
+import PlantImage from "@/components/PlantImage";
 import { GearIcon } from "@phosphor-icons/react";
 
 import BackButton from "@/components/BackButton";
@@ -49,7 +49,7 @@ export default function DetailsPage() {
 
   if (plant.error) return <>Error loading plant: {plant.error}</>;
   const seasons = plant.fertiliserSeasons;
-
+  
   async function deletePlant() {
     const response = await fetch(`/api/plants/${id}`, { method: "DELETE" });
     if (response.ok) {
@@ -71,7 +71,7 @@ export default function DetailsPage() {
         )}
       </StyledHeadline>
       <StyledImage
-        src={plant.imageUrl || "/defaultImage.png"}
+        plant={plant}
         alt={plant.name}
         width={300}
         height={0}
@@ -143,7 +143,7 @@ const StyledDeleteButton = styled.button`
   margin-top: 30px;
 `;
 
-const StyledImage = styled(Image)`
+const StyledImage = styled(PlantImage)`
   width: 100%;
   height: auto;
   display: block;
