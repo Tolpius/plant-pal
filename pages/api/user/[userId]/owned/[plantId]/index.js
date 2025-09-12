@@ -2,6 +2,7 @@ import dbConnect from "@/db/dbConnect";
 import User from "@/db/models/User";
 import { getToken } from "next-auth/jwt";
 import OwnedPlant from "@/db/models/OwnedPlant";
+import Reminder from "@/db/models/Reminder";
 import Plant from "@/db/models/Plant";
 
 export default async function handler(request, response) {
@@ -69,7 +70,19 @@ export default async function handler(request, response) {
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "DELETE": {
         const ownedPlant = await OwnedPlant.findByIdAndDelete(plantId);
-        return response.status(200).json(ownedPlant);
+
+        if (!ownedPlant) {
+          return response.status(404).json({ error: "Owned plant not found" });
+        }
+
+        await Reminder.deleteMany({
+          userId,
+          plantId: ownedPlant._id,
+        });
+
+        return response
+          .status(200)
+          .json({ success: true, deletedPlant: ownedPlant });
       }
 
       default:

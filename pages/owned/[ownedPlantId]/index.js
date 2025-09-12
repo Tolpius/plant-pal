@@ -55,26 +55,22 @@ export default function DetailsPage() {
 
   async function deletePlant() {
     try {
-      mutate(
-        `/api/user/${userId}/owned`,
-        (plantList) =>
-          plantList.filter((plant) => !(plant._id === ownedPlantId)),
-        false
-      );
       const response = await fetch(
         `/api/user/${session.user.id}/owned/${ownedPlantId}`,
         { method: "DELETE" }
       );
-      if (response.ok) {
-        toast.success("Plant removed.");
-        router.push("/owned");
-      } else {
-        mutate();
-        toast.error("Failed to remove Plant.");
-      }
-    } catch (error) {
-      mutate();
-      toast.error("Failed to delete plant. Please try again.");
+      if (!response.ok) throw new Error("Failed to remove plant");
+
+      mutate(
+        `/api/user/${userId}/owned`,
+        (plants) => plants.filter((p) => p._id !== ownedPlantId),
+        false
+      );
+
+      toast.success("Plant removed.");
+      router.push("/owned");
+    } catch (err) {
+      toast.error(err.message);
     }
   }
 
