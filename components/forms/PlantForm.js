@@ -158,7 +158,15 @@ export default function PlantForm({ defaultData, onSubmit }) {
             accept="image/*"
             onChange={(event) => {
               const file = event.target.files[0];
-              if (file) handleFileUpload(file);
+              if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                  // 5 MB in Bytes
+                  alert("File is too large! Max size is 5 MB.");
+                  event.target.value = ""; // reset input
+                  return;
+                }
+                handleFileUpload(file);
+              }
             }}
           />
         </Label>
