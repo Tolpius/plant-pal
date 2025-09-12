@@ -1,6 +1,7 @@
 import { GearIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import styled from "styled-components";
+import PlantImage from "../PlantImage";
 
 export default function ReminderCard({
   reminder,
@@ -31,11 +32,10 @@ export default function ReminderCard({
       ? reminder.plantId
       : null;
   const plantName = plant?.name || "Unknown plant";
-  const plantImage = plant?.imageUrl || "/defaultImage.png";
 
   return (
     <Card>
-      <Image src={plantImage} alt={plantName} />
+      <StyledImage plant={plant} alt={plantName} />
       <Content>
         <h3>{plantName}</h3>
         <p>
@@ -72,7 +72,7 @@ const Card = styled.div`
   position: relative;
 `;
 
-const Image = styled.img`
+const StyledImage = styled(PlantImage)`
   width: 80px;
   height: 80px;
   object-fit: cover;

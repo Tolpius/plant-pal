@@ -1,4 +1,4 @@
-import Image from "next/image";
+import PlantImage from "./PlantImage";
 import styled from "styled-components";
 import OwnedButton from "./OwnedButton";
 import OwnedCounter from "./counters/OwnedCounter";
@@ -57,7 +57,7 @@ export default function Card({ plant, isOwnedPlantList, session }) {
       <CardWrapper>
         <ImageWrapper>
           <StyledImage
-            src={plant.imageUrl || "/defaultImage.png"}
+            plant={plant}
             alt={plant.name ? `Image of ${plant.name}` : "Image of a plant"}
             width={300}
             height={0}
@@ -109,7 +109,7 @@ const ImageWrapper = styled.div`
   overflow: hidden;
 `;
 
-const StyledImage = styled(Image)`
+const StyledImage = styled(PlantImage)`
   height: 100%;
   width: 100%;
   object-fit: cover;

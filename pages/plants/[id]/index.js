@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import PlantImage from "@/components/PlantImage";

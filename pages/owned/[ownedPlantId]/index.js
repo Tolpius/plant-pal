@@ -1,7 +1,7 @@
 import BackButton from "@/components/BackButton";
 import { GearIcon } from "@phosphor-icons/react";
 import DeletePopUp from "@/components/DeletePopUp";
-import Image from "next/image";
+import PlantImage from "@/components/PlantImage";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -94,7 +94,7 @@ export default function DetailsPage() {
         )}
       </StyledHeadline>
       <StyledImage
-        src={plant.imageUrl || "/defaultImage.png"}
+        plant={plant}
         alt={plant.name}
         width={300}
         height={0}
@@ -159,7 +159,7 @@ const StyledDeleteButton = styled.button`
   margin-top: 30px;
 `;
 
-const StyledImage = styled(Image)`
+const StyledImage = styled(PlantImage)`
   width: 100%;
   height: auto;
   display: block;
