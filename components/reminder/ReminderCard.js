@@ -36,7 +36,7 @@ export default function ReminderCard({
     plant?.nickname && plant.nickname.trim() !== ""
       ? plant.nickname
       : plant?.cataloguePlantId?.name?.trim() !== ""
-      ? plant.cataloguePlantId.name
+      ? plant?.cataloguePlantId.name
       : "Unknown plant";
 
   const plantImage =
