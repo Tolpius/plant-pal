@@ -114,19 +114,23 @@ export default function Reminders() {
           const publicKeyArray = urlBase64ToUint8Array(publicKey);
 
           const serviceWorkerRegistration = await navigator.serviceWorker.ready;
-          const subscription =
-            await serviceWorkerRegistration.pushManager.subscribe({
-              userVisibleOnly: true,
-              applicationServerKey: publicKeyArray,
-            });
+          const existingSubscription =
+            await serviceWorkerRegistration.pushManager.getSubscription();
+          if (!existingSubscription) {
+            const subscription =
+              await serviceWorkerRegistration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: publicKeyArray,
+              });
 
-          const response = await fetch("/api/push/subscribe", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(subscription),
-          });
+            const response = await fetch("/api/push/subscribe", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(subscription),
+            });
+          }
         } else {
           console.log("Notifications are blocked by the user.");
         }
