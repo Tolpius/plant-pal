@@ -2,6 +2,7 @@ import dbConnect from "@/db/dbConnect";
 import Reminder from "@/db/models/Reminder";
 import Subscription from "@/db/models/Subscription";
 import webpush from "web-push";
+import OwnedPlant from "@/db/models/OwnedPlant";
 
 export default async function handler(request, response) {
   if (request.method !== "POST") return response.status(405).end();
@@ -9,22 +10,21 @@ export default async function handler(request, response) {
   await dbConnect();
 
   try {
-    const allReminders = await Reminder.find();
+    const allReminders = await Reminder.find()
+      .populate({ model: OwnedPlant, path: "plantId", select: "name _id" })
+      .lean();
 
     const now = new Date();
-    const filteredReminders = allReminders.filter((reminder) => {
-      const result = reminder.dueDate < now;
-      console.debug(`${reminder.dueDate} === ${now}? ${result}`);
-      return result;
-    });
-
-    console.log(
-      `Found ${filteredReminders.length} triggered reminders to push notifications`
+    const filteredReminders = allReminders.filter(
+      (reminder) => reminder.dueDate < now
     );
 
     if (filteredReminders.length === 0) {
       return response.status(200).json({ sent: 0 });
     }
+    console.log(
+      `Found ${filteredReminders.length} triggered reminders to push notifications`
+    );
 
     const publicKey = process.env.VAPID_PUBLIC_KEY;
     const privateKey = process.env.VAPID_PRIVATE_KEY;
@@ -39,10 +39,6 @@ export default async function handler(request, response) {
     for (const reminder of filteredReminders) {
       const subs = await Subscription.find({ userId: String(reminder.userId) });
 
-      console.debug(
-        `found ${subs.length} subscriptions for reminder ${reminder._id} from user ${reminder.userId}`
-      );
-
       for (const subscription of subs) {
         try {
           const pushSubscription = {
@@ -54,7 +50,7 @@ export default async function handler(request, response) {
           };
           const payload = {
             title: "Plant Pal - Reminder",
-            body: `${reminder.title} your plant`,
+            body: `${reminder.title} your ${reminder.plantId?.name || "plant"}`,
             icon: "/icon.png",
             url: "/reminders",
             tag: reminder._id.toString(),
