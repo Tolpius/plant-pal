@@ -8,6 +8,7 @@ self.addEventListener("push", (event) => {
   const options = {
     body: data.body || "",
     icon: data.icon || "/icon.png",
+    // tag: crypto.randomUUID(),<---debugging
     tag: data.tag,
     data,
     renotify: data.renotify ?? true,

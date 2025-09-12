@@ -3,6 +3,7 @@ import Layout from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { SWRConfig } from "swr";
 import { SessionProvider } from "next-auth/react";
+import { ensurePushSubscription } from "@/lib/notifications";
 
 export default function App({
   Component,
@@ -14,10 +15,22 @@ export default function App({
 
     navigator.serviceWorker
       .register("/sw.js")
-      .then((reg) => {
-        console.log("SW registriert:", reg);
-      })
-      .catch((err) => console.error("SW-Fehler:", err));
+
+      .catch((error) => console.error("SW-Fehler:", error));
+
+    const onLoad = () => {
+      ensurePushSubscription();
+    };
+    const onFocus = () => {
+      ensurePushSubscription();
+    };
+
+    window.addEventListener("load", onLoad);
+    window.addEventListener("focus", onFocus);
+    return () => {
+      window.removeEventListener("load", onLoad);
+      window.removeEventListener("focus", onFocus);
+    };
   }, []);
 
   return (
