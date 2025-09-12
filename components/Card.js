@@ -79,12 +79,24 @@ export default function Card({ plant, isOwnedPlantList, session }) {
               <OwnedCounter length={count} />
             </>
           )}
+
+          {isOwnedPlantList && plant.location && (
+            <StyledLocation>{plant.location}</StyledLocation>
+          )}
           <StyledName
             aria-label={`Common name: ${
-              isOwnedPlantList ? plant.cataloguePlantId?.name : plant.name
+              isOwnedPlantList
+                ? plant.nickname && plant.nickname.trim() !== ""
+                  ? plant.nickname
+                  : plant.cataloguePlantId?.name
+                : plant.name
             }`}
           >
-            {isOwnedPlantList ? plant.cataloguePlantId?.name : plant.name}
+            {isOwnedPlantList
+              ? plant.nickname && plant.nickname.trim() !== ""
+                ? plant.nickname
+                : plant.cataloguePlantId?.name
+              : plant.name}
           </StyledName>
           <StyledBotanicalName
             aria-label={`Botanical name: ${
@@ -141,6 +153,12 @@ const TextWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 180px;
+`;
+
+const StyledLocation = styled.p`
+  font-size: var(--font-size-sm);
+  color: var(--color-text-medium);
+  margin-bottom: 4px;
 `;
 
 const StyledName = styled.h3`
