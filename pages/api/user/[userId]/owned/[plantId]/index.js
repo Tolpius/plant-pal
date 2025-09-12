@@ -3,7 +3,7 @@ import User from "@/lib/db/models/User";
 import { getToken } from "next-auth/jwt";
 import OwnedPlant from "@/lib/db/models/OwnedPlant";
 import Plant from "@/lib/db/models/Plant";
-
+import { getSignedImageUrl } from "@/lib/s3/s3Client";
 export default async function handler(request, response) {
   const { userId, plantId } = request.query;
   const token = await getToken({
@@ -26,7 +26,7 @@ export default async function handler(request, response) {
       // GET: returns the owned plant of userId and plantId
       // HERE THE PLANT ID OF THE OWNED PLANT IS USED
       case "GET": {
-        const ownedPlant = await OwnedPlant.findById(plantId);
+        const ownedPlant = await OwnedPlant.findById(plantId).lean();
         if (ownedPlant.imageStoragePath) {
           ownedPlant.storedImageUrl = await getSignedImageUrl(
             ownedPlant.imageStoragePath
@@ -51,6 +51,7 @@ export default async function handler(request, response) {
           lightNeed: plant.lightNeed,
           fertiliserSeasons: plant.fertiliserSeasons,
           description: plant.description,
+          imageStoragePath: plant.imageStoragePath,
         });
         await ownedPlant.save();
         return response.status(200).json(ownedPlant);

@@ -3,6 +3,7 @@ import OwnedPlant from "@/lib/db/models/OwnedPlant";
 import { getToken } from "next-auth/jwt";
 import Plant from "@/lib/db/models/Plant";
 import { moveFile } from "@/lib/s3/s3Client";
+import { getSignedImageUrl } from "@/lib/s3/s3Client";
 export default async function handler(request, response) {
   const { userId } = request.query;
   const token = await getToken({
@@ -21,7 +22,7 @@ export default async function handler(request, response) {
     switch (request.method) {
       // GET: Get all ownedPlants belonging to the userId
       case "GET":
-        const plants = await OwnedPlant.find({ userId });
+        const plants = await OwnedPlant.find({ userId }).lean();
         if (!plants) {
           return response.status(404).json({ error: "ownedPlants not found" });
         }
@@ -36,6 +37,7 @@ export default async function handler(request, response) {
             })
           );
         }
+        console.log(plants);
         return response.status(200).json(plants);
       // POST: Add a completely new plant to catalogue
       case "POST": {
@@ -68,6 +70,7 @@ export default async function handler(request, response) {
             lightNeed: plant.lightNeed,
             fertiliserSeasons: plant.fertiliserSeasons,
             description: plant.description,
+            imageStoragePath: plant.imageStoragePath,
           });
           await ownedPlant.save();
           return response.status(200).json(ownedPlant);

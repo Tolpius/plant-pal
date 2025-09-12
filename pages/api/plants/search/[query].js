@@ -2,7 +2,7 @@ import dbConnect from "@/lib/db/dbConnect";
 import Plant from "@/lib/db/models/Plant";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-
+import { getSignedImageUrl } from "@/lib/s3/s3Client";
 export default async function handler(request, response) {
   try {
     const session = await getServerSession(request, response, authOptions);
@@ -28,7 +28,7 @@ export default async function handler(request, response) {
             },
             { botanicalName: { $regex: pattern, $options: "i" } },
           ],
-        });
+        }).lean();
         if (plants && plants.length > 0) {
           await Promise.all(
             plants.map(async (plant) => {

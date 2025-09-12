@@ -2,7 +2,6 @@ import dbConnect from "@/lib/db/dbConnect";
 import Plant from "@/lib/db/models/Plant";
 import { getSignedImageUrl } from "@/lib/s3/s3Client";
 import { getToken } from "next-auth/jwt";
-
 export default async function handler(request, response) {
   try {
     await dbConnect();

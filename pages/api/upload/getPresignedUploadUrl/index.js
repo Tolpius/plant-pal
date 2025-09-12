@@ -1,6 +1,5 @@
 import { getToken } from "next-auth/jwt";
 import { getSignedUploadUrl } from "@/lib/s3/s3Client";
-
 export default async function handler(request, response) {
   if (request.method !== "POST")
     return response.status(405).json({ error: "Method not allowed" });
