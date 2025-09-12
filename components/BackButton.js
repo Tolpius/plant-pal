@@ -1,18 +1,27 @@
-import Link from "next/link";
 import styled from "styled-components";
 import { ArrowCircleLeftIcon } from "@phosphor-icons/react";
+import { useRouter } from "next/router";
 
-export default function BackButton({
-  href = "/catalogue",
-  ariaLabel = "Go back",
-}) {
+export default function BackButton({ href, ariaLabel = "Go back" }) {
+  const router = useRouter();
+  function handleClick() {
+    if (href) {
+      router.push(href);
+    } else {
+      router.back();
+    }
+  }
   return (
-    <StyledLink href={href} aria-label={ariaLabel}>
-      <ArrowCircleLeftIcon size={32} />
-    </StyledLink>
+    <StyledButton onClick={handleClick} aria-label={ariaLabel}>
+      <ArrowCircleLeftIcon size={32} color="var(--color-text-base)" />
+    </StyledButton>
   );
 }
 
-const StyledLink = styled(Link)`
+const StyledButton = styled.button`
   text-decoration: none;
+  border: none;
+  cursor: pointer;
+  background-color: inherit;
+  max-width: 3rem;
 `;

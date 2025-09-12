@@ -1,18 +1,15 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
-
-import Link from "next/link";
+import BackButton from "@/components/BackButton";
 
 import PlantForm from "@/components/forms/PlantForm";
-import { ArrowCircleLeftIcon } from "@phosphor-icons/react";
 import { toast } from "react-toastify";
 
 export default function EditPage() {
   const router = useRouter();
   const { isReady } = router;
   const { id } = router.query;
-
-  const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
+  const { data: plant, isLoading, error, mutate } = useSWR(`/api/plants/${id}`);
 
   if (isLoading || !isReady) {
     return <h2>Loading...</h2>;
@@ -23,14 +20,18 @@ export default function EditPage() {
 
   if (!isReady || isLoading || error) return <h2>Loading...</h2>;
 
-  async function editPlant(plant) {
+  async function editPlant(plantToUpdate) {
     try {
+      mutate(
+        { ...plantToUpdate, isPublic: plantToUpdate.isPublic === "true" },
+        false
+      );
       const response = await fetch(`/api/plants/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(plant),
+        body: JSON.stringify(plantToUpdate),
       });
 
       if (!response.ok) {
@@ -39,7 +40,10 @@ export default function EditPage() {
         return;
       }
 
-      router.push(`/plants/${id}`);
+      const updatedPlant = await response.json();
+      console.log("Plant edited successfully:", updatedPlant);
+      mutate();
+      router.back();
       toast.success("Plant saved");
     } catch (error) {
       console.error("Error editing plant:", error);
@@ -50,9 +54,7 @@ export default function EditPage() {
   return (
     <>
       <h2 id="edit-plant">Edit Plant</h2>
-      <Link href={`/plants/${id}`} $justifySelf="start" aria-label="Edit plant">
-        <ArrowCircleLeftIcon size={32} />
-      </Link>
+      <BackButton />
       <PlantForm defaultData={plant} onSubmit={editPlant} />
     </>
   );

@@ -1,10 +1,16 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function PlantForm({ defaultData, onSubmit }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEdit = !!defaultData;
-
+  const { data: session, status: sessionStatus } = useSession();
+  const router = useRouter();
+  const showPublicCheckbox =
+    router.pathname.startsWith("/plants/") ||
+    router.pathname.startsWith("/add");
   async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -24,13 +30,40 @@ export default function PlantForm({ defaultData, onSubmit }) {
     await onSubmit(dataWithSeasons);
     setIsSubmitting(false);
   }
-
+  if (sessionStatus === "loading") return <p>Loading....</p>;
   return (
     <Form onSubmit={handleSubmit}>
       <Styledh2>
         {isEdit ? `Edit ${defaultData.name}` : `Add a new plant`}
       </Styledh2>
-
+      {session.user.role === "admin" && (
+        <Fieldset>
+          <legend>Admin Settings</legend>
+          {showPublicCheckbox && (
+            <CheckboxLabel>
+              <input
+                type="checkbox"
+                name="isPublic"
+                value="true"
+                defaultChecked={isEdit && defaultData.isPublic}
+                aria-label="Make public"
+              />
+              make public
+            </CheckboxLabel>
+          )}
+          {!isEdit && (
+            <CheckboxLabel>
+              <input
+                type="checkbox"
+                name="addOwned"
+                value="true"
+                aria-label="add to owned plants"
+              />
+              Add to owned plants
+            </CheckboxLabel>
+          )}
+        </Fieldset>
+      )}
       <Label>
         Name
         <Input
@@ -168,7 +201,6 @@ export default function PlantForm({ defaultData, onSubmit }) {
   );
 }
 
-
 const Form = styled.form`
   color: var(--color-neutral-base);
   padding: 1.5rem;
@@ -184,7 +216,6 @@ const Label = styled.label`
   display: block;
   margin-bottom: 1rem;
   font-weight: 500;
-  
 `;
 
 const Input = styled.input`
@@ -194,8 +225,8 @@ const Input = styled.input`
   padding: 0.5rem;
   border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
-  
-  color: var(--color-neutral-base)
+
+  color: var(--color-neutral-base);
 `;
 
 const StyledCheckBox = styled.input.attrs({ type: "checkbox" })`
@@ -210,7 +241,7 @@ const Textarea = styled.textarea`
   margin-top: 0.3rem;
   border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
-    color: var(--color-neutral-base)
+  color: var(--color-neutral-base);
 `;
 
 const Slider = styled.input.attrs({ type: "range" })`

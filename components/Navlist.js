@@ -186,7 +186,7 @@ const NavFunFactWrapper = styled.div`
 `;
 
 const StyledText = styled.p`
-  padding: 0px, 25px;
+  padding: 0px 25px;
   font-size: var(--font-size-lg);
 `;
 
