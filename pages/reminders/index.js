@@ -1,6 +1,6 @@
 import useSWR, { mutate } from "swr";
 import styled from "styled-components";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
@@ -56,6 +56,9 @@ export default function Reminders() {
   const { data: reminders, error } = useSWR(
     userId ? `/api/user/${userId}/reminders` : null
   );
+  const { data: publicKeyResponse, isLoading: isLoadingPublicKey } = useSWR(
+    "/api/push/public-key"
+  );
 
   const groupedReminders = useMemo(
     () => (reminders ? groupReminders(reminders) : {}),
@@ -76,6 +79,62 @@ export default function Reminders() {
       false
     );
   };
+
+  // Confession: urlBaseFunktion mit freundlicher Unterstützung von ChatGPT !!!
+  function urlBase64ToUint8Array(base64) {
+    const pad = "=".repeat((4 - (base64.length % 4)) % 4);
+    const b64 = (base64 + pad).replace(/-/g, "+").replace(/_/g, "/");
+    const raw = atob(b64);
+    const out = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i);
+    return out;
+  }
+
+  useEffect(() => {
+    async function requestNotificationPermission() {
+      if (isLoadingPublicKey) {
+        return;
+      }
+
+      if (!("Notification" in window)) {
+        console.warn("Browser doesn't support notifications.");
+        return;
+      }
+
+      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+        console.log("Push service not supported by this browser.");
+        return;
+      }
+
+      if (Notification.permission === "default") {
+        await Notification.requestPermission();
+
+        if (Notification.permission === "granted") {
+          const { publicKey } = publicKeyResponse;
+          const publicKeyArray = urlBase64ToUint8Array(publicKey);
+
+          const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+          const subscription =
+            await serviceWorkerRegistration.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: publicKeyArray,
+            });
+
+          const response = await fetch("/api/push/subscribe", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(subscription),
+          });
+        } else {
+          console.log("Notifications are blocked by the user.");
+        }
+      }
+    }
+
+    requestNotificationPermission();
+  });
 
   if (error) return <div>Failed to load reminders: {error.message}</div>;
   if (!reminders) return <div>Loading...</div>;

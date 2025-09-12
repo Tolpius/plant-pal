@@ -5,7 +5,6 @@ import styled from "styled-components";
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
 import PlantCounter from "@/components/counters/PlantCounter";
-import TestNotificationButton from "@/components/TestNotificationButton";
 
 export default function Owned() {
   const { data: session, status: sessionStatus } = useSession();
@@ -50,7 +49,7 @@ export default function Owned() {
   return (
     <>
       <StyledText>My owned Plants</StyledText>
-      <TestNotificationButton />
+
       <PlantFilter
         onFilter={setFilters}
         withOwnedFilter={false}

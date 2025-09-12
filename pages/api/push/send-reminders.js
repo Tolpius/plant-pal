@@ -13,7 +13,7 @@ export default async function handler(request, response) {
 
     const now = new Date();
     const filteredReminders = allReminders.filter((reminder) => {
-      const result = reminder.dueDate > now;
+      const result = reminder.dueDate < now;
       console.debug(`${reminder.dueDate} === ${now}? ${result}`);
       return result;
     });
@@ -37,7 +37,7 @@ export default async function handler(request, response) {
 
     let notificationsSentAmount = 0;
     for (const reminder of filteredReminders) {
-      const subs = await Subscription.find({ userId: reminder.userId });
+      const subs = await Subscription.find({ userId: String(reminder.userId) });
 
       console.debug(
         `found ${subs.length} subscriptions for reminder ${reminder._id} from user ${reminder.userId}`
