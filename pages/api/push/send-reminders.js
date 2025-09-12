@@ -65,7 +65,11 @@ export default async function handler(request, response) {
           );
           notificationsSentAmount++;
         } catch (error) {
-          console.error(error);
+          if (error.statusCode === 410) {
+            await Subscription.deleteOne({ _id: subscription._id });
+          } else {
+            console.error(error);
+          }
         }
       }
     }
