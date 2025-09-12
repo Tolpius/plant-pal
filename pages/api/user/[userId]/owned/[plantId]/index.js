@@ -27,6 +27,11 @@ export default async function handler(request, response) {
       // HERE THE PLANT ID OF THE OWNED PLANT IS USED
       case "GET": {
         const ownedPlant = await OwnedPlant.findById(plantId);
+        if (ownedPlant.imageStoragePath) {
+          ownedPlant.storedImageUrl = await getSignedImageUrl(
+            ownedPlant.imageStoragePath
+          );
+        }
         return response.status(200).json(ownedPlant);
       }
       // POST: Add Plant from Catalogue to OwnedList

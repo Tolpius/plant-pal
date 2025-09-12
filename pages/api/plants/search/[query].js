@@ -29,6 +29,17 @@ export default async function handler(request, response) {
             { botanicalName: { $regex: pattern, $options: "i" } },
           ],
         });
+        if (plants && plants.length > 0) {
+          await Promise.all(
+            plants.map(async (plant) => {
+              if (plant.imageStoragePath) {
+                plant.storedImageUrl = await getSignedImageUrl(
+                  plant.imageStoragePath
+                );
+              }
+            })
+          );
+        }
         return response.status(200).json(plants ?? []);
       }
       default:

@@ -8,6 +8,17 @@ export default async function handler(request, response) {
       case "GET": {
         const plants = await Plant.find();
         const publicPlants = plants.filter((plant) => plant.isPublic === true);
+        if (publicPlants && publicPlants.length > 0) {
+          await Promise.all(
+            publicPlants.map(async (plant) => {
+              if (plant.imageStoragePath) {
+                plant.storedImageUrl = await getSignedImageUrl(
+                  plant.imageStoragePath
+                );
+              }
+            })
+          );
+        }
         return response.status(200).json(publicPlants);
       }
       default: {

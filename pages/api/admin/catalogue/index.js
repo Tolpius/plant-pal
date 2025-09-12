@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/db/dbConnect";
 import Plant from "@/lib/db/models/Plant";
 import { getToken } from "next-auth/jwt";
-
+import { getSignedImageUrl } from "@/lib/s3/s3Client";
 export default async function handler(request, response) {
   try {
     const token = await getToken({
@@ -17,13 +17,21 @@ export default async function handler(request, response) {
     await dbConnect();
     switch (request.method) {
       case "GET": {
-        const plants = await Plant.find();
+        const plants = await Plant.find().lean();
+
+        if (plants && plants.length > 0) {
+          await Promise.all(
+            plants.map(async (plant) => {
+              if (plant.imageStoragePath) {
+                plant.storedImageUrl = await getSignedImageUrl(
+                  plant.imageStoragePath
+                );
+              }
+            })
+          );
+        }
+
         return response.status(200).json(plants);
-      }
-      case "POST": {
-        const newPlant = { ...request.body, isPublic: true };
-        const plant = await Plant.create(newPlant);
-        return response.status(201).json({ success: true, data: plant });
       }
       default:
         return response
