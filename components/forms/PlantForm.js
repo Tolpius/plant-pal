@@ -14,25 +14,41 @@ export default function PlantForm({ defaultData, onSubmit }) {
     router.pathname.startsWith("/plants/") ||
     router.pathname.startsWith("/add");
 
-  const handleFileUpload = async (file) => {
-    const formData = new FormData();
-    formData.append("imageFile", file);
-
+  async function handleFileUpload(file) {
     try {
-      const response = await fetch("/api/uploadTemp", {
+      // 1. Erst Presigned URL vom Backend holen
+      const res = await fetch("/api/upload/getPresignedUploadUrl", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fileName: file.name,
+          mimeType: file.type,
+          folder: "temp",
+        }),
       });
 
-      if (!response.ok) throw new Error("Upload failed");
+      if (!res.ok) throw new Error("Failed to get presigned URL");
 
-      const data = await response.json();
-      setTempImagePath(data.tempPath);
+      const { url, key } = await res.json();
+
+      // 2. File direkt an die S3 Presigned URL hochladen
+      const uploadRes = await fetch(url, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      if (!uploadRes.ok) throw new Error("Upload to S3 failed");
+
+      // 3. Den Key merken, damit er später ins Form mitgeht
+      setTempImagePath(key);
     } catch (error) {
       console.error(error);
       alert("Image upload failed.");
     }
-  };
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
