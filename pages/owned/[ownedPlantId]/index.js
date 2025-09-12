@@ -53,37 +53,36 @@ export default function DetailsPage() {
     return <h2>Error loading plant data</h2>;
   }
 
-  const seasons = plant?.fertiliserSeasons;
-
   async function deletePlant() {
     try {
-      mutate(
-        `/api/user/${userId}/owned`,
-        (plantList) =>
-          plantList.filter((plant) => !(plant._id === ownedPlantId)),
-        false
-      );
       const response = await fetch(
         `/api/user/${session.user.id}/owned/${ownedPlantId}`,
         { method: "DELETE" }
       );
-      if (response.ok) {
-        toast.success("Plant removed.");
-        router.push("/owned");
-      } else {
-        mutate();
-        toast.error("Failed to remove Plant.");
-      }
-    } catch (error) {
-      mutate();
-      toast.error("Failed to delete plant. Please try again.");
+      if (!response.ok) throw new Error("Failed to remove plant");
+
+      mutate(
+        `/api/user/${userId}/owned`,
+        (plants) => plants.filter((p) => p._id !== ownedPlantId),
+        false
+      );
+
+      toast.success("Plant removed.");
+      router.push("/owned");
+    } catch (err) {
+      toast.error(err.message);
     }
   }
 
   return (
     <>
       <StyledHeadline>
-        <BackButton href="/owned"/>
+        <BackButton href="/owned" />
+        <h2>
+          {plant.nickname && plant.nickname.trim() !== ""
+            ? plant.nickname
+            : plant.cataloguePlantId?.name || "Unknown Plant"}
+        </h2>
         {session && (
           <Link
             href={`/owned/${ownedPlantId}/edit`}
@@ -94,38 +93,54 @@ export default function DetailsPage() {
         )}
       </StyledHeadline>
       <StyledImage
-        src={plant.imageUrl || "/defaultImage.png"}
-        alt={plant.name}
+        src={
+          plant.userImageUrl ||
+          plant.cataloguePlantId?.imageUrl ||
+          "/defaultImage.png"
+        }
+        alt={plant.cataloguePlantId?.name}
         width={300}
         height={0}
       />
       <NameWrapper>
-        <StyledPlantName>{plant.name}</StyledPlantName>
-        <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
+        <StyledPlantName>{plant.cataloguePlantId?.name}</StyledPlantName>
+        <StyledBotanicalName>
+          {plant.cataloguePlantId?.botanicalName}
+        </StyledBotanicalName>
       </NameWrapper>
-      <p>{plant.description}</p>
+      <p>{plant.cataloguePlantId?.description}</p>
       <StyledSection>Care</StyledSection>
       <StyledInfoRow>
         <StyledCareInfo>Plant likes:</StyledCareInfo>
         <StyledCareInfo>
-          {lightNeedMap[plant.lightNeed] ?? plant.lightNeed}
+          {lightNeedMap[plant.cataloguePlantId?.lightNeed] ??
+            plant.cataloguePlantId?.lightNeed}
         </StyledCareInfo>
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Water need:</StyledCareInfo>
         <StyledCareInfo>
-          {waterNeedMap[plant.waterNeed] ?? plant.waterNeed}
+          {waterNeedMap[plant.cataloguePlantId?.waterNeed] ??
+            plant.cataloguePlantId?.waterNeed}
         </StyledCareInfo>
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {seasons &&
-          seasons.map((season) => (
+        {plant.cataloguePlantId?.fertiliserSeasons &&
+          plant.cataloguePlantId?.fertiliserSeasons.map((season) => (
             <li key={season}>
               <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
             </li>
           ))}
       </StyledInfoRow>
+
+      {plant.nickname && <p>Nickname: {plant.nickname}</p>}
+      {plant.location && <p>Location: {plant.location}</p>}
+      {plant.acquiredDate && (
+        <p>Acquired: {new Date(plant.acquiredDate).toLocaleDateString()}</p>
+      )}
+      {plant.notes && <p>Notes: {plant.notes}</p>}
+
       {session && (
         <StyledDeleteButton
           onClick={() => {
@@ -146,7 +161,6 @@ export default function DetailsPage() {
 }
 
 const StyledHeadline = styled.div`
-
   display: flex;
   justify-content: space-between;
 `;

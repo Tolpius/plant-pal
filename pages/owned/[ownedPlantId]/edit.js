@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import EditOwnedForm from "@/components/forms/EditOwnedForm";
 
 export default function EditPage() {
   const { data: session } = useSession();
@@ -17,7 +18,9 @@ export default function EditPage() {
     isLoading,
     error,
     mutate,
-  } = useSWR(`/api/user/${userId}/owned/${ownedPlantId}`);
+  } = useSWR(
+    userId && ownedPlantId ? `/api/user/${userId}/owned/${ownedPlantId}` : null
+  );
 
   if (isLoading || !isReady) {
     return <h2>Loading...</h2>;
@@ -60,7 +63,6 @@ export default function EditPage() {
 
   return (
     <>
-      <h2>Edit Your Plant</h2>
       <Link
         href={`/owned/${ownedPlantId}`}
         $justifySelf="start"
@@ -68,7 +70,7 @@ export default function EditPage() {
       >
         <ArrowCircleLeftIcon size={32} />
       </Link>
-      <PlantForm defaultData={ownedPlant} onSubmit={editPlant} />
+      <EditOwnedForm defaultData={ownedPlant} onSubmit={editPlant} />
     </>
   );
 }

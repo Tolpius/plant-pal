@@ -57,7 +57,13 @@ export default function Card({ plant, isOwnedPlantList, session }) {
       <CardWrapper>
         <ImageWrapper>
           <StyledImage
-            src={plant.imageUrl || "/defaultImage.png"}
+            src={
+              isOwnedPlantList
+                ? plant.userImageUrl ||
+                  plant.cataloguePlantId?.imageUrl ||
+                  "/defaultImage.png"
+                : plant.imageUrl || "/defaultImage.png"
+            }
             alt={plant.name ? `Image of ${plant.name}` : "Image of a plant"}
             width={300}
             height={0}
@@ -73,13 +79,35 @@ export default function Card({ plant, isOwnedPlantList, session }) {
               <OwnedCounter length={count} />
             </>
           )}
-          <StyledName aria-label={`Common name: ${plant.name}`}>
-            {plant.name}
+
+          {isOwnedPlantList && plant.location && (
+            <StyledLocation>{plant.location}</StyledLocation>
+          )}
+          <StyledName
+            aria-label={`Common name: ${
+              isOwnedPlantList
+                ? plant.nickname && plant.nickname.trim() !== ""
+                  ? plant.nickname
+                  : plant.cataloguePlantId?.name
+                : plant.name
+            }`}
+          >
+            {isOwnedPlantList
+              ? plant.nickname && plant.nickname.trim() !== ""
+                ? plant.nickname
+                : plant.cataloguePlantId?.name
+              : plant.name}
           </StyledName>
           <StyledBotanicalName
-            aria-label={`Botanical name: ${plant.botanicalName}`}
+            aria-label={`Botanical name: ${
+              isOwnedPlantList
+                ? plant.cataloguePlantId?.botanicalName
+                : plant.botanicalName
+            }`}
           >
-            {plant.botanicalName}
+            {isOwnedPlantList
+              ? plant.cataloguePlantId?.botanicalName
+              : plant.botanicalName}
           </StyledBotanicalName>
         </TextWrapper>
       </CardWrapper>
@@ -125,6 +153,12 @@ const TextWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 180px;
+`;
+
+const StyledLocation = styled.p`
+  font-size: var(--font-size-sm);
+  color: var(--color-text-medium);
+  margin-bottom: 4px;
 `;
 
 const StyledName = styled.h3`

@@ -85,7 +85,11 @@ export default function ReminderForm({ userId, reminderId }) {
           <option value="">Select a plant</option>
           {plants.map((plant) => (
             <option key={plant._id} value={plant._id}>
-              {plant.name}
+              {plant?.nickname && plant.nickname.trim() !== ""
+                ? plant.nickname
+                : plant?.cataloguePlantId?.name?.trim() !== ""
+                ? plant.cataloguePlantId.name
+                : "Unknown plant"}
             </option>
           ))}
         </Select>
