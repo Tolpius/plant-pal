@@ -53,8 +53,6 @@ export default function DetailsPage() {
     return <h2>Error loading plant data</h2>;
   }
 
-  const seasons = plant?.fertiliserSeasons;
-
   async function deletePlant() {
     try {
       mutate(
@@ -94,33 +92,41 @@ export default function DetailsPage() {
         )}
       </StyledHeadline>
       <StyledImage
-        src={plant.imageUrl || "/defaultImage.png"}
-        alt={plant.name}
+        src={
+          plant.userImageUrl ||
+          plant.cataloguePlantId?.imageUrl ||
+          "/defaultImage.png"
+        }
+        alt={plant.cataloguePlantId?.name}
         width={300}
         height={0}
       />
       <NameWrapper>
-        <StyledPlantName>{plant.name}</StyledPlantName>
-        <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
+        <StyledPlantName>{plant.cataloguePlantId?.name}</StyledPlantName>
+        <StyledBotanicalName>
+          {plant.cataloguePlantId?.botanicalName}
+        </StyledBotanicalName>
       </NameWrapper>
-      <p>{plant.description}</p>
+      <p>{plant.cataloguePlantId?.description}</p>
       <StyledSection>Care</StyledSection>
       <StyledInfoRow>
         <StyledCareInfo>Plant likes:</StyledCareInfo>
         <StyledCareInfo>
-          {lightNeedMap[plant.lightNeed] ?? plant.lightNeed}
+          {lightNeedMap[plant.cataloguePlantId?.lightNeed] ??
+            plant.cataloguePlantId?.lightNeed}
         </StyledCareInfo>
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Water need:</StyledCareInfo>
         <StyledCareInfo>
-          {waterNeedMap[plant.waterNeed] ?? plant.waterNeed}
+          {waterNeedMap[plant.cataloguePlantId?.waterNeed] ??
+            plant.cataloguePlantId?.waterNeed}
         </StyledCareInfo>
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {seasons &&
-          seasons.map((season) => (
+        {plant.cataloguePlantId?.fertiliserSeasons &&
+          plant.cataloguePlantId?.fertiliserSeasons.map((season) => (
             <li key={season}>
               <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
             </li>
@@ -146,7 +152,6 @@ export default function DetailsPage() {
 }
 
 const StyledHeadline = styled.div`
-
   display: flex;
   justify-content: space-between;
 `;
