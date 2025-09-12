@@ -1,5 +1,5 @@
-import dbConnect from "@/db/dbConnect";
-import Plant from "@/db/models/Plant";
+import dbConnect from "@/lib/db/dbConnect";
+import Plant from "@/lib/db/models/Plant";
 
 export default async function handler(request, response) {
   try {

@@ -1,8 +1,8 @@
-import dbConnect from "@/db/dbConnect";
-import User from "@/db/models/User";
+import dbConnect from "@/lib/db/dbConnect";
+import User from "@/lib/db/models/User";
 import { getToken } from "next-auth/jwt";
-import OwnedPlant from "@/db/models/OwnedPlant";
-import Plant from "@/db/models/Plant";
+import OwnedPlant from "@/lib/db/models/OwnedPlant";
+import Plant from "@/lib/db/models/Plant";
 
 export default async function handler(request, response) {
   const { userId, plantId } = request.query;
@@ -27,7 +27,7 @@ export default async function handler(request, response) {
       // HERE THE PLANT ID OF THE OWNED PLANT IS USED
       case "GET": {
         const ownedPlant = await OwnedPlant.findById(plantId);
-        return response.status(200).json(ownedPlant)
+        return response.status(200).json(ownedPlant);
       }
       // POST: Add Plant from Catalogue to OwnedList
       // HERE THE PLANT ID OF THE CATALOGUE IS USED
@@ -52,7 +52,7 @@ export default async function handler(request, response) {
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "PUT": {
-        const updatedOwnedPlant = request.body
+        const updatedOwnedPlant = request.body;
         updatedOwnedPlant.cataloguePlantId = plantId;
         updatedOwnedPlant.userId = userId;
         const ownedPlant = await OwnedPlant.findByIdAndUpdate(

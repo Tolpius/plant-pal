@@ -1,7 +1,7 @@
-import dbConnect from "@/db/dbConnect";
+import dbConnect from "@/lib/db/dbConnect";
 
 import { getToken } from "next-auth/jwt";
-import User from "@/db/models/User";
+import User from "@/lib/db/models/User";
 
 export default async function handler(request, response) {
   const { userId } = request.query;

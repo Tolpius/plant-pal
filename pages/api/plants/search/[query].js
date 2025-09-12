@@ -1,5 +1,5 @@
-import dbConnect from "@/db/dbConnect";
-import Plant from "@/db/models/Plant";
+import dbConnect from "@/lib/db/dbConnect";
+import Plant from "@/lib/db/models/Plant";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 

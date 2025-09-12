@@ -1,5 +1,5 @@
-import dbConnect from "@/db/dbConnect";
-import OwnedPlant from "@/db/models/OwnedPlant";
+import dbConnect from "@/lib/db/dbConnect";
+import OwnedPlant from "@/lib/db/models/OwnedPlant";
 import { getToken } from "next-auth/jwt";
 
 export default async function handler(request, response) {

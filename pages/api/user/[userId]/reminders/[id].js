@@ -1,5 +1,5 @@
-import dbConnect from "@/db/dbConnect";
-import Reminder from "@/db/models/Reminder";
+import dbConnect from "@/lib/db/dbConnect";
+import Reminder from "@/lib/db/models/Reminder";
 import { getToken } from "next-auth/jwt";
 
 export default async function handler(request, response) {

@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import dbConnect from "@/db/dbConnect";
-import User from "@/db/models/User";
+import dbConnect from "@/lib/db/dbConnect";
+import User from "@/lib/db/models/User";
 
 export const authOptions = {
   providers: [
