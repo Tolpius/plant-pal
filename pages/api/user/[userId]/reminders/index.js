@@ -26,7 +26,13 @@ export default async function handler(request, response) {
         .populate({
           path: "plantId",
           model: OwnedPlant,
-          select: "name botanicalName imageUrl",
+          select:
+            "nickname name botanicalName imageUrl userImageUrl cataloguePlantId",
+          populate: {
+            path: "cataloguePlantId",
+            model: "Plant",
+            select: "name imageUrl",
+          },
         })
         .sort({ dueDate: 1, createdAt: 1 });
 

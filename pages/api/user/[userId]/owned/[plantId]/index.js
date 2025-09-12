@@ -26,9 +26,10 @@ export default async function handler(request, response) {
       // GET: returns the owned plant of userId and plantId
       // HERE THE PLANT ID OF THE OWNED PLANT IS USED
       case "GET": {
-        const ownedPlant = await OwnedPlant.findById(plantId).populate(
-          "cataloguePlantId"
-        );
+        const ownedPlant = await OwnedPlant.findOne({
+          _id: plantId,
+          userId,
+        }).populate("cataloguePlantId", "name botanicalName imageUrl");
         if (!ownedPlant)
           return response.status(404).json({ error: "Owned plant not found" });
         return response.status(200).json(ownedPlant);
@@ -55,17 +56,11 @@ export default async function handler(request, response) {
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "PUT": {
-        const updatedOwnedPlant = await OwnedPlant.findByIdAndUpdate(
-          plantId,
-          {
-            nickname: request.body.nickname || "",
-            location: request.body.location || "",
-            acquiredDate: request.body.acquiredDate || null,
-            userImageUrl: request.body.userImageUrl || "",
-            notes: request.body.notes || "",
-          },
-          { new: true, runValidators: true }
-        ).populate("cataloguePlantId");
+        const updatedOwnedPlant = await OwnedPlant.findOneAndUpdate(
+          { _id: plantId, userId },
+          request.body,
+          { new: true }
+        ).populate("cataloguePlantId", "name botanicalName imageUrl");
         return response.status(200).json(updatedOwnedPlant);
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED

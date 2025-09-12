@@ -57,7 +57,13 @@ export default function Card({ plant, isOwnedPlantList, session }) {
       <CardWrapper>
         <ImageWrapper>
           <StyledImage
-            src={plant.imageUrl || "/defaultImage.png"}
+            src={
+              isOwnedPlantList
+                ? plant.userImageUrl ||
+                  plant.cataloguePlantId?.imageUrl ||
+                  "/defaultImage.png"
+                : plant.imageUrl || "/defaultImage.png"
+            }
             alt={plant.name ? `Image of ${plant.name}` : "Image of a plant"}
             width={300}
             height={0}
@@ -73,13 +79,23 @@ export default function Card({ plant, isOwnedPlantList, session }) {
               <OwnedCounter length={count} />
             </>
           )}
-          <StyledName aria-label={`Common name: ${plant.name}`}>
-            {plant.name}
+          <StyledName
+            aria-label={`Common name: ${
+              isOwnedPlantList ? plant.cataloguePlantId?.name : plant.name
+            }`}
+          >
+            {isOwnedPlantList ? plant.cataloguePlantId?.name : plant.name}
           </StyledName>
           <StyledBotanicalName
-            aria-label={`Botanical name: ${plant.botanicalName}`}
+            aria-label={`Botanical name: ${
+              isOwnedPlantList
+                ? plant.cataloguePlantId?.botanicalName
+                : plant.botanicalName
+            }`}
           >
-            {plant.botanicalName}
+            {isOwnedPlantList
+              ? plant.cataloguePlantId?.botanicalName
+              : plant.botanicalName}
           </StyledBotanicalName>
         </TextWrapper>
       </CardWrapper>

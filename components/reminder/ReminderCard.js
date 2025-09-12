@@ -7,6 +7,7 @@ export default function ReminderCard({
   showCheckbox,
   onDone,
   userId,
+  userPlants,
 }) {
   const handleCheckboxChange = async () => {
     try {
@@ -29,9 +30,20 @@ export default function ReminderCard({
   const plant =
     reminder.plantId && typeof reminder.plantId === "object"
       ? reminder.plantId
-      : null;
-  const plantName = plant?.name || "Unknown plant";
-  const plantImage = plant?.imageUrl || "/defaultImage.png";
+      : userPlants?.find((plant) => plant._id === reminder.plantId) || null;
+
+  const plantName =
+    plant?.nickname && plant.nickname.trim() !== ""
+      ? plant.nickname
+      : plant?.cataloguePlantId?.name?.trim() !== ""
+      ? plant.cataloguePlantId.name
+      : "Unknown plant";
+
+  const plantImage =
+    plant?.userImageUrl ||
+    plant?.imageUrl ||
+    plant?.cataloguePlantId?.imageUrl ||
+    "/defaultImage.png";
 
   return (
     <Card>
