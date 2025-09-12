@@ -5,31 +5,65 @@ import { useRouter } from "next/router";
 
 export default function PlantForm({ defaultData, onSubmit }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [useUpload, setUseUpload] = useState(true);
+  const [tempImagePath, setTempImagePath] = useState("");
   const isEdit = !!defaultData;
   const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
   const showPublicCheckbox =
     router.pathname.startsWith("/plants/") ||
     router.pathname.startsWith("/add");
+
+  const handleFileUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("imageFile", file);
+
+    try {
+      const response = await fetch("/api/uploadTemp", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Upload failed");
+
+      const data = await response.json();
+      setTempImagePath(data.tempPath);
+    } catch (error) {
+      console.error(error);
+      alert("Image upload failed.");
+    }
+  };
+
   async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     const fertiliserSeasons = formData.getAll("fertiliserSeason");
     const dataWithSeasons = { ...data, fertiliserSeasons };
-    // ONLY IMAGES FROM UNSPLASH FOR NOW
-    if (!data.imageUrl.startsWith("https://images.unsplash.com")) {
-      alert("Image URL must start with https://images.unsplash.com/");
-      return;
+
+    if (useUpload) {
+      if (!tempImagePath) {
+        alert("Please upload an image!");
+        return;
+      }
+      dataWithSeasons.tempImageStoragePath = tempImagePath;
+    } else {
+      if (!data.imageUrl.startsWith("https://images.unsplash.com")) {
+        alert("Image URL must start with https://images.unsplash.com/");
+        return;
+      }
     }
+
     if (fertiliserSeasons.length === 0) {
       alert("Please choose at least one Fertiliser Season!");
       return;
     }
+
     setIsSubmitting(true);
     await onSubmit(dataWithSeasons);
     setIsSubmitting(false);
   }
+
   if (sessionStatus === "loading") return <p>Loading....</p>;
   return (
     <Form onSubmit={handleSubmit}>
@@ -85,14 +119,44 @@ export default function PlantForm({ defaultData, onSubmit }) {
       </Label>
 
       <Label>
-        Image URL
-        <Input
-          name="imageUrl"
-          type="text"
-          required
-          defaultValue={isEdit ? defaultData.imageUrl : ""}
-        />
+        Do you want to upload your own image or give us an URL?
+        <ToggleContainer>
+          <span>URL</span>
+          <SwitchLabel>
+            <SwitchCheckbox
+              type="checkbox"
+              checked={useUpload}
+              onChange={() => setUseUpload(!useUpload)}
+            />
+            <SwitchSlider />
+          </SwitchLabel>
+          <span>Upload</span>
+        </ToggleContainer>
       </Label>
+      {useUpload ? (
+        <Label>
+          Upload Image
+          <Input
+            type="file"
+            name="imageFile"
+            accept="image/*"
+            onChange={(event) => {
+              const file = event.target.files[0];
+              if (file) handleFileUpload(file);
+            }}
+          />
+        </Label>
+      ) : (
+        <Label>
+          Image URL
+          <Input
+            name="imageUrl"
+            type="text"
+            required
+            defaultValue={isEdit ? defaultData.imageUrl : ""}
+          />
+        </Label>
+      )}
 
       <Fieldset>
         <legend>Water Need</legend>
@@ -289,5 +353,58 @@ const Button = styled.button`
 
   &:hover {
     background: var(--color-primary-dark);
+  }
+`;
+const ToggleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+`;
+
+const SwitchLabel = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  margin: 0 0.5rem;
+`;
+
+const SwitchCheckbox = styled.input.attrs({ type: "checkbox" })`
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + span {
+    background-color: var(--color-primary);
+  }
+
+  &:checked + span:before {
+    transform: translateX(26px);
+  }
+`;
+
+const SwitchSlider = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-grey);
+  border-radius: 34px;
+  transition: 0.4s;
+
+  &:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
   }
 `;
