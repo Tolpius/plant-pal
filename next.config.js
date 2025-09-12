@@ -27,7 +27,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "console-minio.bonindev.com",
+        hostname: "minio.bonindev.com",
         port: "",
       },
     ],
