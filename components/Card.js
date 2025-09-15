@@ -7,12 +7,7 @@ import useSWR from "swr";
 import { toast } from "react-toastify";
 import { normalisePlantData } from "@/utils/plantHelpers";
 
-export default function Card({ plant: rawPlant, isOwnedPlantList, session }) {
-  if (!rawPlant) return null;
-
-  const plant = normalisePlantData(rawPlant, true);
-  console.log("normalized plant:", plant);
-
+export default function Card({ plant, isOwnedPlantList, session }) {
   const userId = session?.user.id;
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
   const { data: ownedPlants, mutate: mutatePlants } = useSWR(swrUrl);
@@ -21,7 +16,7 @@ export default function Card({ plant: rawPlant, isOwnedPlantList, session }) {
     data: count,
     isLoading,
     mutate: mutateCount,
-  } = useSWR(!isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null);
+  } = useSWR(`/api/plants/${plant._id}/countowned`);
 
   async function handleAddOwned() {
     if (!session || !plant._id) return;

@@ -5,15 +5,19 @@ import styled from "styled-components";
 import Link from "next/link";
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
-
 import SearchPlant from "@/components/search/SearchPlant";
 import PlantCounter from "@/components/counters/PlantCounter";
+import { normalisePlantData } from "@/utils/plantHelpers";
 
 export default function Catalogue() {
   const [query, setQuery] = useState(null);
   const { data, isLoading } = useSWR(
     !query ? "/api/plants" : `/api/plants/search/${query}`
   );
+
+  const normalisedList = Array.isArray(data)
+    ? data.map((plant) => normalisePlantData(plant, false))
+    : [];
 
   const [filters, setFilters] = useState({
     lightNeed: [],
@@ -26,9 +30,11 @@ export default function Catalogue() {
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
   const { data: ownedPlantIds } = useSWR(swrUrl);
 
-  const showPlantList = !(isLoading || !data || !Array.isArray(data));
+  if (isLoading || sessionStatus === "loading") {
+    return <p>Loading...</p>;
+  }
 
-  const filteredPlantList = data?.filter((plant) => {
+  const filteredPlantList = normalisedList.filter((plant) => {
     const isOwned = ownedPlantIds?.some(
       (blossum) => blossum.cataloguePlant === plant._id
     );
@@ -45,6 +51,9 @@ export default function Catalogue() {
   function handleSearchResult(searchQuery) {
     setQuery(searchQuery);
   }
+
+  const showPlantList =
+    Array.isArray(filteredPlantList) && filteredPlantList.length > 0;
 
   return (
     <>

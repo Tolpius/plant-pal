@@ -19,6 +19,10 @@ export default function Owned() {
     return <p>Loading...</p>;
   }
 
+  const normalisedList = Array.isArray(plantList)
+    ? plantList.map((plant) => normalisePlantData(plant, true))
+    : [];
+
   if (!plantList) {
     return <p>Failed to load plantList!</p>;
   }
@@ -33,14 +37,6 @@ export default function Owned() {
       </TextWrapper>
     );
   }
-
-  console.log("plantList:", plantList);
-  console.log("type:", typeof plantList);
-  console.log("isArray:", Array.isArray(plantList));
-
-  const normalisedList = plantList.map((plant) =>
-    normalisePlantData(plant, true)
-  );
 
   const filteredPlantList =
     filters.lightNeed.length === 0 && filters.waterNeed.length === 0
