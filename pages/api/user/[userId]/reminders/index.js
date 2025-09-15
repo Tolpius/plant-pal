@@ -25,13 +25,8 @@ export default async function handler(request, response) {
       const reminders = await Reminder.find({ userId: queryUserId })
         .populate({
           path: "plantId",
-          model: OwnedPlant,
-          select:
-            "nickname name botanicalName imageUrl userImageUrl cataloguePlant",
           populate: {
             path: "cataloguePlant",
-            model: "Plant",
-            select: "name imageUrl",
           },
         })
         .sort({ dueDate: 1, createdAt: 1 });

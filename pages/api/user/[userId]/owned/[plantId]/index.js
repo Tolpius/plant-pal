@@ -48,11 +48,11 @@ export default async function handler(request, response) {
         const ownedPlant = new OwnedPlant({
           cataloguePlant: plant._id,
           userId,
-          nickname: request.body.nickname || "",
-          location: request.body.location || "",
+          nickname: request.body.nickname,
+          location: request.body.location,
           acquiredDate: request.body.acquiredDate || null,
-          userImageUrl: request.body.userImageUrl || "",
-          notes: request.body.notes || "",
+          userImageUrl: request.body.userImageUrl,
+          notes: request.body.notes,
         });
         await ownedPlant.save();
         await ownedPlant.populate("cataloguePlant");

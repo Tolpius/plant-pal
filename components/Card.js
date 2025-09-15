@@ -5,7 +5,6 @@ import OwnedCounter from "./counters/OwnedCounter";
 import Link from "next/link";
 import useSWR from "swr";
 import { toast } from "react-toastify";
-import { normalisePlantData } from "@/utils/plantHelpers";
 
 export default function Card({ plant, isOwnedPlantList, session }) {
   const userId = session?.user.id;
@@ -55,13 +54,13 @@ export default function Card({ plant, isOwnedPlantList, session }) {
               query: { id: plant._id, from: "/catalogue" },
             }
       }
-      aria-label={`View details for ${plant.name || "Unknown Plant"}`}
+      aria-label={`View details for ${plant.name}`}
     >
       <CardWrapper>
         <ImageWrapper>
           <StyledImage
             src={plant.imageUrl}
-            alt={plant.name || "Image of a plant"}
+            alt={plant.name}
             width={300}
             height={0}
           />
@@ -80,15 +79,13 @@ export default function Card({ plant, isOwnedPlantList, session }) {
           {isOwnedPlantList && plant.location && (
             <StyledLocation>{plant.location}</StyledLocation>
           )}
-          <StyledName
-            aria-label={`Common name: ${plant.name || "Unknown Plant"}`}
-          >
-            {plant.name || "Unknown Plant"}
+          <StyledName aria-label={`Common name: ${plant.name}`}>
+            {plant.name}
           </StyledName>
           <StyledBotanicalName
-            aria-label={`Botanical name: ${plant.botanicalName || ""}`}
+            aria-label={`Botanical name: ${plant.botanicalName}`}
           >
-            {plant.botanicalName || ""}
+            {plant.botanicalName}
           </StyledBotanicalName>
         </TextWrapper>
       </CardWrapper>

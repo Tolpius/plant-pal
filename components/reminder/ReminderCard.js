@@ -8,7 +8,6 @@ export default function ReminderCard({
   showCheckbox,
   onDone,
   userId,
-  userPlants,
 }) {
   const handleCheckboxChange = async () => {
     try {
@@ -28,24 +27,13 @@ export default function ReminderCard({
     }
   };
 
-  let plant = null;
-  if (reminder.plantId) {
-    if (typeof reminder.plantId === "object") {
-      plant = normalisePlantData(reminder.plantId, true);
-    } else {
-      const found = userPlants?.find((plant) => plant._id === reminder.plantId);
-      if (found) plant = normalisePlantData(found, true);
-    }
-  }
-
-  const plantName = plant?.name || "Unknown Plant";
-  const plantImage = plant?.imageUrl || "/placeholder.png";
+  const plant = normalisePlantData(reminder.plantId);
 
   return (
     <Card>
-      <Image src={plantImage} alt={plantName} />
+      <Image src={plant.imageUrl} alt={plant.name} />
       <Content>
-        <h3>{plantName}</h3>
+        <h3>{plant.name}</h3>
         <p>
           <Label>Task:</Label> {reminder.title}
         </p>

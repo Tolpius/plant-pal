@@ -21,12 +21,8 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
 
       <PlantInfo>
         <StyledImage
-          src={
-            defaultData.userImageUrl ||
-            defaultData.cataloguePlant?.imageUrl ||
-            "/defaultImage.png"
-          }
-          alt={defaultData.cataloguePlant?.name || "Plant image"}
+          src={defaultData.imageUrl}
+          alt={defaultData.cataloguePlant?.name}
         />
         <NameWrapper>
           <StyledPlantName>{defaultData.cataloguePlant?.name}</StyledPlantName>

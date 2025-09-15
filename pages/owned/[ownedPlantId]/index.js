@@ -46,14 +46,14 @@ export default function DetailsPage() {
     session ? `/api/user/${session.user.id}/owned/${ownedPlantId}` : null
   );
   const [showPopUp, setShowPopUp] = useState(false);
-  const plant = normalisePlantData(rawPlant, true);
 
   if (isLoading || !isReady) {
     return <h2>Loading...</h2>;
   }
-  if (error || !plant) {
+  if (error || !rawPlant) {
     return <h2>Error loading plant data</h2>;
   }
+  const plant = normalisePlantData(rawPlant);
 
   async function deletePlant() {
     try {
@@ -65,7 +65,7 @@ export default function DetailsPage() {
 
       mutate(
         `/api/user/${userId}/owned`,
-        (plants) => plants.filter((p) => p._id !== ownedPlantId),
+        (plants) => plants.filter((plant) => plant._id !== ownedPlantId),
         false
       );
 

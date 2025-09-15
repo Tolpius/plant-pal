@@ -15,7 +15,12 @@ export default async function handler(request, response) {
     await dbConnect();
 
     if (request.method === "GET") {
-      const reminder = await Reminder.findById(id);
+      const reminder = await Reminder.findById(id).populate({
+        path: "plantId",
+        populate: {
+          path: "cataloguePlant",
+        },
+      });
       if (!reminder)
         return response.status(404).json({ error: "Reminder not found" });
       return response.status(200).json(reminder);
