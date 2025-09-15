@@ -3,7 +3,7 @@ import Reminder from "@/db/models/Reminder";
 import Subscription from "@/db/models/Subscription";
 import webpush from "web-push";
 import OwnedPlant from "@/db/models/OwnedPlant";
-
+import { DateTime } from "luxon";
 
 export default async function handler(request, response) {
   if (request.method !== "POST") return response.status(405).end();
@@ -16,18 +16,6 @@ export default async function handler(request, response) {
       .lean();
     console.log(allReminders);
 
-    const now = new Date();
-    const filteredReminders = allReminders.filter(
-      (reminder) => reminder.dueDate <= now
-    );
-
-    if (filteredReminders.length === 0) {
-      return response.status(200).json({ sent: 0 });
-    }
-    console.log(
-      `Found ${filteredReminders.length} triggered reminders to push notifications`
-    );
-
     const publicKey = process.env.VAPID_PUBLIC_KEY;
     const privateKey = process.env.VAPID_PRIVATE_KEY;
     if (!publicKey || !privateKey) {
@@ -38,7 +26,24 @@ export default async function handler(request, response) {
     webpush.setVapidDetails("mailto:joh.hammerl@web.de", publicKey, privateKey);
 
     let notificationsSentAmount = 0;
-    for (const reminder of filteredReminders) {
+
+    const now = DateTime.now().setZone("Europe/Berlin");
+    for (const reminder of allReminders) {
+      const due = DateTime.fromJSDate(new Date(reminder.dueDate)).setZone(
+        "Europe/Berlin"
+      );
+
+      let reminderDateTime;
+      if (reminder.time) {
+        const [hour, minute] = reminder.time.split(":").map(Number);
+        reminderDateTime = due.set({ hour, minute });
+      } else {
+        reminderDateTime = due.set({ hour: 12, minute: 0 });
+      }
+      if (reminderDateTime >= now) {
+        continue;
+      }
+
       const subs = await Subscription.find({ userId: String(reminder.userId) });
 
       for (const subscription of subs) {
@@ -50,23 +55,16 @@ export default async function handler(request, response) {
               auth: subscription.auth,
             },
           };
-          const dueDate = new Date(reminder.dueDate);
 
-          const dateString = dueDate.toLocaleDateString(undefined, {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          });
-          const timeString = dueDate.toLocaleTimeString(undefined, {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
+          const dateTimeString = reminderDateTime.toFormat(
+            "dd. LLL yyyy 'at' HH:mm"
+          );
 
           const payload = {
             title: "Plant Pal - Reminder",
             body: `${reminder.title} your ${
               reminder.plantId?.name || "plant"
-            }\n${dateString} at ${timeString}`,
+            }\n${dateTimeString} `,
             icon: "/icon.png",
 
             url: "/reminders",
