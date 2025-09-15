@@ -10,19 +10,21 @@ export default function Card({ plant, isOwnedPlantList, session }) {
   const userId = session?.user.id;
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
   const { data: ownedPlants, mutate: mutatePlants } = useSWR(swrUrl);
+
   const {
     data: count,
     isLoading,
     mutate: mutateCount,
-  } = useSWR(!isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null);
+  } = useSWR(`/api/plants/${plant._id}/countowned`);
 
   async function handleAddOwned() {
-    if (!session) return;
+    if (!session || !plant._id) return;
+
     const previousCount = count;
     mutateCount(previousCount + 1, false);
     mutatePlants([...(ownedPlants ?? []), plant], false);
+
     try {
-      const userId = session?.user.id;
       const fetchUrl = `/api/user/${userId}/owned/${plant._id}`;
       const fetchOptions = {
         method: "POST",
@@ -57,8 +59,8 @@ export default function Card({ plant, isOwnedPlantList, session }) {
       <CardWrapper>
         <ImageWrapper>
           <StyledImage
-            src={plant.imageUrl || "/defaultImage.png"}
-            alt={plant.name ? `Image of ${plant.name}` : "Image of a plant"}
+            src={plant.imageUrl}
+            alt={plant.name}
             width={300}
             height={0}
           />
@@ -70,11 +72,15 @@ export default function Card({ plant, isOwnedPlantList, session }) {
                 onAddOwned={handleAddOwned}
                 aria-label={`Add plant to owned for ${plant.name}`}
               />
-              <OwnedCounter length={count} />
+              <OwnedCounter length={count || 0} />
             </>
           )}
+
+          {isOwnedPlantList && plant.location && (
+            <StyledLocation>{plant.location}</StyledLocation>
+          )}
           <StyledName aria-label={`Common name: ${plant.name}`}>
-            {plant.name}
+            {plant.nickname || plant.name}
           </StyledName>
           <StyledBotanicalName
             aria-label={`Botanical name: ${plant.botanicalName}`}
@@ -125,6 +131,12 @@ const TextWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 180px;
+`;
+
+const StyledLocation = styled.p`
+  font-size: var(--font-size-sm);
+  color: var(--color-text-medium);
+  margin-bottom: 4px;
 `;
 
 const StyledName = styled.h3`

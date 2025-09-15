@@ -5,9 +5,9 @@ import styled from "styled-components";
 import Link from "next/link";
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
-
 import SearchPlant from "@/components/search/SearchPlant";
 import PlantCounter from "@/components/counters/PlantCounter";
+import { normalisePlantData } from "@/utils/plantHelpers";
 
 export default function Catalogue() {
   const [query, setQuery] = useState(null);
@@ -26,11 +26,15 @@ export default function Catalogue() {
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
   const { data: ownedPlantIds } = useSWR(swrUrl);
 
-  const showPlantList = !(isLoading || !data || !Array.isArray(data));
+  if (isLoading || sessionStatus === "loading") {
+    return <p>Loading...</p>;
+  }
 
-  const filteredPlantList = data?.filter((plant) => {
+  const normalisedList = data.map(normalisePlantData);
+
+  const filteredPlantList = normalisedList.filter((plant) => {
     const isOwned = ownedPlantIds?.some(
-      (blossum) => blossum.cataloguePlantId === plant._id
+      (blossum) => blossum.cataloguePlant === plant._id
     );
     if (isOwned && filters.hideOwned) return false;
     const matchesLight =
@@ -46,6 +50,9 @@ export default function Catalogue() {
     setQuery(searchQuery);
   }
 
+  const showPlantList =
+    Array.isArray(filteredPlantList) && filteredPlantList.length > 0;
+
   return (
     <>
       <StyledText>Browse to find and select your plants. </StyledText>
@@ -54,11 +61,7 @@ export default function Catalogue() {
         withOwnedFilter={true}
         values={filters}
       />
-      <AddLink
-        href={"/add"}
-      >
-        Didnt find your Plant? Create your own!
-      </AddLink>
+      <AddLink href={"/add"}>Didnt find your Plant? Create your own!</AddLink>
 
       <SearchPlant onSearch={handleSearchResult} value={query} />
       {showPlantList && (
