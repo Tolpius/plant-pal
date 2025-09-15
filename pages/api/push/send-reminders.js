@@ -3,7 +3,7 @@ import Reminder from "@/db/models/Reminder";
 import Subscription from "@/db/models/Subscription";
 import webpush from "web-push";
 import OwnedPlant from "@/db/models/OwnedPlant";
-import { time } from "framer-motion";
+
 
 export default async function handler(request, response) {
   if (request.method !== "POST") return response.status(405).end();
@@ -14,10 +14,11 @@ export default async function handler(request, response) {
     const allReminders = await Reminder.find()
       .populate({ model: OwnedPlant, path: "plantId", select: "name _id" })
       .lean();
+    console.log(allReminders);
 
     const now = new Date();
     const filteredReminders = allReminders.filter(
-      (reminder) => reminder.dueDate < now
+      (reminder) => reminder.dueDate <= now
     );
 
     if (filteredReminders.length === 0) {
@@ -49,6 +50,18 @@ export default async function handler(request, response) {
               auth: subscription.auth,
             },
           };
+          const dueDate = new Date(reminder.dueDate);
+
+          const dateString = dueDate.toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+          const timeString = dueDate.toLocaleTimeString(undefined, {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
           const payload = {
             title: "Plant Pal - Reminder",
             body: `${reminder.title} your ${
