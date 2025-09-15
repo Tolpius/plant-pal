@@ -1,5 +1,9 @@
 import BackButton from "@/components/BackButton";
-import { GearIcon } from "@phosphor-icons/react";
+import {
+  CaretCircleDownIcon,
+  CaretCircleUpIcon,
+  GearIcon,
+} from "@phosphor-icons/react";
 import DeletePopUp from "@/components/DeletePopUp";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,7 +35,7 @@ const seasonMap = {
 };
 
 const dummyData = {
-  persName: "My Plant",
+  persName: "My Nickname",
   persLocation: "Living Room",
   persNotes: "Lorem",
   persDate: "14.09.2025",
@@ -52,6 +56,8 @@ export default function DetailsPage() {
     session ? `/api/user/${session.user.id}/owned/${ownedPlantId}` : null
   );
   const [showPopUp, setShowPopUp] = useState(false);
+  const [isExtendedPersonalNotes, setIsExtendedPersonalNotes] = useState(false);
+  const [isExtendedGeneralInfo, setIsExtendedGeneralInfo] = useState(true);
 
   if (isLoading || !isReady) {
     return <h2>Loading...</h2>;
@@ -87,14 +93,25 @@ export default function DetailsPage() {
     }
   }
 
+  /*   const date1 = new Date('9/13/2025');
+const date2 = new Date('9/15/2025');
+const birthday = new Date();
+const Day = birthday.getDate();
+const Month = birthday.getMonth()
+const Year = birthday.getFullYear()
+const today = `${Day}.${Month}.${Year}`
+const diffTime = Math.abs(date2 - date1);
+const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
+console.log("today:",today);
+console.log(Month + " days") */
   return (
     <>
       <StyledHeadline>
         <BackButton href="/owned" />
         {dummyData.persName ? (
-          dummyData.persName
+          <StyledHeadlinePlantName>{dummyData.persName}</StyledHeadlinePlantName>
         ) : (
-          <StyledPlantName>{plant.name}</StyledPlantName>
+          <StyledHeadlinePlantName>{plant.name}</StyledHeadlinePlantName>
         )}
         {session && (
           <Link
@@ -121,29 +138,85 @@ export default function DetailsPage() {
           height={0}
         />
       )}
-      <p>{plant.description}</p>
-      <StyledSection>Care</StyledSection>
-      <StyledInfoRow>
-        <StyledCareInfo>Plant likes:</StyledCareInfo>
-        <StyledCareInfo>
-          {lightNeedMap[plant.lightNeed] ?? plant.lightNeed}
-        </StyledCareInfo>
-      </StyledInfoRow>
-      <StyledInfoRow>
-        <StyledCareInfo>Water need:</StyledCareInfo>
-        <StyledCareInfo>
-          {waterNeedMap[plant.waterNeed] ?? plant.waterNeed}
-        </StyledCareInfo>
-      </StyledInfoRow>
-      <StyledInfoRow>
-        <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {seasons &&
-          seasons.map((season) => (
-            <li key={season}>
-              <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
-            </li>
-          ))}
-      </StyledInfoRow>
+      <Wrapper>
+        {isExtendedGeneralInfo ? (
+          <GeneralInformationWrapper>
+            <StyledExtendedWrapper>
+              <StyledSectionHeadline>General Information</StyledSectionHeadline>
+              <ExtendingButton onClick={() => setIsExtendedGeneralInfo(false)}>
+                <CaretCircleUpIcon size={28} />
+              </ExtendingButton>
+            </StyledExtendedWrapper>
+            <p>{plant.description}</p>
+            <StyledSection>Care</StyledSection>
+            <StyledInfoRow>
+              <StyledCareInfo>Plant likes:</StyledCareInfo>
+              <StyledCareInfo>
+                {lightNeedMap[plant.lightNeed] ?? plant.lightNeed}
+              </StyledCareInfo>
+            </StyledInfoRow>
+            <StyledInfoRow>
+              <StyledCareInfo>Water need:</StyledCareInfo>
+              <StyledCareInfo>
+                {waterNeedMap[plant.waterNeed] ?? plant.waterNeed}
+              </StyledCareInfo>
+            </StyledInfoRow>
+            <StyledInfoRow>
+              <StyledCareInfo>Fertilise in:</StyledCareInfo>
+              {seasons &&
+                seasons.map((season) => (
+                  <li key={season}>
+                    <StyledCareInfo>
+                      {seasonMap[season] ?? season}
+                    </StyledCareInfo>
+                  </li>
+                ))}
+            </StyledInfoRow>
+          </GeneralInformationWrapper>
+        ) : (
+          <StyledExtendedWrapper>
+            <StyledSectionHeadline>General Information</StyledSectionHeadline>
+            <ExtendingButton onClick={() => setIsExtendedGeneralInfo(true)}>
+              <CaretCircleDownIcon size={28} />
+            </ExtendingButton>
+          </StyledExtendedWrapper>
+        )}
+      </Wrapper>
+      <Wrapper>
+        {isExtendedPersonalNotes ? (
+          <GeneralInformationWrapper>
+            <StyledExtendedWrapper>
+              <StyledSectionHeadline>
+                Personal Information
+              </StyledSectionHeadline>
+              <ExtendingButton
+                onClick={() => setIsExtendedPersonalNotes(false)}
+              >
+                <CaretCircleUpIcon size={28} />
+              </ExtendingButton>
+            </StyledExtendedWrapper>
+            <StyledInfoRow>
+              <StyledPlantName>{dummyData.persName}</StyledPlantName>
+            </StyledInfoRow>
+            <StyledInfoRow>
+              <StyledCareInfo>{dummyData.persLocation}</StyledCareInfo>
+            </StyledInfoRow>
+            <StyledInfoRow>
+              <StyledCareInfo>{dummyData.persDate}</StyledCareInfo>
+            </StyledInfoRow>
+            <StyledInfoRow>
+              <StyledCareInfo>{dummyData.persNotes}</StyledCareInfo>
+            </StyledInfoRow>
+          </GeneralInformationWrapper>
+        ) : (
+          <StyledExtendedWrapper>
+            <StyledSectionHeadline>Personal Information</StyledSectionHeadline>
+            <ExtendingButton onClick={() => setIsExtendedPersonalNotes(true)}>
+              <CaretCircleDownIcon size={28} />
+            </ExtendingButton>
+          </StyledExtendedWrapper>
+        )}
+      </Wrapper>
       {session && (
         <StyledDeleteButton
           onClick={() => {
@@ -163,9 +236,31 @@ export default function DetailsPage() {
   );
 }
 
+const StyledHeadlinePlantName = styled.h2``
+
+const StyledSectionHeadline = styled.h3``;
+
+const StyledExtendedWrapper = styled.div`
+  display: flex;
+`;
+
+const ExtendingButton = styled.button`
+  border: none;
+  background-color: var(--color-secondary);
+`;
+
+const Wrapper = styled.div`
+  border: 1px solid var(--color-neutral-base);
+  padding: 10px;
+  border-radius: var(--radius-bg-md);
+  color: var(--color-text-base);
+`;
+const GeneralInformationWrapper = styled.div``;
+
 const StyledHeadline = styled.div`
   display: flex;
   justify-content: space-between;
+  color: var(--color-text-base);
 `;
 
 const StyledDeleteButton = styled.button`
@@ -183,10 +278,11 @@ const StyledImage = styled(Image)`
 `;
 
 const NameWrapper = styled.div`
-display: grid;
-
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   font-family: var(--font-headline);
   text-align: center;
+  color: var(--color-text-base);
 `;
 
 const StyledPlantName = styled.h3`
