@@ -5,6 +5,7 @@ import styled from "styled-components";
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
 import PlantCounter from "@/components/counters/PlantCounter";
+import { normalisePlantData } from "@/utils/plantHelpers";
 
 export default function Owned() {
   const { data: session, status: sessionStatus } = useSession();
@@ -33,10 +34,18 @@ export default function Owned() {
     );
   }
 
+  console.log("plantList:", plantList);
+  console.log("type:", typeof plantList);
+  console.log("isArray:", Array.isArray(plantList));
+
+  const normalisedList = plantList.map((plant) =>
+    normalisePlantData(plant, true)
+  );
+
   const filteredPlantList =
     filters.lightNeed.length === 0 && filters.waterNeed.length === 0
-      ? plantList
-      : plantList.filter((plant) => {
+      ? normalisedList
+      : normalisedList.filter((plant) => {
           const matchesLight =
             filters.lightNeed.length === 0 ||
             filters.lightNeed.includes(plant.lightNeed);

@@ -23,17 +23,15 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
         <StyledImage
           src={
             defaultData.userImageUrl ||
-            defaultData.cataloguePlantId?.imageUrl ||
+            defaultData.cataloguePlant?.imageUrl ||
             "/defaultImage.png"
           }
-          alt={defaultData.cataloguePlantId?.name || "Plant image"}
+          alt={defaultData.cataloguePlant?.name || "Plant image"}
         />
         <NameWrapper>
-          <StyledPlantName>
-            {defaultData.cataloguePlantId?.name}
-          </StyledPlantName>
+          <StyledPlantName>{defaultData.cataloguePlant?.name}</StyledPlantName>
           <StyledBotanicalName>
-            {defaultData.cataloguePlantId?.botanicalName}
+            {defaultData.cataloguePlant?.botanicalName}
           </StyledBotanicalName>
         </NameWrapper>
       </PlantInfo>

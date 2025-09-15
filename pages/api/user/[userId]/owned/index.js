@@ -22,7 +22,7 @@ export default async function handler(request, response) {
       // GET: Get all ownedPlants belonging to the userId
       case "GET":
         const plants = await OwnedPlant.find({ userId }).populate(
-          "cataloguePlantId",
+          "cataloguePlant",
           "name botanicalName imageUrl"
         );
         if (!plants) {

@@ -30,7 +30,7 @@ export default function Catalogue() {
 
   const filteredPlantList = data?.filter((plant) => {
     const isOwned = ownedPlantIds?.some(
-      (blossum) => blossum.cataloguePlantId === plant._id
+      (blossum) => blossum.cataloguePlant === plant._id
     );
     if (isOwned && filters.hideOwned) return false;
     const matchesLight =
@@ -54,11 +54,7 @@ export default function Catalogue() {
         withOwnedFilter={true}
         values={filters}
       />
-      <AddLink
-        href={"/add"}
-      >
-        Didnt find your Plant? Create your own!
-      </AddLink>
+      <AddLink href={"/add"}>Didnt find your Plant? Create your own!</AddLink>
 
       <SearchPlant onSearch={handleSearchResult} value={query} />
       {showPlantList && (

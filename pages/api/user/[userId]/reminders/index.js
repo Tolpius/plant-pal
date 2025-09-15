@@ -27,9 +27,9 @@ export default async function handler(request, response) {
           path: "plantId",
           model: OwnedPlant,
           select:
-            "nickname name botanicalName imageUrl userImageUrl cataloguePlantId",
+            "nickname name botanicalName imageUrl userImageUrl cataloguePlant",
           populate: {
-            path: "cataloguePlantId",
+            path: "cataloguePlant",
             model: "Plant",
             select: "name imageUrl",
           },

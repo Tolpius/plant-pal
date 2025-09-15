@@ -5,16 +5,18 @@ import OwnedCounter from "./counters/OwnedCounter";
 import Link from "next/link";
 import useSWR from "swr";
 import { toast } from "react-toastify";
-import {
-  getPlantBotanicalName,
-  getPlantImage,
-  getPlantName,
-} from "@/utils/plantHelpers";
+import { normalisePlantData } from "@/utils/plantHelpers";
 
-export default function Card({ plant, isOwnedPlantList, session }) {
+export default function Card({ plant: rawPlant, isOwnedPlantList, session }) {
+  if (!rawPlant) return null;
+
+  const plant = normalisePlantData(rawPlant, true);
+  console.log("normalized plant:", plant);
+
   const userId = session?.user.id;
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
   const { data: ownedPlants, mutate: mutatePlants } = useSWR(swrUrl);
+
   const {
     data: count,
     isLoading,
@@ -22,12 +24,13 @@ export default function Card({ plant, isOwnedPlantList, session }) {
   } = useSWR(!isOwnedPlantList ? `/api/plants/${plant._id}/countowned` : null);
 
   async function handleAddOwned() {
-    if (!session) return;
+    if (!session || !plant._id) return;
+
     const previousCount = count;
     mutateCount(previousCount + 1, false);
     mutatePlants([...(ownedPlants ?? []), plant], false);
+
     try {
-      const userId = session?.user.id;
       const fetchUrl = `/api/user/${userId}/owned/${plant._id}`;
       const fetchOptions = {
         method: "POST",
@@ -57,13 +60,13 @@ export default function Card({ plant, isOwnedPlantList, session }) {
               query: { id: plant._id, from: "/catalogue" },
             }
       }
-      aria-label={`View details for ${plant.name}`}
+      aria-label={`View details for ${plant.name || "Unknown Plant"}`}
     >
       <CardWrapper>
         <ImageWrapper>
           <StyledImage
-            src={getPlantImage(plant)}
-            alt={plant.name ? `Image of ${plant.name}` : "Image of a plant"}
+            src={plant.imageUrl}
+            alt={plant.name || "Image of a plant"}
             width={300}
             height={0}
           />
@@ -75,20 +78,22 @@ export default function Card({ plant, isOwnedPlantList, session }) {
                 onAddOwned={handleAddOwned}
                 aria-label={`Add plant to owned for ${plant.name}`}
               />
-              <OwnedCounter length={count} />
+              <OwnedCounter length={count || 0} />
             </>
           )}
 
           {isOwnedPlantList && plant.location && (
             <StyledLocation>{plant.location}</StyledLocation>
           )}
-          <StyledName aria-label={`Common name: ${getPlantName(plant)}`}>
-            {getPlantName(plant)}
+          <StyledName
+            aria-label={`Common name: ${plant.name || "Unknown Plant"}`}
+          >
+            {plant.name || "Unknown Plant"}
           </StyledName>
           <StyledBotanicalName
-            aria-label={`Botanical name: ${getPlantBotanicalName(plant)}`}
+            aria-label={`Botanical name: ${plant.botanicalName || ""}`}
           >
-            {getPlantBotanicalName(plant)}
+            {plant.botanicalName || ""}
           </StyledBotanicalName>
         </TextWrapper>
       </CardWrapper>

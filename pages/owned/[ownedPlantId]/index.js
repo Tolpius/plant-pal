@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { mutate } from "swr";
+import { normalisePlantData } from "@/utils/plantHelpers";
 
 const lightNeedMap = {
   1: "⛅",
@@ -38,13 +39,14 @@ export default function DetailsPage() {
   const userId = session?.user.id;
 
   const {
-    data: plant,
+    data: rawPlant,
     isLoading,
     error,
   } = useSWR(
     session ? `/api/user/${session.user.id}/owned/${ownedPlantId}` : null
   );
   const [showPopUp, setShowPopUp] = useState(false);
+  const plant = normalisePlantData(rawPlant, true);
 
   if (isLoading || !isReady) {
     return <h2>Loading...</h2>;
@@ -78,11 +80,7 @@ export default function DetailsPage() {
     <>
       <StyledHeadline>
         <BackButton href="/owned" />
-        <h2>
-          {plant.nickname && plant.nickname.trim() !== ""
-            ? plant.nickname
-            : plant.cataloguePlantId?.name || "Unknown Plant"}
-        </h2>
+        <h2>{plant.name}</h2>
         {session && (
           <Link
             href={`/owned/${ownedPlantId}/edit`}
@@ -93,41 +91,33 @@ export default function DetailsPage() {
         )}
       </StyledHeadline>
       <StyledImage
-        src={
-          plant.userImageUrl ||
-          plant.cataloguePlantId?.imageUrl ||
-          "/defaultImage.png"
-        }
-        alt={plant.cataloguePlantId?.name}
+        src={plant.imageUrl}
+        alt={plant.name}
         width={300}
         height={0}
       />
       <NameWrapper>
-        <StyledPlantName>{plant.cataloguePlantId?.name}</StyledPlantName>
-        <StyledBotanicalName>
-          {plant.cataloguePlantId?.botanicalName}
-        </StyledBotanicalName>
+        <StyledPlantName>{plant.name}</StyledPlantName>
+        <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
       </NameWrapper>
-      <p>{plant.cataloguePlantId?.description}</p>
+      <p>{plant.description}</p>
       <StyledSection>Care</StyledSection>
       <StyledInfoRow>
         <StyledCareInfo>Plant likes:</StyledCareInfo>
         <StyledCareInfo>
-          {lightNeedMap[plant.cataloguePlantId?.lightNeed] ??
-            plant.cataloguePlantId?.lightNeed}
+          {lightNeedMap[plant.lightNeed] ?? plant.lightNeed}
         </StyledCareInfo>
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Water need:</StyledCareInfo>
         <StyledCareInfo>
-          {waterNeedMap[plant.cataloguePlantId?.waterNeed] ??
-            plant.cataloguePlantId?.waterNeed}
+          {waterNeedMap[plant.waterNeed] ?? plant.waterNeed}
         </StyledCareInfo>
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {plant.cataloguePlantId?.fertiliserSeasons &&
-          plant.cataloguePlantId?.fertiliserSeasons.map((season) => (
+        {plant.fertiliserSeasons &&
+          plant.fertiliserSeasons.map((season) => (
             <li key={season}>
               <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
             </li>

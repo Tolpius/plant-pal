@@ -1,38 +1,33 @@
-export function getPlantName(plant) {
-  if (!plant) return "Unknown plant";
-
-  if (plant.nickname && plant.nickname.trim() !== "") {
-    return plant.nickname;
+export function normalisePlantData(plant, isOwnedPlant = false) {
+  if (!plant) {
+    return {
+      _id: "",
+      name: "Unknown plant",
+      botanicalName: "Unknown botanical name",
+      imageUrl: "/defaultImage.png",
+      location: "",
+    };
   }
 
-  if (
-    plant.cataloguePlantId?.name &&
-    plant.cataloguePlantId.name.trim() !== ""
-  ) {
-    return plant.cataloguePlantId.name;
-  }
+  return {
+    _id: plant._id || "",
+    name:
+      (isOwnedPlant &&
+        (plant.nickname?.trim() || plant.cataloguePlant?.name)) ||
+      plant.name ||
+      "Unknown plant",
 
-  return plant.name || "Unknown plant";
-}
+    botanicalName:
+      (isOwnedPlant && plant.cataloguePlant?.botanicalName) ||
+      plant.botanicalName ||
+      "Unknown botanical name",
 
-export function getPlantImage(plant) {
-  return (
-    plant?.userImageUrl ||
-    plant?.imageUrl ||
-    plant?.cataloguePlantId?.imageUrl ||
-    "/defaultImage.png"
-  );
-}
+    imageUrl:
+      (isOwnedPlant &&
+        (plant.userImageUrl || plant.cataloguePlant?.imageUrl)) ||
+      plant.imageUrl ||
+      "/defaultImage.png",
 
-export function getPlantBotanicalName(plant) {
-  if (!plant) return "Unknown botanical name";
-
-  if (
-    plant.cataloguePlantId?.botanicalName &&
-    plant.cataloguePlantId.botanicalName.trim() !== ""
-  ) {
-    return plant.cataloguePlantId.botanicalName;
-  }
-
-  return plant.botanicalName || "Unknown botanical name";
+    location: plant.location || "",
+  };
 }

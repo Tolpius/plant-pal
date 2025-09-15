@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { getPlantName } from "@/utils/plantHelpers";
+import { normalisePlantData } from "@/utils/plantHelpers";
 
 export default function ReminderForm({ userId, reminderId }) {
   const router = useRouter();
@@ -18,18 +18,32 @@ export default function ReminderForm({ userId, reminderId }) {
 
   const quickActions = ["Water", "Fertilise", "Repot"];
   const [title, setTitle] = useState(reminder?.title ?? "");
-  const [plantId, setPlantId] = useState(reminder?.plantId ?? "");
+  const [plantId, setPlantId] = useState(
+    reminder
+      ? typeof reminder.plantId === "object"
+        ? reminder.plantId._id
+        : reminder.plantId
+      : ""
+  );
 
   useEffect(() => {
     if (reminder) {
       setTitle(reminder.title || "");
-      setPlantId(reminder.plantId || "");
+      setPlantId(
+        typeof reminder.plantId === "object"
+          ? reminder.plantId._id
+          : reminder.plantId || ""
+      );
     }
   }, [reminder]);
 
   if (plantsError) return <p>Failed to load plants</p>;
   if (!plants) return <p>Loading plants...</p>;
   if (reminderError) return <p>Failed to load reminder</p>;
+
+  const normalisedPlants = plants.map((plant) =>
+    normalisePlantData(plant, true)
+  );
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -84,9 +98,9 @@ export default function ReminderForm({ userId, reminderId }) {
           onChange={(event) => setPlantId(event.target.value)}
         >
           <option value="">Select a plant</option>
-          {plants.map((plant) => (
+          {normalisedPlants.map((plant) => (
             <option key={plant._id} value={plant._id}>
-              {getPlantName(plant)}
+              {plant.name}
             </option>
           ))}
         </Select>

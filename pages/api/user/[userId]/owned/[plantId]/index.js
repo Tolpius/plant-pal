@@ -31,7 +31,7 @@ export default async function handler(request, response) {
           _id: plantId,
           userId,
         }).populate(
-          "cataloguePlantId",
+          "cataloguePlant",
           "name botanicalName description imageUrl lightNeed waterNeed fertiliserSeasons"
         );
         if (!ownedPlant)
@@ -46,7 +46,7 @@ export default async function handler(request, response) {
           return response.status(404).json({ error: "Plant not found" });
         }
         const ownedPlant = new OwnedPlant({
-          cataloguePlantId: plant._id,
+          cataloguePlant: plant._id,
           userId,
           nickname: request.body.nickname || "",
           location: request.body.location || "",
@@ -55,7 +55,7 @@ export default async function handler(request, response) {
           notes: request.body.notes || "",
         });
         await ownedPlant.save();
-        await ownedPlant.populate("cataloguePlantId");
+        await ownedPlant.populate("cataloguePlant");
         return response.status(200).json(ownedPlant);
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
@@ -64,7 +64,7 @@ export default async function handler(request, response) {
           { _id: plantId, userId },
           request.body,
           { new: true }
-        ).populate("cataloguePlantId", "name botanicalName imageUrl");
+        ).populate("cataloguePlant", "name botanicalName imageUrl");
         return response.status(200).json(updatedOwnedPlant);
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
