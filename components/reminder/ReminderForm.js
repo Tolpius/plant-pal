@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { getPlantName } from "@/utils/plantHelpers";
 
 export default function ReminderForm({ userId, reminderId }) {
   const router = useRouter();
@@ -85,11 +86,7 @@ export default function ReminderForm({ userId, reminderId }) {
           <option value="">Select a plant</option>
           {plants.map((plant) => (
             <option key={plant._id} value={plant._id}>
-              {plant?.nickname && plant.nickname.trim() !== ""
-                ? plant.nickname
-                : plant?.cataloguePlantId?.name?.trim() !== ""
-                ? plant.cataloguePlantId.name
-                : "Unknown plant"}
+              {getPlantName(plant)}
             </option>
           ))}
         </Select>

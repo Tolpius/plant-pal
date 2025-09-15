@@ -1,3 +1,4 @@
+import { getPlantImage, getPlantName } from "@/utils/plantHelpers";
 import { GearIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import styled from "styled-components";
@@ -32,18 +33,8 @@ export default function ReminderCard({
       ? reminder.plantId
       : userPlants?.find((plant) => plant._id === reminder.plantId) || null;
 
-  const plantName =
-    plant?.nickname && plant.nickname.trim() !== ""
-      ? plant.nickname
-      : plant?.cataloguePlantId?.name?.trim() !== ""
-      ? plant?.cataloguePlantId.name
-      : "Unknown plant";
-
-  const plantImage =
-    plant?.userImageUrl ||
-    plant?.imageUrl ||
-    plant?.cataloguePlantId?.imageUrl ||
-    "/defaultImage.png";
+  const plantName = getPlantName(plant);
+  const plantImage = getPlantImage(plant);
 
   return (
     <Card>

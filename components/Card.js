@@ -5,6 +5,11 @@ import OwnedCounter from "./counters/OwnedCounter";
 import Link from "next/link";
 import useSWR from "swr";
 import { toast } from "react-toastify";
+import {
+  getPlantBotanicalName,
+  getPlantImage,
+  getPlantName,
+} from "@/utils/plantHelpers";
 
 export default function Card({ plant, isOwnedPlantList, session }) {
   const userId = session?.user.id;
@@ -57,13 +62,7 @@ export default function Card({ plant, isOwnedPlantList, session }) {
       <CardWrapper>
         <ImageWrapper>
           <StyledImage
-            src={
-              isOwnedPlantList
-                ? plant.userImageUrl ||
-                  plant.cataloguePlantId?.imageUrl ||
-                  "/defaultImage.png"
-                : plant.imageUrl || "/defaultImage.png"
-            }
+            src={getPlantImage(plant)}
             alt={plant.name ? `Image of ${plant.name}` : "Image of a plant"}
             width={300}
             height={0}
@@ -83,31 +82,13 @@ export default function Card({ plant, isOwnedPlantList, session }) {
           {isOwnedPlantList && plant.location && (
             <StyledLocation>{plant.location}</StyledLocation>
           )}
-          <StyledName
-            aria-label={`Common name: ${
-              isOwnedPlantList
-                ? plant.nickname && plant.nickname.trim() !== ""
-                  ? plant.nickname
-                  : plant.cataloguePlantId?.name
-                : plant.name
-            }`}
-          >
-            {isOwnedPlantList
-              ? plant.nickname && plant.nickname.trim() !== ""
-                ? plant.nickname
-                : plant.cataloguePlantId?.name
-              : plant.name}
+          <StyledName aria-label={`Common name: ${getPlantName(plant)}`}>
+            {getPlantName(plant)}
           </StyledName>
           <StyledBotanicalName
-            aria-label={`Botanical name: ${
-              isOwnedPlantList
-                ? plant.cataloguePlantId?.botanicalName
-                : plant.botanicalName
-            }`}
+            aria-label={`Botanical name: ${getPlantBotanicalName(plant)}`}
           >
-            {isOwnedPlantList
-              ? plant.cataloguePlantId?.botanicalName
-              : plant.botanicalName}
+            {getPlantBotanicalName(plant)}
           </StyledBotanicalName>
         </TextWrapper>
       </CardWrapper>
