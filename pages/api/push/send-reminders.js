@@ -3,6 +3,7 @@ import Reminder from "@/db/models/Reminder";
 import Subscription from "@/db/models/Subscription";
 import webpush from "web-push";
 import OwnedPlant from "@/db/models/OwnedPlant";
+import { time } from "framer-motion";
 
 export default async function handler(request, response) {
   if (request.method !== "POST") return response.status(405).end();
@@ -50,8 +51,11 @@ export default async function handler(request, response) {
           };
           const payload = {
             title: "Plant Pal - Reminder",
-            body: `${reminder.title} your ${reminder.plantId?.name || "plant"}`,
+            body: `${reminder.title} your ${
+              reminder.plantId?.name || "plant"
+            }\n${dateString} at ${timeString}`,
             icon: "/icon.png",
+
             url: "/reminders",
             tag: reminder._id.toString(),
           };
