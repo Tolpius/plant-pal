@@ -30,6 +30,13 @@ const seasonMap = {
   winter: "❄️ Winter",
 };
 
+const dummyData = {
+  persName: "My Plant",
+  persLocation: "Living Room",
+  persNotes: "Lorem",
+  persDate: "14.09.2025",
+  /* persImage: "Image" */
+};
 export default function DetailsPage() {
   const router = useRouter();
   const { isReady } = router;
@@ -83,7 +90,12 @@ export default function DetailsPage() {
   return (
     <>
       <StyledHeadline>
-        <BackButton href="/owned"/>
+        <BackButton href="/owned" />
+        {dummyData.persName ? (
+          dummyData.persName
+        ) : (
+          <StyledPlantName>{plant.name}</StyledPlantName>
+        )}
         {session && (
           <Link
             href={`/owned/${ownedPlantId}/edit`}
@@ -93,16 +105,22 @@ export default function DetailsPage() {
           </Link>
         )}
       </StyledHeadline>
-      <StyledImage
-        src={plant.imageUrl || "/defaultImage.png"}
-        alt={plant.name}
-        width={300}
-        height={0}
-      />
       <NameWrapper>
         <StyledPlantName>{plant.name}</StyledPlantName>
         <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
+        <p>Species</p>
+        <p>Botanical Name</p>
       </NameWrapper>
+      {dummyData.persImage ? (
+        dummyData.persImage
+      ) : (
+        <StyledImage
+          src={plant.imageUrl || "/defaultImage.png"}
+          alt={plant.name}
+          width={300}
+          height={0}
+        />
+      )}
       <p>{plant.description}</p>
       <StyledSection>Care</StyledSection>
       <StyledInfoRow>
@@ -146,7 +164,6 @@ export default function DetailsPage() {
 }
 
 const StyledHeadline = styled.div`
-
   display: flex;
   justify-content: space-between;
 `;
@@ -166,6 +183,8 @@ const StyledImage = styled(Image)`
 `;
 
 const NameWrapper = styled.div`
+display: grid;
+
   font-family: var(--font-headline);
   text-align: center;
 `;
