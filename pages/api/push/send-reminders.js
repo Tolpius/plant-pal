@@ -14,7 +14,6 @@ export default async function handler(request, response) {
     const allReminders = await Reminder.find()
       .populate({ model: OwnedPlant, path: "plantId", select: "name _id" })
       .lean();
-    console.log(allReminders);
 
     const publicKey = process.env.VAPID_PUBLIC_KEY;
     const privateKey = process.env.VAPID_PRIVATE_KEY;
@@ -40,9 +39,7 @@ export default async function handler(request, response) {
       } else {
         reminderDateTime = due.set({ hour: 12, minute: 0 });
       }
-      if (reminderDateTime >= now) {
-        continue;
-      }
+      if (reminderDateTime >= now) continue;
 
       const subs = await Subscription.find({ userId: String(reminder.userId) });
 
