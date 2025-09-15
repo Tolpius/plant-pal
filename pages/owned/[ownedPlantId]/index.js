@@ -71,8 +71,8 @@ export default function DetailsPage() {
 
       toast.success("Plant removed.");
       router.push("/owned");
-    } catch (err) {
-      toast.error(err.message);
+    } catch (error) {
+      toast.error(error.message);
     }
   }
 
