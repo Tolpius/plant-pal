@@ -17,7 +17,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
   async function handleFileUpload(file) {
     try {
       // 1. Erst Presigned URL vom Backend holen
-      const res = await fetch("/api/upload/getPresignedUploadUrl", {
+      const res = await fetch("/api/images/getPresignedUploadUrl", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
