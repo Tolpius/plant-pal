@@ -4,7 +4,6 @@ import Subscription from "@/db/models/Subscription";
 import webpush from "web-push";
 
 import { DateTime } from "luxon";
-import { get } from "mongoose";
 
 export default async function handler(request, response) {
   if (request.method !== "POST") return response.status(405).end();
