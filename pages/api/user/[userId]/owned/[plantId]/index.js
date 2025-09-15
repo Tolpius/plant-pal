@@ -2,6 +2,7 @@ import dbConnect from "@/db/dbConnect";
 import User from "@/db/models/User";
 import { getToken } from "next-auth/jwt";
 import OwnedPlant from "@/db/models/OwnedPlant";
+import Reminder from "@/db/models/Reminder";
 import Plant from "@/db/models/Plant";
 
 export default async function handler(request, response) {
@@ -26,8 +27,13 @@ export default async function handler(request, response) {
       // GET: returns the owned plant of userId and plantId
       // HERE THE PLANT ID OF THE OWNED PLANT IS USED
       case "GET": {
-        const ownedPlant = await OwnedPlant.findById(plantId);
-        return response.status(200).json(ownedPlant)
+        const ownedPlant = await OwnedPlant.findOne({
+          _id: plantId,
+          userId,
+        }).populate("cataloguePlant");
+        if (!ownedPlant)
+          return response.status(404).json({ error: "Owned plant not found" });
+        return response.status(200).json(ownedPlant);
       }
       // POST: Add Plant from Catalogue to OwnedList
       // HERE THE PLANT ID OF THE CATALOGUE IS USED
@@ -37,35 +43,43 @@ export default async function handler(request, response) {
           return response.status(404).json({ error: "Plant not found" });
         }
         const ownedPlant = new OwnedPlant({
-          cataloguePlantId: plantId,
-          userId: userId,
-          name: plant.name,
-          botanicalName: plant.botanicalName,
-          imageUrl: plant.imageUrl,
-          waterNeed: plant.waterNeed,
-          lightNeed: plant.lightNeed,
-          fertiliserSeasons: plant.fertiliserSeasons,
-          description: plant.description,
+          cataloguePlant: plant._id,
+          userId,
+          nickname: request.body.nickname,
+          location: request.body.location,
+          acquiredDate: request.body.acquiredDate || null,
+          userImageUrl: request.body.userImageUrl,
+          notes: request.body.notes,
         });
         await ownedPlant.save();
+        await ownedPlant.populate("cataloguePlant");
         return response.status(200).json(ownedPlant);
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "PUT": {
-        const updatedOwnedPlant = request.body
-        updatedOwnedPlant.cataloguePlantId = plantId;
-        updatedOwnedPlant.userId = userId;
-        const ownedPlant = await OwnedPlant.findByIdAndUpdate(
-          plantId,
-          updatedOwnedPlant,
-          { new: true, runValidators: true }
-        );
-        return response.status(200).json(ownedPlant);
+        const updatedOwnedPlant = await OwnedPlant.findOneAndUpdate(
+          { _id: plantId, userId },
+          request.body,
+          { new: true }
+        ).populate("cataloguePlant");
+        return response.status(200).json(updatedOwnedPlant);
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "DELETE": {
         const ownedPlant = await OwnedPlant.findByIdAndDelete(plantId);
-        return response.status(200).json(ownedPlant);
+
+        if (!ownedPlant) {
+          return response.status(404).json({ error: "Owned plant not found" });
+        }
+
+        await Reminder.deleteMany({
+          userId,
+          plantId: ownedPlant._id,
+        });
+
+        return response
+          .status(200)
+          .json({ success: true, deletedPlant: ownedPlant });
       }
 
       default:

@@ -71,7 +71,7 @@ export default function DetailsPage() {
         )}
       </StyledHeadline>
       <StyledImage
-        src={plant.imageUrl || "/defaultImage.png"}
+        src={plant.imageUrl}
         alt={plant.name}
         width={300}
         height={0}

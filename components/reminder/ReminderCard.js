@@ -1,3 +1,4 @@
+import { normalisePlantData } from "@/utils/plantHelpers";
 import { GearIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import styled from "styled-components";
@@ -26,18 +27,13 @@ export default function ReminderCard({
     }
   };
 
-  const plant =
-    reminder.plantId && typeof reminder.plantId === "object"
-      ? reminder.plantId
-      : null;
-  const plantName = plant?.name || "Unknown plant";
-  const plantImage = plant?.imageUrl || "/defaultImage.png";
+  const plant = normalisePlantData(reminder.plantId);
 
   return (
     <Card>
-      <Image src={plantImage} alt={plantName} />
+      <Image src={plant.imageUrl} alt={plant.name} />
       <Content>
-        <h3>{plantName}</h3>
+        <h3>{plant.nickname || plant.name}</h3>
         <p>
           <Label>Task:</Label> {reminder.title}
         </p>
