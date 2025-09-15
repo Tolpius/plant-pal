@@ -26,22 +26,34 @@ export default async function handler(request, response) {
           return response.status(404).json({ error: "ownedPlants not found" });
         }
         return response.status(200).json(plants);
-        // POST: Add a completely new plant to catalogue(isPublic=false) and to OwnedList
+      // POST: Add a completely new plant to catalogue
       case "POST": {
-        const plant = await Plant.create(request.body);
-        const ownedPlant = new OwnedPlant({
-          cataloguePlantId: plant._id,
-          userId: userId,
-          name: plant.name,
-          botanicalName: plant.botanicalName,
-          imageUrl: plant.imageUrl,
-          waterNeed: plant.waterNeed,
-          lightNeed: plant.lightNeed,
-          fertiliserSeasons: plant.fertiliserSeasons,
-          description: plant.description,
-        });
-        await ownedPlant.save();
-        return response.status(200).json(ownedPlant);
+        const { addOwned, isPublic, ...newPlant } = request.body;
+        //Admins can choose, if the plant will be public
+        if (token.role === "admin" && isPublic === "true") {
+          newPlant.isPublic = true;
+        }
+        const plant = await Plant.create(newPlant);
+        //Admins can choose, wether the plant will be added to their own plants
+        if (
+          token.role === "user" ||
+          (token.role === "admin" && addOwned === "true")
+        ) {
+          const ownedPlant = new OwnedPlant({
+            cataloguePlantId: plant._id,
+            userId: userId,
+            name: plant.name,
+            botanicalName: plant.botanicalName,
+            imageUrl: plant.imageUrl,
+            waterNeed: plant.waterNeed,
+            lightNeed: plant.lightNeed,
+            fertiliserSeasons: plant.fertiliserSeasons,
+            description: plant.description,
+          });
+          await ownedPlant.save();
+          return response.status(200).json(ownedPlant);
+        }
+        return response.status(200).json(plant);
       }
       default:
         return response.status(405).json("Method not allowed");

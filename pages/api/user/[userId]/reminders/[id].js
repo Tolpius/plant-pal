@@ -14,6 +14,21 @@ export default async function handler(request, response) {
   try {
     await dbConnect();
 
+    if (request.method === "GET") {
+      const reminder = await Reminder.findById(id);
+      if (!reminder)
+        return response.status(404).json({ error: "Reminder not found" });
+      return response.status(200).json(reminder);
+    }
+
+    if (request.method === "PUT") {
+      const data = request.body;
+      const updated = await Reminder.findByIdAndUpdate(id, data, { new: true });
+      if (!updated)
+        return response.status(404).json({ error: "Reminder not found" });
+      return response.status(200).json(updated);
+    }
+
     if (request.method === "DELETE") {
       const deleted = await Reminder.findByIdAndDelete(id);
       if (!deleted) {

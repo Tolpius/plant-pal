@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import styled from "styled-components";
@@ -6,39 +6,59 @@ import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { toast } from "react-toastify";
 
-export default function ReminderForm({ userId }) {
+export default function ReminderForm({ userId, reminderId }) {
   const router = useRouter();
-  const { data: plants, error } = useSWR(
+  const { data: plants, error: plantsError } = useSWR(
     userId ? `/api/user/${userId}/owned` : null
   );
-
-  const [title, setTitle] = useState("");
+  const { data: reminder, error: reminderError } = useSWR(
+    reminderId ? `/api/user/${userId}/reminders/${reminderId}` : null
+  );
 
   const quickActions = ["Water", "Fertilise", "Repot"];
+  const [title, setTitle] = useState(reminder?.title ?? "");
+  const [plantId, setPlantId] = useState(reminder?.plantId ?? "");
 
-  if (error) return <p>Failed to load plants</p>;
+  useEffect(() => {
+    if (reminder) {
+      setTitle(reminder.title || "");
+      setPlantId(reminder.plantId || "");
+    }
+  }, [reminder]);
+
+  if (plantsError) return <p>Failed to load plants</p>;
   if (!plants) return <p>Loading plants...</p>;
+  if (reminderError) return <p>Failed to load reminder</p>;
 
   async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    const newReminder = {
-      ...data,
-    };
+    data.title = title;
 
-    const response = await fetch(`/api/user/${userId}/reminders`, {
-      method: "POST",
+    const url = reminderId
+      ? `/api/user/${userId}/reminders/${reminderId}`
+      : `/api/user/${userId}/reminders`;
+    const method = reminderId ? "PUT" : "POST";
+
+    const response = await fetch(url, {
+      method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newReminder),
+      body: JSON.stringify(data),
     });
 
     if (response.ok) {
-      toast.success("Reminder created successfully.");
+      toast.success(
+        reminderId
+          ? "Reminder updated successfully."
+          : "Reminder created successfully."
+      );
       router.push("/reminders");
     } else {
-      toast.error("Failed to create reminder.");
+      toast.error(
+        reminderId ? "Failed to update reminder." : "Failed to create reminder."
+      );
     }
   }
 
@@ -48,7 +68,7 @@ export default function ReminderForm({ userId }) {
         <StyledLink href="/reminders" aria-label="cancel">
           <XCircleIcon size={28} />
         </StyledLink>
-        <Title>New Reminder</Title>
+        <Title>{reminderId ? "Edit Reminder" : "New Reminder"}</Title>
         <IconButton type="submit" aria-label="save reminder">
           <CheckCircleIcon size={28} />
         </IconButton>
@@ -56,7 +76,12 @@ export default function ReminderForm({ userId }) {
 
       <Label>
         Plant
-        <Select name="plantId" required>
+        <Select
+          name="plantId"
+          required
+          value={plantId}
+          onChange={(event) => setPlantId(event.target.value)}
+        >
           <option value="">Select a plant</option>
           {plants.map((plant) => (
             <option key={plant._id} value={plant._id}>
@@ -93,17 +118,25 @@ export default function ReminderForm({ userId }) {
 
       <Label>
         Description
-        <Textarea name="description" />
+        <Textarea
+          name="description"
+          defaultValue={reminder?.description || ""}
+        />
       </Label>
 
       <Label>
         Due Date
-        <Input type="date" name="dueDate" required />
+        <Input
+          type="date"
+          name="dueDate"
+          required
+          defaultValue={reminder?.dueDate?.split("T")[0] || ""}
+        />
       </Label>
 
       <Label>
         Time
-        <Input type="time" name="time" />
+        <Input type="time" name="time" defaultValue={reminder?.time || ""} />
       </Label>
     </Form>
   );

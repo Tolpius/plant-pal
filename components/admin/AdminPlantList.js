@@ -1,7 +1,7 @@
 import Card from "@/components/admin/AdminCatalogueCard";
 import styled from "styled-components";
 
-export default function AdminPlantList({ plants }) {
+export default function AdminPlantList({ plants, onDelete, onTogglePublic }) {
 
     if(plants.error) return (<>Error loading plants: {plants.error}</>)
     if(plants.length === 0) return (<>No plants found. Check your filter.</>)
@@ -10,7 +10,7 @@ export default function AdminPlantList({ plants }) {
       {plants.map((plant) => {
         return (
           <li key={plant._id}>
-            <Card plant={plant} />
+            <Card plant={plant} onDelete={onDelete} onTogglePublic={onTogglePublic} />
           </li>
         );
       })}

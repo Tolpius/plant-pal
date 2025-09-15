@@ -1,23 +1,60 @@
 import styled from "styled-components";
 import Link from "next/link";
-export default function AdminCatalogueCard({ plant }) {
+import DeletePopUp from "@/components/DeletePopUp";
+import { useState } from "react";
+export default function AdminCatalogueCard({
+  plant,
+  onDelete,
+  onTogglePublic,
+}) {
+  const [showPopUp, setShowPopUp] = useState(false);
+
   return (
-    <Card
-      href={{
-        pathname: "/plants/[id]",
-        query: { id: plant._id, from: "/admin/catalogue" },
-      }}
-    >
-      <Image src={plant.imageUrl} alt={plant.name} />
-      <Content>
-        <h3>{plant.name}</h3>
-        <p>{plant.isPublic ? "Public" : "Private"}</p>
-      </Content>
+    <Card>
+      <LinkWrapper
+        href={{
+          pathname: "/plants/[id]",
+          query: { id: plant._id, from: "/admin/catalogue" },
+        }}
+      >
+        <Image src={plant.imageUrl} alt={plant.name} />
+        <NameContent>
+          <h3>{plant.name}</h3>
+          <p>{plant.isPublic ? "Public" : "Private"}</p>
+        </NameContent>
+      </LinkWrapper>
+      <CRUDContent>
+        <EditLink href={`/plants/${plant._id}/edit`}>
+          edit
+        </EditLink>
+        <DeleteButton
+          onClick={() => {
+            setShowPopUp(true);
+          }}
+          aria-label="Delete this plant"
+        >
+          Delete
+        </DeleteButton>
+        <TogglePublicButton
+          onClick={() => onTogglePublic(plant._id)}
+        >
+          make {plant.isPublic ? "private" : "public"}
+        </TogglePublicButton>
+      </CRUDContent>
+      {showPopUp && (
+        <DeletePopUp
+          onDelete={() => {
+            setShowPopUp(false);
+            onDelete(plant._id);
+          }}
+          onCancel={() => setShowPopUp(false)}
+        />
+      )}
     </Card>
   );
 }
 
-const Card = styled(Link)`
+const Card = styled.div`
   border: var(--border-sm-dark);
   padding: var(--padding-bg-sm);
   margin-bottom: 10px;
@@ -26,8 +63,16 @@ const Card = styled(Link)`
   gap: 10px;
   align-items: center;
   color: var(--color-neutral-base);
-  background-color: var(--color-white);
+  background-color: var(--color-secondary-dark);
+`;
+
+const LinkWrapper = styled(Link)`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex: 2;
   text-decoration: none;
+  color: inherit;
   &:visited {
     color: inherit;
   }
@@ -40,6 +85,42 @@ const Image = styled.img`
   border-radius: var(--radius-md);
 `;
 
-const Content = styled.div`
-  flex: 1;
+const NameContent = styled.div`
+  margin-left: 10px;
 `;
+const CRUDContent = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "edit delete"
+    "togglepublic togglepublic";
+  gap: 10px;
+  flex: 1;
+  align-items: center;
+  & > button,
+  & > a {
+    width: 100%;
+    padding: var(--padding-small) 0;
+    border-radius: var(--radius-md);
+    border: var(--border-sm-dark);
+    background: var(--color-secondary);
+    color: var(--color-text-dark);
+    font-size: var(--font-size-md);
+    text-align: center;
+    text-decoration: none;
+    display: block;
+  }
+`;
+
+const EditLink = styled(Link)`
+    grid-area: edit;`
+;
+
+const DeleteButton = styled.button`
+    grid-area: delete;`
+;
+
+const TogglePublicButton = styled.button`
+    grid-area: togglepublic;`
+;

@@ -39,7 +39,7 @@ const FilterContainer = styled.div`
   ${(props) =>
     props.$displayBorder
       ? css`
-          border: 1px solid black;
+          border: var(--border-sm-dark);
           border-radius: 15px;
           overflow: hidden;
         `
@@ -70,7 +70,8 @@ const ButtonContainer = styled.div`
 const FilterButton = styled.button`
   width: 100%;
   padding: 10px 20px;
-  background-color: var(--color-neutral-light);
+  background-color: var(--color-secondary);
+  color: var(--color-text-medium);
   border-radius: var(--radius-bg-md);
   font-size: var(--font-size-md);
   ${(props) =>
@@ -96,6 +97,6 @@ const TextWrapper = styled.div`
           gap: 3rem;
         `
       : css`
-          grid-template-columns: (1fr - 1rem);
+          grid-template-columns: 1fr;
         `};
 `;
