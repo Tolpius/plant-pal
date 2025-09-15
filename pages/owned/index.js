@@ -19,13 +19,11 @@ export default function Owned() {
     return <p>Loading...</p>;
   }
 
-  const normalisedList = Array.isArray(plantList)
-    ? plantList.map((plant) => normalisePlantData(plant, true))
-    : [];
-
   if (!plantList) {
     return <p>Failed to load plantList!</p>;
   }
+
+  const normalisedList = plantList.map(normalisePlantData);
 
   if (plantList.length == 0) {
     return (

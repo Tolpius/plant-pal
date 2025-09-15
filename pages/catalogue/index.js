@@ -15,10 +15,6 @@ export default function Catalogue() {
     !query ? "/api/plants" : `/api/plants/search/${query}`
   );
 
-  const normalisedList = Array.isArray(data)
-    ? data.map((plant) => normalisePlantData(plant, false))
-    : [];
-
   const [filters, setFilters] = useState({
     lightNeed: [],
     waterNeed: [],
@@ -33,6 +29,8 @@ export default function Catalogue() {
   if (isLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
   }
+
+  const normalisedList = data.map(normalisePlantData);
 
   const filteredPlantList = normalisedList.filter((plant) => {
     const isOwned = ownedPlantIds?.some(

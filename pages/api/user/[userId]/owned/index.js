@@ -22,8 +22,7 @@ export default async function handler(request, response) {
       // GET: Get all ownedPlants belonging to the userId
       case "GET":
         const plants = await OwnedPlant.find({ userId }).populate(
-          "cataloguePlant",
-          "name botanicalName imageUrl"
+          "cataloguePlant"
         );
         if (!plants) {
           return response.status(404).json({ error: "ownedPlants not found" });

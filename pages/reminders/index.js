@@ -103,7 +103,6 @@ export default function Reminders() {
             showCheckbox
             onDone={handleDone}
             userId={userId}
-            userPlants={plants}
           />
         ))
       ) : (
@@ -119,7 +118,6 @@ export default function Reminders() {
             showCheckbox
             onDone={handleDone}
             userId={userId}
-            userPlants={plants}
           />
         ))
       ) : (
@@ -131,11 +129,7 @@ export default function Reminders() {
           <div key={groupName}>
             <GroupTitle>{groupName}</GroupTitle>
             {items.map((reminder) => (
-              <ReminderCard
-                key={reminder._id}
-                reminder={reminder}
-                userPlants={plants}
-              />
+              <ReminderCard key={reminder._id} reminder={reminder} />
             ))}
           </div>
         ) : null

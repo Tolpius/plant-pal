@@ -30,10 +30,7 @@ export default async function handler(request, response) {
         const ownedPlant = await OwnedPlant.findOne({
           _id: plantId,
           userId,
-        }).populate(
-          "cataloguePlant",
-          "name botanicalName description imageUrl lightNeed waterNeed fertiliserSeasons"
-        );
+        }).populate("cataloguePlant");
         if (!ownedPlant)
           return response.status(404).json({ error: "Owned plant not found" });
         return response.status(200).json(ownedPlant);
@@ -64,7 +61,7 @@ export default async function handler(request, response) {
           { _id: plantId, userId },
           request.body,
           { new: true }
-        ).populate("cataloguePlant", "name botanicalName imageUrl");
+        ).populate("cataloguePlant");
         return response.status(200).json(updatedOwnedPlant);
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED

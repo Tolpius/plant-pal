@@ -80,7 +80,7 @@ export default function Card({ plant, isOwnedPlantList, session }) {
             <StyledLocation>{plant.location}</StyledLocation>
           )}
           <StyledName aria-label={`Common name: ${plant.name}`}>
-            {plant.name}
+            {plant.nickname || plant.name}
           </StyledName>
           <StyledBotanicalName
             aria-label={`Botanical name: ${plant.botanicalName}`}

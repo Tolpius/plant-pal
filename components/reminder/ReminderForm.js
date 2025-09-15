@@ -18,22 +18,12 @@ export default function ReminderForm({ userId, reminderId }) {
 
   const quickActions = ["Water", "Fertilise", "Repot"];
   const [title, setTitle] = useState(reminder?.title ?? "");
-  const [plantId, setPlantId] = useState(
-    reminder
-      ? typeof reminder.plantId === "object"
-        ? reminder.plantId._id
-        : reminder.plantId
-      : ""
-  );
+  const [plantId, setPlantId] = useState(reminder?.plantId?._id);
 
   useEffect(() => {
     if (reminder) {
       setTitle(reminder.title || "");
-      setPlantId(
-        typeof reminder.plantId === "object"
-          ? reminder.plantId._id
-          : reminder.plantId || ""
-      );
+      setPlantId(reminder.plantId?._id);
     }
   }, [reminder]);
 
@@ -41,9 +31,7 @@ export default function ReminderForm({ userId, reminderId }) {
   if (!plants) return <p>Loading plants...</p>;
   if (reminderError) return <p>Failed to load reminder</p>;
 
-  const normalisedPlants = plants.map((plant) =>
-    normalisePlantData(plant, true)
-  );
+  const normalisedPlants = plants.map(normalisePlantData);
 
   async function handleSubmit(event) {
     event.preventDefault();
