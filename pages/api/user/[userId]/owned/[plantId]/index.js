@@ -3,7 +3,7 @@ import User from "@/lib/db/models/User";
 import { getToken } from "next-auth/jwt";
 import OwnedPlant from "@/lib/db/models/OwnedPlant";
 import Plant from "@/lib/db/models/Plant";
-import { getSignedImageUrl } from "@/lib/s3/s3Client";
+import { deleteFile, getSignedImageUrl } from "@/lib/s3/s3Client";
 export default async function handler(request, response) {
   const { userId, plantId } = request.query;
   const token = await getToken({
@@ -71,9 +71,11 @@ export default async function handler(request, response) {
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "DELETE": {
         const ownedPlant = await OwnedPlant.findByIdAndDelete(plantId);
+        if (ownedPlant.imageStoragePath) {
+          await deleteFile(ownedPlant.imageStoragePath);
+        }
         return response.status(200).json(ownedPlant);
       }
-
       default:
         return response.status(405).json({ error: "Method not allowed" });
     }
