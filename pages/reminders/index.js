@@ -57,6 +57,10 @@ export default function Reminders() {
     userId ? `/api/user/${userId}/reminders` : null
   );
 
+  const { data: plants, error: plantsError } = useSWR(
+    userId ? `/api/user/${userId}/owned` : null
+  );
+
   const groupedReminders = useMemo(
     () => (reminders ? groupReminders(reminders) : {}),
     [reminders]
@@ -78,6 +82,7 @@ export default function Reminders() {
   };
 
   if (error) return <div>Failed to load reminders: {error.message}</div>;
+  if (plantsError) return <div>Failed to load plants</div>;
   if (!reminders) return <div>Loading...</div>;
 
   return (

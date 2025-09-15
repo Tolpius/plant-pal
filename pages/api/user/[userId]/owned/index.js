@@ -22,7 +22,9 @@ export default async function handler(request, response) {
     switch (request.method) {
       // GET: Get all ownedPlants belonging to the userId
       case "GET":
-        const plants = await OwnedPlant.find({ userId }).lean();
+        const plants = await OwnedPlant.find({ userId }).populate(
+          "cataloguePlant"
+        ).lean();
         if (!plants) {
           return response.status(404).json({ error: "ownedPlants not found" });
         }
@@ -61,15 +63,8 @@ export default async function handler(request, response) {
           (token.role === "admin" && addOwned === "true")
         ) {
           const ownedPlant = new OwnedPlant({
-            cataloguePlantId: plant._id,
-            userId: userId,
-            name: plant.name,
-            botanicalName: plant.botanicalName,
-            imageUrl: plant.imageUrl,
-            waterNeed: plant.waterNeed,
-            lightNeed: plant.lightNeed,
-            fertiliserSeasons: plant.fertiliserSeasons,
-            description: plant.description,
+            ...request.body,
+            userId,
             imageStoragePath: plant.imageStoragePath,
           });
           await ownedPlant.save();

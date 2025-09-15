@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { mutate } from "swr";
+import { normalisePlantData } from "@/utils/plantHelpers";
 
 const lightNeedMap = {
   1: "⛅",
@@ -38,7 +39,7 @@ export default function DetailsPage() {
   const userId = session?.user.id;
 
   const {
-    data: plant,
+    data: rawPlant,
     isLoading,
     error,
   } = useSWR(
@@ -49,41 +50,37 @@ export default function DetailsPage() {
   if (isLoading || !isReady) {
     return <h2>Loading...</h2>;
   }
-  if (error || !plant) {
+  if (error || !rawPlant) {
     return <h2>Error loading plant data</h2>;
   }
-
-  const seasons = plant?.fertiliserSeasons;
+  const plant = normalisePlantData(rawPlant);
 
   async function deletePlant() {
     try {
-      mutate(
-        `/api/user/${userId}/owned`,
-        (plantList) =>
-          plantList.filter((plant) => !(plant._id === ownedPlantId)),
-        false
-      );
       const response = await fetch(
         `/api/user/${session.user.id}/owned/${ownedPlantId}`,
         { method: "DELETE" }
       );
-      if (response.ok) {
-        toast.success("Plant removed.");
-        router.push("/owned");
-      } else {
-        mutate();
-        toast.error("Failed to remove Plant.");
-      }
+      if (!response.ok) throw new Error("Failed to remove plant");
+
+      mutate(
+        `/api/user/${userId}/owned`,
+        (plants) => plants.filter((plant) => plant._id !== ownedPlantId),
+        false
+      );
+
+      toast.success("Plant removed.");
+      router.push("/owned");
     } catch (error) {
-      mutate();
-      toast.error("Failed to delete plant. Please try again.");
+      toast.error(error.message);
     }
   }
 
   return (
     <>
       <StyledHeadline>
-        <BackButton href="/owned"/>
+        <BackButton href="/owned" />
+        <h2>{plant.nickname || plant.name}</h2>
         {session && (
           <Link
             href={`/owned/${ownedPlantId}/edit`}
@@ -119,13 +116,21 @@ export default function DetailsPage() {
       </StyledInfoRow>
       <StyledInfoRow>
         <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {seasons &&
-          seasons.map((season) => (
+        {plant.fertiliserSeasons &&
+          plant.fertiliserSeasons.map((season) => (
             <li key={season}>
               <StyledCareInfo>{seasonMap[season] ?? season}</StyledCareInfo>
             </li>
           ))}
       </StyledInfoRow>
+
+      {plant.nickname && <p>Nickname: {plant.nickname}</p>}
+      {plant.location && <p>Location: {plant.location}</p>}
+      {plant.acquiredDate && (
+        <p>Acquired: {new Date(plant.acquiredDate).toLocaleDateString()}</p>
+      )}
+      {plant.notes && <p>Notes: {plant.notes}</p>}
+
       {session && (
         <StyledDeleteButton
           onClick={() => {
@@ -146,7 +151,6 @@ export default function DetailsPage() {
 }
 
 const StyledHeadline = styled.div`
-
   display: flex;
   justify-content: space-between;
 `;

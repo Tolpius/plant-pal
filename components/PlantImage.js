@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-const PlantImage = ({ plant, alt = "Plant", width = 200, height = 200, className }) => {
+const PlantImage = ({ plant, alt = "Plant", width = 200, height = 200, className }) => {asdasdasdasd[//TODO: ANPASSEN AUF MAIN ÄNDERUNGEN!!
   const imageOptions = [
     plant?.storedImageUrl,
     plant?.imageUrl,

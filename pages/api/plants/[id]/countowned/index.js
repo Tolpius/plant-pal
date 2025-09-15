@@ -19,7 +19,7 @@ export default async function handler(request, response) {
       case "GET": {
         const count = await OwnedPlant.countDocuments({
           userId,
-          cataloguePlantId: id,
+          cataloguePlant: id,
         });
         return response.status(200).json(count);
       }
