@@ -2,8 +2,9 @@ import dbConnect from "@/db/dbConnect";
 import Reminder from "@/db/models/Reminder";
 import Subscription from "@/db/models/Subscription";
 import webpush from "web-push";
-import OwnedPlant from "@/db/models/OwnedPlant";
+
 import { DateTime } from "luxon";
+import { get } from "mongoose";
 
 export default async function handler(request, response) {
   if (request.method !== "POST") return response.status(405).end();
@@ -12,7 +13,16 @@ export default async function handler(request, response) {
 
   try {
     const allReminders = await Reminder.find()
-      .populate({ model: OwnedPlant, path: "plantId", select: "name _id" })
+      .populate({
+        path: "plantId",
+        model: "OwnedPlant",
+        select: "nickname cataloguePlant",
+        populate: {
+          path: "cataloguePlant",
+          model: "Plant",
+          select: "name",
+        },
+      })
       .lean();
 
     const publicKey = process.env.VAPID_PUBLIC_KEY;
@@ -57,16 +67,24 @@ export default async function handler(request, response) {
             "dd. LLL yyyy 'at' HH:mm"
           );
 
+          function getPlantLabel() {
+            const nickname = reminder.plantId?.nickname;
+            if (nickname && nickname.trim().length > 0) return nickname;
+            const name = reminder.plantId?.cataloguePlant?.name;
+            if (name && name.trim().length > 0) return name;
+            return "plant";
+          }
+
+          const plantLabel = getPlantLabel();
+
           const payload = {
             title: "Plant Pal - Reminder",
-            body: `${reminder.title} your ${
-              reminder.plantId?.name || "plant"
-            }\n${dateTimeString} `,
+            body: `${reminder.title} your ${plantLabel}\n${dateTimeString} `,
             icon: "/icon.png",
-
             url: "/reminders",
             tag: reminder._id.toString(),
           };
+
           await webpush.sendNotification(
             pushSubscription,
             JSON.stringify(payload)
