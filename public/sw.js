@@ -4,7 +4,7 @@ self.addEventListener("activate", () => console.log("SW aktiv"));
 self.addEventListener("push", (event) => {
   const data = event.data ? event.data.json() : {};
 
-  const title = "Plant Pal";
+  const title = data.title || "Plant Pal";
   const options = {
     body: data.body || "",
     icon: data.icon || "/icon.png",

@@ -2,7 +2,6 @@ import dbConnect from "@/db/dbConnect";
 import Reminder from "@/db/models/Reminder";
 import Subscription from "@/db/models/Subscription";
 import webpush from "web-push";
-
 import { DateTime } from "luxon";
 
 export default async function handler(request, response) {
