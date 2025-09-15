@@ -33,7 +33,7 @@ export default function ReminderCard({
     <Card>
       <Image src={plant.imageUrl} alt={plant.name} />
       <Content>
-        <h3>{plant.name}</h3>
+        <h3>{plant.nickname || plant.name}</h3>
         <p>
           <Label>Task:</Label> {reminder.title}
         </p>
