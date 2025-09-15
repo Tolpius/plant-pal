@@ -5,6 +5,7 @@ import styled from "styled-components";
 import PlantList from "@/components/PlantList";
 import PlantFilter from "@/components/filter/PlantFilter";
 import PlantCounter from "@/components/counters/PlantCounter";
+import { normalisePlantData } from "@/utils/plantHelpers";
 
 export default function Owned() {
   const { data: session, status: sessionStatus } = useSession();
@@ -22,6 +23,8 @@ export default function Owned() {
     return <p>Failed to load plantList!</p>;
   }
 
+  const normalisedList = plantList.map(normalisePlantData);
+
   if (plantList.length == 0) {
     return (
       <TextWrapper>
@@ -35,8 +38,8 @@ export default function Owned() {
 
   const filteredPlantList =
     filters.lightNeed.length === 0 && filters.waterNeed.length === 0
-      ? plantList
-      : plantList.filter((plant) => {
+      ? normalisedList
+      : normalisedList.filter((plant) => {
           const matchesLight =
             filters.lightNeed.length === 0 ||
             filters.lightNeed.includes(plant.lightNeed);
