@@ -4,14 +4,13 @@ self.addEventListener("activate", () => console.log("SW aktiv"));
 self.addEventListener("push", (event) => {
   const data = event.data ? event.data.json() : {};
 
-  const title = data.title || "Plant Pal";
+  const title = "Plant Pal";
   const options = {
     body: data.body || "",
     icon: data.icon || "/icon.png",
+    data: { url: data.url },
     tag: data.tag,
-    data,
     renotify: data.renotify ?? true,
-    actions: data.actions || [],
   };
 
   event.waitUntil(self.registration.showNotification(title, options));
