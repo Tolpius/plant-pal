@@ -8,7 +8,7 @@ export default async function handler(request, response) {
   const session = await getServerSession(request, response, authOptions);
   if (!session?.user?.id) return response.status(401).end();
 
-  const { endpoint, keys } = request.body || {};
+  const { endpoint, keys } = request.body;
   if (!endpoint || !keys?.p256dh || !keys?.auth)
     return response.status(400).json({ error: "invalid body" });
 
@@ -17,7 +17,6 @@ export default async function handler(request, response) {
   await Subscription.findOneAndUpdate(
     { endpoint },
     {
-      endpoint,
       p256dh: keys.p256dh,
       auth: keys.auth,
       userId: String(session.user.id),

@@ -10,26 +10,17 @@ export default function App({
   pageProps: { session, ...pageProps },
 }) {
   useEffect(() => {
-    if (typeof window === "undefined" || !("serviceWorker" in navigator))
-      return;
+    if (!navigator.serviceWorker) return;
 
     navigator.serviceWorker
       .register("/sw.js")
-
       .catch((error) => console.error("SW-Fehler:", error));
 
-    const onLoad = () => {
-      ensurePushSubscription();
-    };
-    const onFocus = () => {
-      ensurePushSubscription();
-    };
-
-    window.addEventListener("load", onLoad);
-    window.addEventListener("focus", onFocus);
+    window.addEventListener("load", ensurePushSubscription);
+    window.addEventListener("focus", ensurePushSubscription);
     return () => {
-      window.removeEventListener("load", onLoad);
-      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("load", ensurePushSubscription);
+      window.removeEventListener("focus", ensurePushSubscription);
     };
   }, []);
 

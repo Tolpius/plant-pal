@@ -3,12 +3,10 @@ import styled from "styled-components";
 import { useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-
 import ReminderCard from "@/components/reminder/ReminderCard";
 import { PlusCircleIcon } from "@phosphor-icons/react";
 import Link from "next/link";
-
-import { urlBase64ToUint8Array } from "@/lib/notifications";
+import urlBase64ToUint8Array from "@/utils/urlBase64";
 
 function groupReminders(reminders) {
   const today = new Date();
@@ -58,9 +56,6 @@ export default function Reminders() {
   const { data: reminders, error } = useSWR(
     userId ? `/api/user/${userId}/reminders` : null
   );
-  const { data: publicKeyResponse, isLoading: isLoadingPublicKey } = useSWR(
-    "/api/push/public-key"
-  );
 
   const { data: plants, error: plantsError } = useSWR(
     userId ? `/api/user/${userId}/owned` : null
@@ -88,47 +83,44 @@ export default function Reminders() {
 
   useEffect(() => {
     async function requestNotificationPermission() {
-      if (isLoadingPublicKey) {
+      if (!window.Notification) {
         return;
       }
 
-      if (!("Notification" in window)) {
+      if (!navigator.serviceWorker || !window.PushManager) {
         return;
       }
 
-      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+      if (Notification.permission !== "default") {
         return;
       }
 
-      if (Notification.permission === "default") {
-        await Notification.requestPermission();
+      await Notification.requestPermission();
 
-        if (Notification.permission === "granted") {
-          const { publicKey } = publicKeyResponse;
-          const publicKeyArray = urlBase64ToUint8Array(publicKey);
-
-          const serviceWorkerRegistration = await navigator.serviceWorker.ready;
-          const existingSubscription =
-            await serviceWorkerRegistration.pushManager.getSubscription();
-          if (!existingSubscription) {
-            const subscription =
-              await serviceWorkerRegistration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: publicKeyArray,
-              });
-
-            const response = await fetch("/api/push/subscribe", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(subscription),
-            });
-          }
-        } else {
-          console.log("Notifications are blocked by the user.");
-        }
+      if (Notification.permission !== "granted") {
+        console.log("Notifications are blocked by the user.");
+        return;
       }
+      const publicKeyArray = urlBase64ToUint8Array(
+        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+      );
+
+      const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+      const existingSubscription =
+        await serviceWorkerRegistration.pushManager.getSubscription();
+      if (!existingSubscription) return;
+      const subscription =
+        await serviceWorkerRegistration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: publicKeyArray,
+        });
+      const response = await fetch("/api/push/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subscription),
+      });
     }
 
     requestNotificationPermission();

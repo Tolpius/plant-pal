@@ -16,12 +16,8 @@ export default async function handler(request, response) {
     const allReminders = await Reminder.find()
       .populate({
         path: "plantId",
-        model: OwnedPlant,
-        select: "nickname cataloguePlant",
         populate: {
           path: "cataloguePlant",
-          model: Plant,
-          select: "name",
         },
       })
       .lean();
