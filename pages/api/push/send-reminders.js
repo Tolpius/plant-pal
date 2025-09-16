@@ -3,6 +3,8 @@ import Reminder from "@/db/models/Reminder";
 import Subscription from "@/db/models/Subscription";
 import webpush from "web-push";
 import { DateTime } from "luxon";
+import OwnedPlant from "@/db/models/OwnedPlant";
+import Plant from "@/db/models/Plant";
 
 export default async function handler(request, response) {
   if (request.method !== "POST") return response.status(405).end();
@@ -13,11 +15,11 @@ export default async function handler(request, response) {
     const allReminders = await Reminder.find()
       .populate({
         path: "plantId",
-        model: "OwnedPlant",
+        model: OwnedPlant,
         select: "nickname cataloguePlant",
         populate: {
           path: "cataloguePlant",
-          model: "Plant",
+          model: Plant, 
           select: "name",
         },
       })
