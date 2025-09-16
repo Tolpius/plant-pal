@@ -88,7 +88,7 @@ export default async function handler(request, response) {
         //If the image gets updated (either new s3 file or new URL) then delete the old s3 file
         if (
           (editedPlant.imageStoragePath && updatedOwnedPlant.imageStoragePath) ||
-          (editedPlant.imageUrl && updatedOwnedPlant.imageStoragePath)
+          (editedPlant.userImageUrl && updatedOwnedPlant.imageStoragePath)
         ) {
           deleteFile(updatedOwnedPlant.imageStoragePath);
         }

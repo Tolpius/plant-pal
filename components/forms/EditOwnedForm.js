@@ -52,7 +52,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
     if (useUpload) {
       data.tempImageStoragePath = tempImagePath;
     } else {
-      if (!data.imageUrl.startsWith("https://images.unsplash.com")) {
+      if (!data.userImageUrl.startsWith("https://images.unsplash.com")) {
         alert("Image URL must start with https://images.unsplash.com/");
         return;
       }
