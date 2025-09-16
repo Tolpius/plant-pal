@@ -18,7 +18,7 @@ export default function AdminCatalogueCard({
           query: { id: plant._id, from: "/admin/catalogue" },
         }}
       >
-        <StyledImage plant={plant} alt={plant.name} />
+        <StyledImage plant={plant} alt={plant.name} height={"100"} width={"100"} />
         <NameContent>
           <h3>{plant.name}</h3>
           <p>{plant.isPublic ? "Public" : "Private"}</p>
