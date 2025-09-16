@@ -60,7 +60,6 @@ export default function DetailsPage() {
     return <h2>Error loading plant data</h2>;
   }
   const plant = normalisePlantData(rawPlant);
-  console.log("plant: ", plant);
 
   async function deletePlant() {
     try {
@@ -105,7 +104,7 @@ export default function DetailsPage() {
       </NameWrapper>
       <StyledImageWrapper>
         <StyledImage
-          src={plant.userImageUrl || plant.imageUrl || "/defaultImage.png"}
+          src={plant.imageUrl}
           alt={plant.name}
           width={300}
           height={0}
