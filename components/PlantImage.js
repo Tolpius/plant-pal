@@ -5,6 +5,7 @@ const PlantImage = ({ plant, ...props }) => {
   const imageOptions = [
     plant?.storedImageUrl,
     plant?.userImageUrl,
+    plant?.imageUrl,
     plant?.cataloguePlant?.storedImageUrl,
     plant?.cataloguePlant?.imageUrl,
     "/defaultImage.png",
