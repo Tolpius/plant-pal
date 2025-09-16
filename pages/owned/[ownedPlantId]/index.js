@@ -35,13 +35,6 @@ const seasonMap = {
   winter: "❄️ Winter",
 };
 
-const dummyData = {
-  persName: "My Nickname",
-  persLocation: "Living Room",
-  persNotes: "Lorem",
-  persDate: "14.09.2025",
-  /* persImage: "Image" */
-};
 export default function DetailsPage() {
   const router = useRouter();
   const { isReady } = router;
@@ -67,6 +60,7 @@ export default function DetailsPage() {
     return <h2>Error loading plant data</h2>;
   }
   const plant = normalisePlantData(rawPlant);
+  console.log("plant: ", plant);
 
   async function deletePlant() {
     try {
@@ -90,99 +84,76 @@ export default function DetailsPage() {
     }
   }
 
-  /*   const date1 = new Date('9/13/2025');
-const date2 = new Date('9/15/2025');
-const birthday = new Date();
-const Day = birthday.getDate();
-const Month = birthday.getMonth()
-const Year = birthday.getFullYear()
-const today = `${Day}.${Month}.${Year}`
-const diffTime = Math.abs(date2 - date1);
-const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
-console.log("today:",today);
-console.log(Month + " days") */
   return (
     <>
       <StyledHeadline>
-        <BackButton href="/owned"  />
-        <h2>{plant.nickname || plant.name}</h2> {/* !!!! */}
-        {dummyData.persName ? (
-          <StyledHeadlinePlantName>{dummyData.persName}</StyledHeadlinePlantName>
-        ) : (
-          <StyledHeadlinePlantName>{plant.name}</StyledHeadlinePlantName>
-        )}
-        {session && (
-          <Link
-            href={`/owned/${ownedPlantId}/edit`}
-            aria-label="Edit this plant"
-          >
-            <GearIcon size={32} />
-          </Link>
-        )}
+        <BackButton href="/owned" />
+        <StyledHeadlinePlantName>
+          {plant.nickname || plant.name}
+        </StyledHeadlinePlantName>
       </StyledHeadline>
-      <StyledImage
-        src={plant.imageUrl}
-        alt={plant.name}
-        width={300}
-        height={0}
-      />
+
       <NameWrapper>
-        <StyledPlantName>{plant.name}</StyledPlantName>
-        <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
-        <p>Species</p>
-        <p>Botanical Name</p>
+        <StyledNameInfoWrapper>
+          <StyledPlantName>{plant.name}</StyledPlantName>
+          <StyledBotanicalName>{plant.botanicalName}</StyledBotanicalName>
+        </StyledNameInfoWrapper>
+        <StyledNameInfoWrapper>
+          <StyledCursive>Species</StyledCursive>
+          <StyledCursive>Botanical Name</StyledCursive>
+        </StyledNameInfoWrapper>
       </NameWrapper>
-      {dummyData.persImage ? (
-        dummyData.persImage
-      ) : (
+      <StyledImageWrapper>
         <StyledImage
-          src={plant.imageUrl || "/defaultImage.png"}
+          src={plant.userImageUrl || plant.imageUrl || "/defaultImage.png"}
           alt={plant.name}
           width={300}
           height={0}
         />
-      )}
+      </StyledImageWrapper>
       <Wrapper>
         {isExtendedGeneralInfo ? (
           <GeneralInformationWrapper>
             <StyledExtendedWrapper>
-              <StyledSectionHeadline>General Information</StyledSectionHeadline>
               <ExtendingButton onClick={() => setIsExtendedGeneralInfo(false)}>
                 <CaretCircleUpIcon size={28} />
               </ExtendingButton>
+              <h3>General Information</h3>
             </StyledExtendedWrapper>
-            <p>{plant.description}</p>
-            <StyledSection>Care</StyledSection>
-            <StyledInfoRow>
-              <StyledCareInfo>Plant likes:</StyledCareInfo>
-              <StyledCareInfo>
-                {lightNeedMap[plant.lightNeed] ?? plant.lightNeed}
-              </StyledCareInfo>
-            </StyledInfoRow>
-            <StyledInfoRow>
-              <StyledCareInfo>Water need:</StyledCareInfo>
-              <StyledCareInfo>
-                {waterNeedMap[plant.waterNeed] ?? plant.waterNeed}
-              </StyledCareInfo>
-            </StyledInfoRow>
-            <StyledInfoRow>
-              <StyledCareInfo>Fertilise in:</StyledCareInfo>
-              {plant.fertiliserSeasons &&
-                plant.fertiliserSeasons.map((season) => (
-                  <li key={season}>
-                    <StyledCareInfo>
-                      {seasonMap[season] ?? season}
-                    </StyledCareInfo>
-                  </li>
-                ))}
-            </StyledInfoRow>
+            <StyledInfoWrapper>
+              <p>{plant.description}</p>
+              <StyledSection>Care:</StyledSection>
+              <StyledInfoRow>
+                <StyledCareInfo>Plant likes:</StyledCareInfo>
+                <StyledCareInfo>
+                  {lightNeedMap[plant.lightNeed] ?? plant.lightNeed}
+                </StyledCareInfo>
+              </StyledInfoRow>
+              <StyledInfoRow>
+                <StyledCareInfo>Water need:</StyledCareInfo>
+                <StyledCareInfo>
+                  {waterNeedMap[plant.waterNeed] ?? plant.waterNeed}
+                </StyledCareInfo>
+              </StyledInfoRow>
+              <StyledInfoRow>
+                <StyledCareInfo>Fertilise in:</StyledCareInfo>
+                {plant.fertiliserSeasons &&
+                  plant.fertiliserSeasons.map((season) => (
+                    <li key={season}>
+                      <StyledCareInfo>
+                        {seasonMap[season] ?? season}
+                      </StyledCareInfo>
+                    </li>
+                  ))}
+              </StyledInfoRow>
+            </StyledInfoWrapper>
           </GeneralInformationWrapper>
         ) : (
           <StyledExtendedWrapper>
-            <StyledSectionHeadline>General Information</StyledSectionHeadline>
             <ExtendingButton onClick={() => setIsExtendedGeneralInfo(true)}>
               <CaretCircleDownIcon size={28} />
             </ExtendingButton>
+            <h3>General Information</h3>
           </StyledExtendedWrapper>
         )}
       </Wrapper>
@@ -190,44 +161,68 @@ console.log(Month + " days") */
         {isExtendedPersonalNotes ? (
           <GeneralInformationWrapper>
             <StyledExtendedWrapper>
-              <StyledSectionHeadline>
-                Personal Information
-              </StyledSectionHeadline>
               <ExtendingButton
                 onClick={() => setIsExtendedPersonalNotes(false)}
               >
                 <CaretCircleUpIcon size={28} />
               </ExtendingButton>
+              <h3>Personal Information</h3>
+
+              {session && (
+                <StyledEditLink
+                  href={`/owned/${ownedPlantId}/edit`}
+                  aria-label="Edit this plant"
+                >
+                  <GearIcon size={28} />
+                </StyledEditLink>
+              )}
             </StyledExtendedWrapper>
-            <StyledInfoRow>
-              <StyledPlantName>{dummyData.persName}</StyledPlantName>
-            </StyledInfoRow>
-            <StyledInfoRow>
-              <StyledCareInfo>{dummyData.persLocation}</StyledCareInfo>
-            </StyledInfoRow>
-            <StyledInfoRow>
-              <StyledCareInfo>{dummyData.persDate}</StyledCareInfo>
-            </StyledInfoRow>
-            <StyledInfoRow>
-              <StyledCareInfo>{dummyData.persNotes}</StyledCareInfo>
-            </StyledInfoRow>
+            <StyledInfoWrapper>
+              <StyledInfoRow>
+                {!plant.nickname &&
+                  !plant.location &&
+                  !plant.acquiredDate &&
+                  !plant.notes && (
+                    <p>
+                      You do not have any personal information. You can edit the
+                      plant and add some.
+                    </p>
+                  )}
+                <StyledNickname>
+                  {plant.nickname && <p>Nickname: {plant.nickname}</p>}
+                </StyledNickname>
+              </StyledInfoRow>
+              <StyledInfoRow>
+                <StyledCareInfo>
+                  {plant.location && <p>Location: {plant.location}</p>}
+                </StyledCareInfo>
+              </StyledInfoRow>
+              <StyledInfoRow>
+                <StyledCareInfo>
+                  {plant.acquiredDate && (
+                    <p>
+                      {`Acquired: 
+                    ${new Date(plant.acquiredDate).toLocaleDateString()}`}
+                    </p>
+                  )}
+                </StyledCareInfo>
+              </StyledInfoRow>
+              <StyledInfoRow>
+                <StyledCareInfo>
+                  {plant.notes && <p>Notes: {plant.notes}</p>}
+                </StyledCareInfo>
+              </StyledInfoRow>
+            </StyledInfoWrapper>
           </GeneralInformationWrapper>
         ) : (
           <StyledExtendedWrapper>
-            <StyledSectionHeadline>Personal Information</StyledSectionHeadline>
             <ExtendingButton onClick={() => setIsExtendedPersonalNotes(true)}>
               <CaretCircleDownIcon size={28} />
             </ExtendingButton>
+            <h3>Personal Information</h3>
           </StyledExtendedWrapper>
         )}
       </Wrapper>
-
-      {plant.nickname && <p>Nickname: {plant.nickname}</p>}
-      {plant.location && <p>Location: {plant.location}</p>}
-      {plant.acquiredDate && (
-        <p>Acquired: {new Date(plant.acquiredDate).toLocaleDateString()}</p>
-      )}
-      {plant.notes && <p>Notes: {plant.notes}</p>}
 
       {session && (
         <StyledDeleteButton
@@ -248,15 +243,43 @@ console.log(Month + " days") */
   );
 }
 
-const StyledHeadlinePlantName = styled.h2``
+const StyledNickname = styled.h4``;
 
-const StyledSectionHeadline = styled.h3``;
+const StyledInfoWrapper = styled.div`
+  padding: 0 8px;
+`;
+
+const StyledImageWrapper = styled.div`
+  padding-bottom: 8px;
+`;
+
+const StyledNameInfoWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+`;
+
+const StyledCursive = styled.p`
+  font-style: italic;
+  font-size: var(--font-size-sm);
+`;
+
+const StyledHeadlinePlantName = styled.h2`
+  justify-self: center;
+`;
+
+const StyledEditLink = styled(Link)`
+  color: var(--color-neutral-base);
+`;
 
 const StyledExtendedWrapper = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
 `;
 
 const ExtendingButton = styled.button`
+  color: var(--color-neutral-base);
   border: none;
   background-color: var(--color-secondary);
 `;
@@ -264,14 +287,16 @@ const ExtendingButton = styled.button`
 const Wrapper = styled.div`
   border: 1px solid var(--color-neutral-base);
   padding: 10px;
+
   border-radius: var(--radius-bg-md);
   color: var(--color-text-base);
 `;
 const GeneralInformationWrapper = styled.div``;
 
 const StyledHeadline = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 40px 2fr 40px;
+  padding-top: 8px;
   color: var(--color-text-base);
 `;
 
@@ -287,30 +312,28 @@ const StyledImage = styled(Image)`
   width: 100%;
   height: auto;
   display: block;
+  border-radius: var(--radius-bg-md);
 `;
 
 const NameWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  font-family: var(--font-headline);
+  padding: 8px 0;
   text-align: center;
   color: var(--color-text-base);
 `;
 
 const StyledPlantName = styled.h3`
-  font-size: var(--fs-xl);
-  margin-bottom: 8px;
+  font-size: var(--font-size-lg);
 `;
 
 const StyledBotanicalName = styled.p`
-  margin-top: 8px;
-  font-style: italic;
-  color: var(--color-gray-600);
-  font-size: var(--fs-sm);
+  color: var(--color-neutral-base);
+  font-size: var(--font-size-md);
 `;
 
-const StyledSection = styled.h4`
-  font-size: var(--fs-lg);
+const StyledSection = styled.p`
+font-size: var(--font-size-lg);
+font-weight: bold;
+padding-top: 12px;
 `;
 
 const StyledInfoRow = styled.div`
