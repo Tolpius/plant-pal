@@ -68,9 +68,8 @@ export default async function handler(request, response) {
           (token.role === "admin" && addOwned === "true")
         ) {
           const ownedPlant = new OwnedPlant({
-            ...request.body,
-            userId,
-            imageStoragePath: plant.imageStoragePath,
+            cataloguePlant: plant._id,
+            userId: token.id,
           });
           await ownedPlant.save();
           return response.status(200).json(ownedPlant);
