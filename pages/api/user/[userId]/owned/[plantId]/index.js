@@ -28,12 +28,19 @@ export default async function handler(request, response) {
       // GET: returns the owned plant of userId and plantId
       // HERE THE PLANT ID OF THE OWNED PLANT IS USED
       case "GET": {
-        const ownedPlant = await OwnedPlant.findById(plantId).populate("cataloguePlant").lean();
-                if (!ownedPlant)
+        const ownedPlant = await OwnedPlant.findById(plantId)
+          .populate("cataloguePlant")
+          .lean();
+        if (!ownedPlant)
           return response.status(404).json({ error: "Owned plant not found" });
         if (ownedPlant.imageStoragePath) {
           ownedPlant.storedImageUrl = await getSignedImageUrl(
             ownedPlant.imageStoragePath
+          );
+        }
+        if (ownedPlant.cataloguePlant?.imageStoragePath) {
+          ownedPlant.cataloguePlant.storedImageUrl = await getSignedImageUrl(
+            ownedPlant.cataloguePlant.imageStoragePath
           );
         }
         return response.status(200).json(ownedPlant);
@@ -53,7 +60,7 @@ export default async function handler(request, response) {
           acquiredDate: request.body.acquiredDate || null,
           userImageUrl: request.body.userImageUrl,
           notes: request.body.notes,
-                    imageStoragePath: plant.imageStoragePath,
+          imageStoragePath: plant.imageStoragePath,
         });
         await ownedPlant.save();
         await ownedPlant.populate("cataloguePlant");
@@ -81,8 +88,6 @@ export default async function handler(request, response) {
         if (ownedPlant.imageStoragePath) {
           await deleteFile(ownedPlant.imageStoragePath);
         }
-
-
 
         return response
           .status(200)

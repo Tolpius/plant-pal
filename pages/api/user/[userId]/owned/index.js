@@ -22,9 +22,9 @@ export default async function handler(request, response) {
     switch (request.method) {
       // GET: Get all ownedPlants belonging to the userId
       case "GET":
-        const plants = await OwnedPlant.find({ userId }).populate(
-          "cataloguePlant"
-        ).lean();
+        const plants = await OwnedPlant.find({ userId })
+          .populate("cataloguePlant")
+          .lean();
         if (!plants) {
           return response.status(404).json({ error: "ownedPlants not found" });
         }
@@ -36,10 +36,15 @@ export default async function handler(request, response) {
                   plant.imageStoragePath
                 );
               }
+              if (plant.cataloguePlant?.imageStoragePath) {
+                plant.cataloguePlant.storedImageUrl =
+                  await getSignedImageUrl(
+                    plant.cataloguePlant.imageStoragePath
+                  );
+              }
             })
           );
         }
-        console.log(plants);
         return response.status(200).json(plants);
       // POST: Add a completely new plant to catalogue
       case "POST": {
