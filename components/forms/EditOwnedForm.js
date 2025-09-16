@@ -140,7 +140,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
             name="imageUrl"
             type="text"
             required
-            defaultValue={isEdit ? defaultData.imageUrl : ""}
+            defaultValue={defaultData.imageUrl}
           />
         </Label>
       )}

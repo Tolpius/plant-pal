@@ -3,7 +3,7 @@ import User from "@/lib/db/models/User";
 import { getToken } from "next-auth/jwt";
 import OwnedPlant from "@/lib/db/models/OwnedPlant";
 import Plant from "@/lib/db/models/Plant";
-import { deleteFile, getSignedImageUrl } from "@/lib/s3/s3Client";
+import { deleteFile, getSignedImageUrl, moveFile } from "@/lib/s3/s3Client";
 import Reminder from "@/lib/db/models/Reminder";
 
 export default async function handler(request, response) {
@@ -74,7 +74,7 @@ export default async function handler(request, response) {
           editedPlant.imageStoragePath = `plants/${fileName}`;
           await moveFile(tempImageStoragePath, editedPlant.imageStoragePath);
         }
-
+        
         const updatedOwnedPlant = await OwnedPlant.findByIdAndUpdate(
           plantId,
           editedPlant,
