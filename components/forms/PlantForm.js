@@ -10,13 +10,10 @@ export default function PlantForm({ defaultData, onSubmit }) {
   const isEdit = !!defaultData;
   const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
-  const showPublicCheckbox =
-    router.pathname.startsWith("/plants/") ||
-    router.pathname.startsWith("/add");
-
+  //handleFileUpload with help from ChatGPT
   async function handleFileUpload(file) {
     try {
-      // 1. Erst Presigned URL vom Backend holen
+      // 1. Get presignedURL from backend
       const res = await fetch("/api/images/getPresignedUploadUrl", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -31,7 +28,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
 
       const { url, key } = await res.json();
 
-      // 2. File direkt an die S3 Presigned URL hochladen
+      // 2. Upload file directly to s3 backend
       const uploadRes = await fetch(url, {
         method: "PUT",
         body: file,
@@ -42,7 +39,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
 
       if (!uploadRes.ok) throw new Error("Upload to S3 failed");
 
-      // 3. Den Key merken, damit er später ins Form mitgeht
+      // 3. Save the key so API can find temp file and save it longterm
       setTempImagePath(key);
     } catch (error) {
       console.error(error);
@@ -89,7 +86,6 @@ export default function PlantForm({ defaultData, onSubmit }) {
       {session.user.role === "admin" && (
         <Fieldset>
           <legend>Admin Settings</legend>
-          {showPublicCheckbox && (
             <CheckboxLabel>
               <input
                 type="checkbox"
@@ -100,7 +96,6 @@ export default function PlantForm({ defaultData, onSubmit }) {
               />
               make public
             </CheckboxLabel>
-          )}
           {!isEdit && (
             <CheckboxLabel>
               <input
