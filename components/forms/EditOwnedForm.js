@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
+import PlantImage from "../PlantImage";
 
 export default function EditOwnedForm({ defaultData, onSubmit }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -230,7 +231,7 @@ const PlantInfo = styled.div`
   gap: 1rem;
 `;
 
-const StyledImage = styled.img`
+const StyledImage = styled(PlantImage)`
   width: 100px;
   height: 100px;
   object-fit: cover;
