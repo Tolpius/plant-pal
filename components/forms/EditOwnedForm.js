@@ -68,8 +68,10 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
 
       <PlantInfo>
         <StyledImage
-          src={defaultData.imageUrl}
+          plant={defaultData}
           alt={defaultData.cataloguePlant?.name}
+          height={"200"}
+          width={"200"}
         />
         <NameWrapper>
           <StyledPlantName>{defaultData.cataloguePlant?.name}</StyledPlantName>
