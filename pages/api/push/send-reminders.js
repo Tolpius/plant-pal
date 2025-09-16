@@ -7,7 +7,7 @@ import OwnedPlant from "@/db/models/OwnedPlant";
 import Plant from "@/db/models/Plant";
 
 export default async function handler(request, response) {
-  if (request.method !== "POST") return response.status(405).end();
+  if (request.method !== "GET") return response.status(405).end();
 
   await dbConnect();
 
@@ -19,7 +19,7 @@ export default async function handler(request, response) {
         select: "nickname cataloguePlant",
         populate: {
           path: "cataloguePlant",
-          model: Plant, 
+          model: Plant,
           select: "name",
         },
       })
