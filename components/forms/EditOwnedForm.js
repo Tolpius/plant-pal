@@ -55,7 +55,6 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
         <Input
           name="userImageUrl"
           type="text"
-          required
           defaultValue={isEdit ? defaultData.userImageUrl : ""}
         />
       </Label>
