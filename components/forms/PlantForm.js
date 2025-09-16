@@ -58,7 +58,7 @@ export default function PlantForm({ defaultData, onSubmit }) {
     const dataWithSeasons = { ...data, fertiliserSeasons };
 
     if (useUpload) {
-      if (!tempImagePath) {
+      if (!tempImagePath && !isEdit) {
         alert("Please upload an image!");
         return;
       }

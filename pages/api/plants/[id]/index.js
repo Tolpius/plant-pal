@@ -41,21 +41,31 @@ export default async function handler(request, response) {
         switch (request.method) {
           //Use PUT for Edit Plant
           case "PUT": {
-            const { addOwned, isPublic, ...editedPlant } = request.body;
+            const { addOwned, isPublic, tempImageStoragePath, ...editedPlant } =
+              request.body;
             //Admins can choose, if the plant will be public
             if (isPublic === "true") {
               editedPlant.isPublic = true;
             } else {
               editedPlant.isPublic = false;
             }
+            if (tempImageStoragePath) {
+              const fileName = tempImageStoragePath.replace(/^temp\//, "");
+              editedPlant.imageStoragePath = `plants/${fileName}`;
+              await moveFile(tempImageStoragePath, editedPlant.imageStoragePath);
+            }
             const plant = await Plant.findByIdAndUpdate(id, editedPlant, {
-              new: true,
+              new: false,
               runValidators: true,
             });
             if (!plant) {
               return response
                 .status(404)
                 .json({ success: false, message: "Plant not found" });
+            }
+            //If the image gets updated (either new s3 file or new URL) then delete the old s3 file
+            if((editedPlant.imageStoragePath && plant.imageStoragePath) || (editedPlant.imageUrl && plant.imageStoragePath)){
+              deleteFile(plant.imageStoragePath)
             }
             return response.status(200).json({ success: true, data: plant });
           }
