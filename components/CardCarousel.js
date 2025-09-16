@@ -17,9 +17,9 @@ export default function CardCarousel({ plant, grayScale }) {
         <StyledImage
           plant={plant}
           alt={plant.name ? `Image of ${plant.name}` : "Image of a plant"}
-          fill
+          fill={true}
           grayScale={grayScale}
-        />
+        />eigentl
       </CardWrapper>
     </StyledLink>
   );

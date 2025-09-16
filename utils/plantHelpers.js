@@ -5,7 +5,9 @@ export function normalisePlantData(plant) {
     botanicalName: plant.cataloguePlant?.botanicalName || plant.botanicalName,
     imageUrl:
       plant.userImageUrl || plant.cataloguePlant?.imageUrl || plant.imageUrl,
-      imagePath: asdasdasdasd;asdasdasd//TODO: ImagePath
+    imagePath: plant.imageStoragePath || plant.cataloguePlant?.imageStoragePath,
+    storedImageUrl:
+      plant.storedImageUrl || plant.cataloguePlant?.storedImageUrl,
     description: plant.cataloguePlant?.description || plant.description,
     lightNeed: plant.cataloguePlant?.lightNeed || plant.lightNeed,
     waterNeed: plant.cataloguePlant?.waterNeed || plant.waterNeed,
