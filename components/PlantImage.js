@@ -4,7 +4,7 @@ import Image from "next/image";
 const PlantImage = ({ plant, ...props }) => {
   const imageOptions = [
     plant?.storedImageUrl,
-    plant?.imageUrl,
+    plant?.userImageUrl,
     plant?.cataloguePlant?.storedImageUrl,
     plant?.cataloguePlant?.imageUrl,
     "/defaultImage.png",
