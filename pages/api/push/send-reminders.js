@@ -5,6 +5,7 @@ import webpush from "web-push";
 import { DateTime } from "luxon";
 import OwnedPlant from "@/db/models/OwnedPlant";
 import Plant from "@/db/models/Plant";
+import { normalisePlantData } from "@/utils/plantHelpers";
 
 export default async function handler(request, response) {
   if (request.method !== "GET") return response.status(405).end();
@@ -37,58 +38,58 @@ export default async function handler(request, response) {
     let notificationsSentAmount = 0;
 
     const now = DateTime.now().setZone("Europe/Berlin");
-    for (const reminder of allReminders) {
+
+    const dueReminders = allReminders.filter((reminder) => {
       const due = DateTime.fromJSDate(new Date(reminder.dueDate)).setZone(
         "Europe/Berlin"
       );
+      const [hour, minute] = reminder?.time?.split(":").map(Number) || [12, 0];
+      const reminderDateTime = due.set({ hour, minute });
+      return reminderDateTime <= now;
+    });
 
-      let reminderDateTime;
-      if (reminder.time) {
-        const [hour, minute] = reminder.time.split(":").map(Number);
-        reminderDateTime = due.set({ hour, minute });
-      } else {
-        reminderDateTime = due.set({ hour: 12, minute: 0 });
-      }
-      if (reminderDateTime >= now) continue;
+    const remindedUserIds = dueReminders.map((reminder) => {
+      return reminder.userId;
+    });
 
-      const subs = await Subscription.find({ userId: String(reminder.userId) });
+    const uniqueUserIds = remindedUserIds.filter(onlyUnique);
 
-      for (const subscription of subs) {
+    const allSubscriptions = await Subscription.find({
+      userId: { $in: uniqueUserIds },
+    });
+
+    for (const reminder of dueReminders) {
+      const subscriptionsForUser = allSubscriptions.filter(
+        (subscription) => reminder.userId === subscription.userId
+      );
+
+      for (const subscription of subscriptionsForUser) {
+        const pushSubscription = {
+          endpoint: subscription.endpoint,
+          keys: {
+            p256dh: subscription.p256dh,
+            auth: subscription.auth,
+          },
+        };
+        const dateTimeString = DateTime.fromJSDate(new Date(reminder.dueDate))
+          .setZone("Europe/Berlin")
+          .toFormat("dd. LLL yyyy 'at' HH:mm");
+
+        const plant = normalisePlantData(reminder.plantId);
+
+        const payload = {
+          title: "Plant Pal - Reminder",
+          body: `${reminder.title} your ${plant.name}\n${dateTimeString} `,
+          icon: "/icon.png",
+          url: "/reminders",
+          tag: reminder._id.toString(),
+        };
         try {
-          const pushSubscription = {
-            endpoint: subscription.endpoint,
-            keys: {
-              p256dh: subscription.p256dh,
-              auth: subscription.auth,
-            },
-          };
-
-          const dateTimeString = reminderDateTime.toFormat(
-            "dd. LLL yyyy 'at' HH:mm"
-          );
-
-          function getPlantLabel() {
-            const nickname = reminder.plantId?.nickname;
-            if (nickname && nickname.trim().length > 0) return nickname;
-            const name = reminder.plantId?.cataloguePlant?.name;
-            if (name && name.trim().length > 0) return name;
-            return "plant";
-          }
-
-          const plantLabel = getPlantLabel();
-
-          const payload = {
-            title: "Plant Pal - Reminder",
-            body: `${reminder.title} your ${plantLabel}\n${dateTimeString} `,
-            icon: "/icon.png",
-            url: "/reminders",
-            tag: reminder._id.toString(),
-          };
-
           await webpush.sendNotification(
             pushSubscription,
             JSON.stringify(payload)
           );
+
           notificationsSentAmount++;
         } catch (error) {
           if (error.statusCode === 410) {
@@ -105,4 +106,8 @@ export default async function handler(request, response) {
     console.error(error);
     return response.status(500).json({ error: error.message }).end();
   }
+}
+
+function onlyUnique(value, index, array) {
+  return array.indexOf(value) === index;
 }
