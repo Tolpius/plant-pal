@@ -60,7 +60,6 @@ export default async function handler(request, response) {
           acquiredDate: request.body.acquiredDate || null,
           userImageUrl: request.body.userImageUrl,
           notes: request.body.notes,
-          imageStoragePath: plant.imageStoragePath,
         });
         await ownedPlant.save();
         await ownedPlant.populate("cataloguePlant");
