@@ -67,11 +67,31 @@ export default async function handler(request, response) {
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "PUT": {
+        const { tempImageStoragePath, ...editedPlant } = request.body;
+
+        if (tempImageStoragePath) {
+          const fileName = tempImageStoragePath.replace(/^temp\//, "");
+          editedPlant.imageStoragePath = `plants/${fileName}`;
+          await moveFile(tempImageStoragePath, editedPlant.imageStoragePath);
+        }
+
         const updatedOwnedPlant = await OwnedPlant.findByIdAndUpdate(
           plantId,
-          request.body,
-          { new: true }
+          editedPlant,
+          { new: false }
         ).populate("cataloguePlant");
+        if (!updatedOwnedPlant) {
+          return response
+            .status(404)
+            .json({ success: false, message: "Plant not found" });
+        }
+        //If the image gets updated (either new s3 file or new URL) then delete the old s3 file
+        if (
+          (editedPlant.imageStoragePath && updatedOwnedPlant.imageStoragePath) ||
+          (editedPlant.imageUrl && updatedOwnedPlant.imageStoragePath)
+        ) {
+          deleteFile(updatedOwnedPlant.imageStoragePath);
+        }
         return response.status(200).json(updatedOwnedPlant);
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED

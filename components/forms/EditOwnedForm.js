@@ -3,11 +3,59 @@ import { useState } from "react";
 
 export default function EditOwnedForm({ defaultData, onSubmit }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [useUpload, setUseUpload] = useState(true);
+  const [tempImagePath, setTempImagePath] = useState("");
+
+  //handleFileUpload with help from ChatGPT
+  async function handleFileUpload(file) {
+    try {
+      // 1. Get presignedURL from backend
+      const res = await fetch("/api/images/getPresignedUploadUrl", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fileName: file.name,
+          mimeType: file.type,
+          folder: "temp",
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to get presigned URL");
+
+      const { url, key } = await res.json();
+
+      // 2. Upload file directly to s3 backend
+      const uploadRes = await fetch(url, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      if (!uploadRes.ok) throw new Error("Upload to S3 failed");
+
+      // 3. Save the key so API can find temp file and save it longterm
+      setTempImagePath(key);
+    } catch (error) {
+      console.error(error);
+      alert("Image upload failed.");
+    }
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
+
+    if (useUpload) {
+      data.tempImageStoragePath = tempImagePath;
+    } else {
+      if (!data.imageUrl.startsWith("https://images.unsplash.com")) {
+        alert("Image URL must start with https://images.unsplash.com/");
+        return;
+      }
+    }
 
     setIsSubmitting(true);
     await onSubmit(data);
@@ -50,13 +98,52 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
       </Label>
 
       <Label>
-        Image URL
-        <Input
-          name="userImageUrl"
-          type="text"
-          defaultValue={defaultData.userImageUr}
-        />
+        Do you want to upload your own image or give us an URL?
+        <ToggleContainer>
+          <span>URL</span>
+          <SwitchLabel>
+            <SwitchCheckbox
+              type="checkbox"
+              checked={useUpload}
+              onChange={() => setUseUpload(!useUpload)}
+            />
+            <SwitchSlider />
+          </SwitchLabel>
+          <span>Upload</span>
+        </ToggleContainer>
       </Label>
+      {useUpload ? (
+        <Label>
+          Upload Image
+          <Input
+            type="file"
+            name="imageFile"
+            accept="image/*"
+            onChange={(event) => {
+              const file = event.target.files[0];
+              if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                  // 5 MB in Bytes
+                  alert("File is too large! Max size is 5 MB.");
+                  event.target.value = ""; // reset input
+                  return;
+                }
+                handleFileUpload(file);
+              }
+            }}
+          />
+        </Label>
+      ) : (
+        <Label>
+          Image URL
+          <Input
+            name="imageUrl"
+            type="text"
+            required
+            defaultValue={isEdit ? defaultData.imageUrl : ""}
+          />
+        </Label>
+      )}
 
       <Label>
         Acquired Date
@@ -69,11 +156,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
 
       <Label>
         Notes
-        <Textarea
-          name="notes"
-          rows="4"
-          defaultValue={defaultData.notes}
-        />
+        <Textarea name="notes" rows="4" defaultValue={defaultData.notes} />
       </Label>
 
       <Button type="submit" disabled={isSubmitting}>
@@ -166,4 +249,58 @@ const StyledBotanicalName = styled.p`
   font-style: italic;
   margin: 0;
   color: var(--color-gray-600);
+`;
+
+const ToggleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+`;
+
+const SwitchLabel = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  margin: 0 0.5rem;
+`;
+
+const SwitchCheckbox = styled.input.attrs({ type: "checkbox" })`
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + span {
+    background-color: var(--color-primary);
+  }
+
+  &:checked + span:before {
+    transform: translateX(26px);
+  }
+`;
+
+const SwitchSlider = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-grey);
+  border-radius: 34px;
+  transition: 0.4s;
+
+  &:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+  }
 `;
