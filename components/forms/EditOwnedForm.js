@@ -3,7 +3,6 @@ import { useState } from "react";
 
 export default function EditOwnedForm({ defaultData, onSubmit }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const isEdit = !!defaultData;
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -37,7 +36,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
         <Input
           name="nickname"
           type="text"
-          defaultValue={isEdit ? defaultData.nickname : ""}
+          defaultValue={defaultData.nickname}
         />
       </Label>
 
@@ -46,7 +45,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
         <Input
           name="location"
           type="text"
-          defaultValue={isEdit ? defaultData.location : ""}
+          defaultValue={defaultData.location}
         />
       </Label>
 
@@ -55,7 +54,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
         <Input
           name="userImageUrl"
           type="text"
-          defaultValue={isEdit ? defaultData.userImageUrl : ""}
+          defaultValue={defaultData.userImageUr}
         />
       </Label>
 
@@ -64,7 +63,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
         <Input
           name="acquiredDate"
           type="date"
-          defaultValue={isEdit ? defaultData.acquiredDate?.split("T")[0] : ""}
+          defaultValue={defaultData.acquiredDate?.split("T")[0]}
         />
       </Label>
 
@@ -73,7 +72,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
         <Textarea
           name="notes"
           rows="4"
-          defaultValue={isEdit ? defaultData.notes : ""}
+          defaultValue={defaultData.notes}
         />
       </Label>
 
