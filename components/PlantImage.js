@@ -6,7 +6,7 @@ const PlantImage = ({ plant, ...props }) => {
     plant?.storedImageUrl,
     plant?.imageUrl,
     plant?.cataloguePlant?.storedImageUrl,
-    plant?.cataloguePlant?.imgaeUrl,
+    plant?.cataloguePlant?.imageUrl,
     "/defaultImage.png",
   ].filter(Boolean);
 
