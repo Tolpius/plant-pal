@@ -22,20 +22,18 @@ export default async function handler(request, response) {
     const now = DateTime.now().setZone("Europe/Berlin");
     let notificationsSentAmount = 0;
 
-    //Finde alle subscriptions:
-
+    // Finde alle subscriptions
     const allSubscriptions = await Subscription.find();
 
-    // uniqueUserId Collection aus subscriptions:
-
+    // Ein Nutzer hat eventuell mehrere Subscriptions.
+    // Findet alle einzigartigen userIds aus allen Subscriptions:
     const allSubscribedUsers = allSubscriptions.map(
       (subscription) => subscription.userId
     );
 
     const uniqueUserIds = allSubscribedUsers.filter(onlyUnique);
 
-    // 3. alle reminder die ne userId in der uniqueUserId collection haben
-
+    // Findet alle Reminder inklusive Plant-Details von Nutzern mit mindestens einer Subscription:
     const allReminders = await Reminder.find({ userId: { $in: uniqueUserIds } })
       .populate({
         path: "plantId",
@@ -45,17 +43,19 @@ export default async function handler(request, response) {
       })
       .lean();
 
-    // 4. reminder mit dueDate filtern
-
+    // Filtert nach allen Reminders mit dueDate+dueTime in der Vergangenheit:
     const dueReminders = allReminders.filter(
       (reminder) => getReminderDueDate(reminder) <= now
     );
 
+    // Bearbeitet jeden fälligen Reminder:
     for (const reminder of dueReminders) {
+      // Findet alle subscriptions des Users des Reminders um dorthin Notifications zu senden.
       const subscriptionsForUser = allSubscriptions.filter(
         (subscription) => reminder.userId === subscription.userId
       );
 
+      // Bearbeitet jede Subscription des Users:
       for (const subscription of subscriptionsForUser) {
         const pushSubscription = {
           endpoint: subscription.endpoint,
@@ -79,7 +79,7 @@ export default async function handler(request, response) {
           tag: reminder._id.toString(),
         };
 
-        // 5. reminder zu allen subs des users webpush´n
+        // Fälligen Reminder an eine Subscription des Users webpush´n
         try {
           await webpush.sendNotification(
             pushSubscription,
@@ -88,6 +88,7 @@ export default async function handler(request, response) {
 
           notificationsSentAmount++;
         } catch (error) {
+          // Falls laut Push-Service die Subscription nicht mehr besteht, wird die Subscription aus der Datenbank gelöscht.
           if (error.statusCode === 410) {
             await Subscription.deleteOne({ _id: subscription._id });
           } else {
