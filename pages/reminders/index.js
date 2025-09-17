@@ -157,7 +157,9 @@ export default function Reminders() {
           />
         ))
       ) : (
-        <p>No reminders for today</p>
+        <StyledNoReminderMessage>
+          No reminders for today
+        </StyledNoReminderMessage>
       )}
 
       <GroupTitle>Tomorrow</GroupTitle>
