@@ -1,6 +1,8 @@
 import dbConnect from "@/db/dbConnect";
 import Reminder from "@/db/models/Reminder";
 import Subscription from "@/db/models/Subscription";
+import OwnedPlant from "@/db/models/OwnedPlant";
+import Plant from "@/db/models/Plant";
 import webpush from "web-push";
 import { DateTime } from "luxon";
 import { normalisePlantData } from "@/utils/plantHelpers";
@@ -38,8 +40,10 @@ export default async function handler(request, response) {
     const allReminders = await Reminder.find({ userId: { $in: uniqueUserIds } })
       .populate({
         path: "plantId",
+        model: OwnedPlant,
         populate: {
           path: "cataloguePlant",
+          model: Plant,
         },
       })
       .lean();
