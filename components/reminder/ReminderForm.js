@@ -158,10 +158,11 @@ const Header = styled.div`
 
 const Title = styled.h2`
   text-align: center;
+  color: var(--color-neutral-base);
 `;
 
 const StyledLink = styled(Link)`
-  color: var(--color-black);
+  color: var(--color-neutral-base);
   cursor: pointer;
 `;
 
@@ -169,11 +170,13 @@ const IconButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  color: var(--color-neutral-base);
 `;
 
 const Label = styled.label`
   display: block;
   margin-bottom: 1rem;
+  color: var(--color-neutral-base);
 `;
 
 const Input = styled.input`
@@ -183,6 +186,8 @@ const Input = styled.input`
   border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
   margin-top: 0.3rem;
+  background-color: var(--color-secondary-dark);
+  color: var(--color-neutral-base);
 `;
 
 const Select = styled.select`
@@ -192,6 +197,8 @@ const Select = styled.select`
   border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
   margin-top: 0.3rem;
+  background-color: var(--color-secondary-dark);
+  color: var(--color-neutral-base);
 `;
 
 const Textarea = styled.textarea`
@@ -201,6 +208,8 @@ const Textarea = styled.textarea`
   margin-top: 0.3rem;
   border: 1px solid var(--color-grey);
   border-radius: var(--radius-md);
+  background-color: var(--color-secondary-dark);
+  color: var(--color-neutral-base);
 `;
 
 const QuickActionsContainer = styled.div`
@@ -215,6 +224,7 @@ const QuickActionLabel = styled.label`
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   user-select: none;
+  color: var(--color-neutral-base);
 
   input {
     display: none;
