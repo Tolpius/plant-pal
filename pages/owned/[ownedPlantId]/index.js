@@ -187,9 +187,7 @@ export default function DetailsPage() {
                       plant and add some.
                     </p>
                   )}
-                <StyledNickname>
-                  {plant.nickname && <p>Nickname: {plant.nickname}</p>}
-                </StyledNickname>
+                <h4>{plant.nickname && <p>Nickname: {plant.nickname}</p>}</h4>
               </StyledInfoRow>
               <StyledInfoRow>
                 <StyledCareInfo>
@@ -242,8 +240,6 @@ export default function DetailsPage() {
   );
 }
 
-const StyledNickname = styled.h4``;
-
 const StyledInfoWrapper = styled.div`
   padding: 0 8px;
 `;
@@ -286,10 +282,10 @@ const ExtendingButton = styled.button`
 const Wrapper = styled.div`
   border: 1px solid var(--color-neutral-base);
   padding: 10px;
-
   border-radius: var(--radius-bg-md);
   color: var(--color-text-base);
 `;
+
 const GeneralInformationWrapper = styled.div``;
 
 const StyledHeadline = styled.div`
@@ -330,9 +326,9 @@ const StyledBotanicalName = styled.p`
 `;
 
 const StyledSection = styled.p`
-font-size: var(--font-size-lg);
-font-weight: bold;
-padding-top: 12px;
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  padding-top: 12px;
 `;
 
 const StyledInfoRow = styled.div`

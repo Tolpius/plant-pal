@@ -61,9 +61,10 @@ export default function Catalogue() {
         withOwnedFilter={true}
         values={filters}
       />
-      <AddLink href={"/add"}>Didnt find your Plant? Create your own!</AddLink>
 
       <SearchPlant onSearch={handleSearchResult} value={query} />
+      <AddLink href={"/add"}>Didnt find your Plant? Create your own!</AddLink>
+
       {showPlantList && (
         <>
           <PlantCounter length={filteredPlantList.length} />
