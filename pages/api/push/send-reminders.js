@@ -3,9 +3,7 @@ import Reminder from "@/db/models/Reminder";
 import Subscription from "@/db/models/Subscription";
 import webpush from "web-push";
 import { DateTime } from "luxon";
-import OwnedPlant from "@/db/models/OwnedPlant";
-import Plant from "@/db/models/Plant";
-import { normalisePlantData } from "@/utils/plantHelpers";
+import { normalisePlantData, getReminderDueDate } from "@/utils/plantHelpers";
 
 export default async function handler(request, response) {
   if (request.method !== "GET") return response.status(405).end();
@@ -13,7 +11,32 @@ export default async function handler(request, response) {
   await dbConnect();
 
   try {
-    const allReminders = await Reminder.find()
+    const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+    const privateKey = process.env.VAPID_PRIVATE_KEY;
+    if (!publicKey || !privateKey) {
+      console.error("VAPID keys missing");
+      return response.status(500).json({});
+    }
+    webpush.setVapidDetails("mailto:joh.hammerl@web.de", publicKey, privateKey);
+
+    const now = DateTime.now().setZone("Europe/Berlin");
+    let notificationsSentAmount = 0;
+
+    //Finde alle subscriptions:
+
+    const allSubscriptions = await Subscription.find();
+
+    // uniqueUserId Collection aus subscriptions:
+
+    const allSubscribedUsers = allSubscriptions.map(
+      (subscription) => subscription.userId
+    );
+
+    const uniqueUserIds = allSubscribedUsers.filter(onlyUnique);
+
+    // 3. alle reminder die ne userId in der uniqueUserId collection haben
+
+    const allReminders = await Reminder.find({ userId: { $in: uniqueUserIds } })
       .populate({
         path: "plantId",
         populate: {
@@ -22,37 +45,11 @@ export default async function handler(request, response) {
       })
       .lean();
 
-    const publicKey = process.env.VAPID_PUBLIC_KEY;
-    const privateKey = process.env.VAPID_PRIVATE_KEY;
-    if (!publicKey || !privateKey) {
-      console.error("VAPID keys missing");
-      return response.status(500).json({});
-    }
+    // 4. reminder mit dueDate filtern
 
-    webpush.setVapidDetails("mailto:joh.hammerl@web.de", publicKey, privateKey);
-
-    let notificationsSentAmount = 0;
-
-    const now = DateTime.now().setZone("Europe/Berlin");
-
-    const dueReminders = allReminders.filter((reminder) => {
-      const due = DateTime.fromJSDate(new Date(reminder.dueDate)).setZone(
-        "Europe/Berlin"
-      );
-      const [hour, minute] = reminder?.time?.split(":").map(Number) || [12, 0];
-      const reminderDateTime = due.set({ hour, minute });
-      return reminderDateTime <= now;
-    });
-
-    const remindedUserIds = dueReminders.map((reminder) => {
-      return reminder.userId;
-    });
-
-    const uniqueUserIds = remindedUserIds.filter(onlyUnique);
-
-    const allSubscriptions = await Subscription.find({
-      userId: { $in: uniqueUserIds },
-    });
+    const dueReminders = allReminders.filter(
+      (reminder) => getReminderDueDate(reminder) <= now
+    );
 
     for (const reminder of dueReminders) {
       const subscriptionsForUser = allSubscriptions.filter(
@@ -67,7 +64,8 @@ export default async function handler(request, response) {
             auth: subscription.auth,
           },
         };
-        const dateTimeString = DateTime.fromJSDate(new Date(reminder.dueDate))
+
+        const dueDateTimeString = getReminderDueDate(reminder)
           .setZone("Europe/Berlin")
           .toFormat("dd. LLL yyyy 'at' HH:mm");
 
@@ -75,11 +73,13 @@ export default async function handler(request, response) {
 
         const payload = {
           title: "Plant Pal - Reminder",
-          body: `${reminder.title} your ${plant.name}\n${dateTimeString} `,
+          body: `${reminder.title} your ${plant.name}\n${dueDateTimeString} `,
           icon: "/icon.png",
           url: "/reminders",
           tag: reminder._id.toString(),
         };
+
+        // 5. reminder zu allen subs des users webpush´n
         try {
           await webpush.sendNotification(
             pushSubscription,
