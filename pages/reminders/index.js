@@ -51,15 +51,19 @@ function groupReminders(reminders) {
 
 export default function Reminders() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const userId = session?.user?.id;
-  const { data: reminders, error } = useSWR(
-    userId ? `/api/user/${userId}/reminders` : null
-  );
+  const {
+    data: reminders,
+    error,
+    isLoading: remindersIsLoading,
+  } = useSWR(userId ? `/api/user/${userId}/reminders` : null);
 
-  const { data: plants, error: plantsError } = useSWR(
-    userId ? `/api/user/${userId}/owned` : null
-  );
+  const {
+    data: plants,
+    error: plantsError,
+    isLoading: plantsIsLoading,
+  } = useSWR(userId ? `/api/user/${userId}/owned` : null);
 
   const groupedReminders = useMemo(
     () => (reminders ? groupReminders(reminders) : []),
@@ -126,6 +130,8 @@ export default function Reminders() {
     requestNotificationPermission();
   });
 
+  if (plantsIsLoading || remindersIsLoading || status === "loading")
+    return <p>Loading...</p>;
   if (error) return <div>Failed to load reminders: {error.message}</div>;
   if (plantsError) return <div>Failed to load plants</div>;
   if (!reminders) return <div>Loading...</div>;
