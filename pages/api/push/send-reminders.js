@@ -20,6 +20,15 @@ export default async function handler(request, response) {
       console.error("VAPID keys missing");
       return response.status(500).json({});
     }
+    if (process.env.VERCEL_ENV !== "production")
+      return response
+        .status(403)
+        .json({
+          error: "forbidden",
+          message: "This endpoint is only available in production environment",
+        })
+        .end();
+
     webpush.setVapidDetails("mailto:joh.hammerl@web.de", publicKey, privateKey);
 
     const now = DateTime.now().setZone("Europe/Berlin");
