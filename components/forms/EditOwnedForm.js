@@ -29,7 +29,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
 
       <PlantInfo>
         <StyledImage
-          src={defaultData.cataloguePlant?.imageUrl}
+          src={defaultData.userImageUrl || defaultData.cataloguePlant?.imageUrl}
           alt={defaultData.cataloguePlant?.name}
         />
         <NameWrapper>
