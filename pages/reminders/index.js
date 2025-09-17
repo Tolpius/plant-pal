@@ -62,7 +62,7 @@ export default function Reminders() {
   );
 
   const groupedReminders = useMemo(
-    () => (reminders ? groupReminders(reminders) : {}),
+    () => (reminders ? groupReminders(reminders) : []),
     [reminders]
   );
 
