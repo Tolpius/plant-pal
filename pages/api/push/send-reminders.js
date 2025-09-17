@@ -3,7 +3,8 @@ import Reminder from "@/db/models/Reminder";
 import Subscription from "@/db/models/Subscription";
 import webpush from "web-push";
 import { DateTime } from "luxon";
-import { normalisePlantData, getReminderDueDate } from "@/utils/plantHelpers";
+import { normalisePlantData } from "@/utils/plantHelpers";
+import { getReminderDueDate } from "@/utils/reminderHelpers";
 
 export default async function handler(request, response) {
   if (request.method !== "GET") return response.status(405).end();
