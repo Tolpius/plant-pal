@@ -7,8 +7,8 @@ import PlantForm from "@/components/forms/PlantForm";
 
 export default function Add() {
   const router = useRouter();
-  const {data: session} = useSession();
-  const userId = session?.data?.user?.id;
+  const { data: session, status: sessionStatus } = useSession();
+  const userId = session?.user?.id;
   async function addPlant(plant) {
     try {
       const response = await fetch(`/api/user/${userId}/owned`, {
@@ -25,7 +25,11 @@ export default function Add() {
 
       const newPlant = await response.json();
       if (session?.user?.role === "admin") {
-        toast.success(`New Plant has been added to catalogue and is marked as ${newPlant.isPublic ? "Public" : "Private"}`);
+        toast.success(
+          `New Plant has been added to catalogue and is marked as ${
+            newPlant.isPublic ? "Public" : "Private"
+          }`
+        );
       } else {
         toast.success(
           "Your plant has been added to your list! An admin will review your plant and might add it to the catalogue."
@@ -36,10 +40,11 @@ export default function Add() {
       toast.error("Failed to add plant. Please try again.");
     }
   }
+  if (sessionStatus === "loading") return <p>Loading...</p>;
 
   return (
     <>
-      <BackButton/>
+      <BackButton />
       <PlantForm onSubmit={addPlant} />
     </>
   );
