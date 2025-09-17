@@ -121,7 +121,9 @@ export default function Reminders() {
           />
         ))
       ) : (
-        <p>No reminders for tomorrow</p>
+        <StyledNoReminderMessage>
+          No reminders for tomorrow
+        </StyledNoReminderMessage>
       )}
 
       {Object.entries(otherReminders).map(([groupName, items]) =>
@@ -151,10 +153,11 @@ const Header = styled.div`
 
 const Title = styled.h1`
   text-align: center;
+  color: var(--color-neutral-base);
 `;
 
 const StyledLink = styled(Link)`
-  color: var(--color-black);
+  color: var(--color-neutral-base);
   cursor: pointer;
 `;
 
@@ -168,4 +171,9 @@ const AddIcon = styled(PlusCircleIcon)`
 const GroupTitle = styled.h2`
   margin-top: 20px;
   margin-bottom: 10px;
+  color: var(--color-neutral-base);
+`;
+
+const StyledNoReminderMessage = styled.p`
+  color: var(--color-neutral-base);
 `;
