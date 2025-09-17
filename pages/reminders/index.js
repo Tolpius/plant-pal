@@ -1,12 +1,12 @@
 import useSWR, { mutate } from "swr";
 import styled from "styled-components";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-
 import ReminderCard from "@/components/reminder/ReminderCard";
 import { PlusCircleIcon } from "@phosphor-icons/react";
 import Link from "next/link";
+import urlBase64ToUint8Array from "@/utils/urlBase64";
 
 function groupReminders(reminders) {
   const today = new Date();
@@ -62,7 +62,7 @@ export default function Reminders() {
   );
 
   const groupedReminders = useMemo(
-    () => (reminders ? groupReminders(reminders) : {}),
+    () => (reminders ? groupReminders(reminders) : []),
     [reminders]
   );
 
@@ -80,6 +80,51 @@ export default function Reminders() {
       false
     );
   };
+
+  useEffect(() => {
+    async function requestNotificationPermission() {
+      if (!window.Notification) {
+        return;
+      }
+
+      if (!navigator.serviceWorker || !window.PushManager) {
+        return;
+      }
+
+      if (Notification.permission !== "default") {
+        return;
+      }
+
+      await Notification.requestPermission();
+
+      if (Notification.permission !== "granted") {
+        console.log("Notifications are blocked by the user.");
+        return;
+      }
+      const publicKeyArray = urlBase64ToUint8Array(
+        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+      );
+
+      const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+      const existingSubscription =
+        await serviceWorkerRegistration.pushManager.getSubscription();
+      if (!existingSubscription) return;
+      const subscription =
+        await serviceWorkerRegistration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: publicKeyArray,
+        });
+      const response = await fetch("/api/push/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subscription),
+      });
+    }
+
+    requestNotificationPermission();
+  });
 
   if (error) return <div>Failed to load reminders: {error.message}</div>;
   if (plantsError) return <div>Failed to load plants</div>;
