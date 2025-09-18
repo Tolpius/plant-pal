@@ -34,7 +34,7 @@ export default function Catalogue() {
 
   const filteredPlantList = normalisedList.filter((plant) => {
     const isOwned = ownedPlantIds?.some(
-      (blossum) => blossum.cataloguePlant === plant._id
+      (blossum) => blossum.cataloguePlant.toString() === plant._id.toString()
     );
     if (isOwned && filters.hideOwned) return false;
     const matchesLight =
