@@ -24,7 +24,7 @@ const GlobalStyles = createGlobalStyle`
    
   :root {
     --color-primary: #3B7A57;
-    --color-primary-light: #74C69D;
+    --color-primary-light: #88bb9aff;
     --color-primary-dark: #2D5D42;
 
     --color-secondary: #F5F1E6;
@@ -75,8 +75,8 @@ ${(props) =>
   props.isDarkMode &&
   css`
     :root {
-      --color-primary: #74c69d;
-      --color-primary-light: #a8e6cf;
+      --color-primary: #6e7571ff;
+      --color-primary-light: #aeafafff;
       --color-primary-dark: #3b7a57;
 
       --color-secondary: #292929ff;
@@ -88,7 +88,7 @@ ${(props) =>
 
       --color-neutral-base: #e0e0e0;
       --color-neutral-medium: #a0a0a0;
-      --color-neutral-highlight: #74c69d;
+      --color-neutral-highlight: #6e7571ff;
 
       --color-text-white: #ffffff;
       --color-text-base: #f5f5f5;
