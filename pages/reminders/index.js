@@ -32,20 +32,21 @@ function groupReminders(reminders) {
     Later: [],
   };
 
-  reminders.forEach((reminder) => {
-    const due = new Date(reminder.dueDate);
-    due.setHours(0, 0, 0, 0);
+  if (reminders) {
+    reminders.forEach((reminder) => {
+      const due = new Date(reminder.dueDate);
+      due.setHours(0, 0, 0, 0);
 
-    if (due <= today) groups.Today.push(reminder);
-    else if (due.getTime() === tomorrow.getTime())
-      groups.Tomorrow.push(reminder);
-    else if (due > tomorrow && due <= endOfThisWeek)
-      groups["This Week"].push(reminder);
-    else if (due >= startOfNextWeek && due <= endOfNextWeek)
-      groups["Next Week"].push(reminder);
-    else groups.Later.push(reminder);
-  });
-
+      if (due <= today) groups.Today.push(reminder);
+      else if (due.getTime() === tomorrow.getTime())
+        groups.Tomorrow.push(reminder);
+      else if (due > tomorrow && due <= endOfThisWeek)
+        groups["This Week"].push(reminder);
+      else if (due >= startOfNextWeek && due <= endOfNextWeek)
+        groups["Next Week"].push(reminder);
+      else groups.Later.push(reminder);
+    });
+  }
   return groups;
 }
 
