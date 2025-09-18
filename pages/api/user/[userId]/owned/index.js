@@ -35,25 +35,30 @@ export default async function handler(request, response) {
         if (token.role === "admin" && isPublic === "true") {
           newPlant.isPublic = true;
         }
+
         const plant = await Plant.create(newPlant);
+
         //Admins can choose, wether the plant will be added to their own plants
         if (
           token.role === "user" ||
           (token.role === "admin" && addOwned === "true")
         ) {
           const ownedPlant = new OwnedPlant({
-            ...request.body,
             userId,
+            cataloguePlant: plant._id,
           });
           await ownedPlant.save();
+
           return response.status(200).json(ownedPlant);
         }
+
         return response.status(200).json(plant);
       }
       default:
         return response.status(405).json("Method not allowed");
     }
   } catch (error) {
+    console.error(error);
     response.status(500).json({ success: false, error: error.message });
   }
 }

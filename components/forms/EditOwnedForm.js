@@ -10,6 +10,14 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
+    if (
+      data.userImageUrl &&
+      !data.userImageUrl.startsWith("https://images.unsplash.com")
+    ) {
+      alert("Image URL must start with https://images.unsplash.com/");
+      return;
+    }
+
     setIsSubmitting(true);
     await onSubmit(data);
     setIsSubmitting(false);
@@ -21,7 +29,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
 
       <PlantInfo>
         <StyledImage
-          src={defaultData.imageUrl}
+          src={defaultData.userImageUrl || defaultData.cataloguePlant?.imageUrl}
           alt={defaultData.cataloguePlant?.name}
         />
         <NameWrapper>
@@ -55,7 +63,6 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
         <Input
           name="userImageUrl"
           type="text"
-          required
           defaultValue={isEdit ? defaultData.userImageUrl : ""}
         />
       </Label>
