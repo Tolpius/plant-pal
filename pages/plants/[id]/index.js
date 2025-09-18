@@ -5,7 +5,8 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-
+import OwnedButton from "@/components/OwnedButton";
+import OwnedCounter from "@/components/counters/OwnedCounter";
 import { GearIcon } from "@phosphor-icons/react";
 
 import BackButton from "@/components/BackButton";
@@ -37,10 +38,15 @@ export default function DetailsPage() {
   const { id } = router.query;
   const from = router.query.from;
   const { data: plant, isLoading, error } = useSWR(`/api/plants/${id}`);
+  const {
+    data: count,
+    isLoading: countOwnedIsLoading,
+    mutate: mutateCount,
+  } = useSWR(`/api/plants/${plant?._id}/countowned`);
   const [showPopUp, setShowPopUp] = useState(false);
   const { data: session } = useSession();
 
-  if (isLoading || !isReady) {
+  if (isLoading || countOwnedIsLoading || !isReady) {
     return <h2>Loading...</h2>;
   }
   if (error || !plant) {
@@ -49,6 +55,28 @@ export default function DetailsPage() {
 
   if (plant.error) return <>Error loading plant: {plant.error}</>;
   const seasons = plant.fertiliserSeasons;
+
+  async function handleAddOwned() {
+    if (!session || !plant._id) return;
+
+    const previousCount = count;
+    mutateCount(previousCount + 1, false);
+
+    try {
+      const fetchUrl = `/api/user/${session.user.id}/owned/${plant._id}`;
+      const fetchOptions = {
+        method: "POST",
+      };
+      const response = await fetch(fetchUrl, fetchOptions);
+      if (!response.ok) {
+        toast.error("Error: Failed to add Plant.");
+      } else toast.success("Plant added.");
+    } catch (error) {
+      toast.error("Error: Faild to add Plant.");
+    } finally {
+      mutateCount();
+    }
+  }
 
   async function deletePlant() {
     const response = await fetch(`/api/plants/${id}`, { method: "DELETE" });
@@ -124,6 +152,11 @@ export default function DetailsPage() {
           ))}
         </StyledInfoRow>
       </Wrapper>
+      <OwnedCounter length={count || 0} />
+      <OwnedButton
+        onAddOwned={handleAddOwned}
+        aria-label={`Add plant to owned for ${plant.name}`}
+      />
 
       {session?.user?.role === "admin" && (
         <StyledDeleteButton
@@ -173,7 +206,6 @@ const StyledDeleteButton = styled.button`
   color: var(--color-text-white);
   border-radius: var(--radius-sm);
   height: 30px;
-  margin-top: 30px;
 `;
 
 const StyledImage = styled(Image)`
@@ -203,6 +235,7 @@ const Wrapper = styled.div`
   padding: 10px;
   border-radius: var(--radius-bg-md);
   color: var(--color-text-base);
+  margin-bottom: 30px;
 `;
 
 const StyledSection = styled.h4`

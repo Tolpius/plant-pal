@@ -23,12 +23,13 @@ export default function OwnedButton({ onAddOwned }) {
 const StyledOwnedButton = styled.button`
   position: relative;
   display: inline-flex;
+  justify-content: center;
   font-size: 1.25rem;
   border-width: 1px;
   width: auto;
   height: auto;
-  background: var(--color-primary-light);
-  border-radius: 3px;
+  background: var(--color-neutral-highlight);
+  border-radius: var(--radius-sm);
   padding: var(--padding-small);
   z-index: 2;
   &:hover {

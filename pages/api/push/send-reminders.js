@@ -34,6 +34,8 @@ export default async function handler(request, response) {
     const now = DateTime.now().setZone("Europe/Berlin");
     let notificationsSentAmount = 0;
 
+
+    
     // Finde alle subscriptions
     const allSubscriptions = await Subscription.find();
 
