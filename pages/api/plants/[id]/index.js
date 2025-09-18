@@ -1,5 +1,7 @@
 import dbConnect from "@/db/dbConnect";
 import Plant from "@/db/models/Plant";
+import OwnedPlant from "@/db/models/OwnedPlant";
+import Reminder from "@/db/models/Reminder";
 import { getToken } from "next-auth/jwt";
 
 export default async function handler(request, response) {
@@ -67,7 +69,9 @@ export default async function handler(request, response) {
 
               const ownedPlants = await OwnedPlant.find({ cataloguePlant: id });
               if (ownedPlants.length > 0) {
-                const ownedPlantIds = ownedPlants.map((ownedPlant) => ownedPlant._id);
+                const ownedPlantIds = ownedPlants.map(
+                  (ownedPlant) => ownedPlant._id
+                );
                 await Reminder.deleteMany({ plantId: { $in: ownedPlantIds } });
                 await OwnedPlant.deleteMany({ cataloguePlant: id });
               }
