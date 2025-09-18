@@ -3,7 +3,7 @@ import OwnedPlant from "@/lib/db/models/OwnedPlant";
 import { getToken } from "next-auth/jwt";
 import Plant from "@/lib/db/models/Plant";
 import { moveFile } from "@/lib/s3/s3Client";
-import { getSignedImageUrl } from "@/lib/s3/s3Client";
+import generateImageUrls from "@/lib/s3/generateImageUrls";
 export default async function handler(request, response) {
   const { userId } = request.query;
   const token = await getToken({
@@ -28,24 +28,8 @@ export default async function handler(request, response) {
         if (!plants) {
           return response.status(404).json({ error: "ownedPlants not found" });
         }
-        if (plants && plants.length > 0) {
-          await Promise.all(
-            plants.map(async (plant) => {
-              if (plant.imageStoragePath) {
-                plant.storedImageUrl = await getSignedImageUrl(
-                  plant.imageStoragePath
-                );
-              }
-              if (plant.cataloguePlant?.imageStoragePath) {
-                plant.cataloguePlant.storedImageUrl =
-                  await getSignedImageUrl(
-                    plant.cataloguePlant.imageStoragePath
-                  );
-              }
-            })
-          );
-        }
-        return response.status(200).json(plants);
+        const plantsWithUrl = await generateImageUrls(plants);
+        return response.status(200).json(plantsWithUrl);
       // POST: Add a completely new plant to catalogue
       case "POST": {
         const { addOwned, isPublic, tempImageStoragePath, ...newPlant } =
@@ -80,6 +64,7 @@ export default async function handler(request, response) {
         return response.status(405).json("Method not allowed");
     }
   } catch (error) {
+    console.error(error);
     response.status(500).json({ success: false, error: error.message });
   }
 }

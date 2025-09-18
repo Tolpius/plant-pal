@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/db/dbConnect";
 import Plant from "@/lib/db/models/Plant";
-import { getSignedImageUrl } from "@/lib/s3/s3Client";
+import generateImageUrls from "@/lib/s3/generateImageUrls";
 export default async function handler(request, response) {
   try {
     await dbConnect();
@@ -8,18 +8,8 @@ export default async function handler(request, response) {
       case "GET": {
         const plants = await Plant.find().lean();
         const publicPlants = plants.filter((plant) => plant.isPublic === true);
-        if (publicPlants && publicPlants.length > 0) {
-          await Promise.all(
-            publicPlants.map(async (plant) => {
-              if (plant.imageStoragePath) {
-                plant.storedImageUrl = await getSignedImageUrl(
-                  plant.imageStoragePath
-                );
-              }
-            })
-          );
-        }
-        return response.status(200).json(publicPlants);
+        const publicPlantsWithUrls = await generateImageUrls(publicPlants);
+        return response.status(200).json(publicPlantsWithUrls);
       }
       default: {
         return response

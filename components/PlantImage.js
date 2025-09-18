@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-const PlantImage = ({ plant, ...props }) => {
+export default function PlantImage ({ plant, ...props }) {
   const imageOptions = [
     plant?.storedImageUrl,
     plant?.userImageUrl,
@@ -30,4 +30,3 @@ const PlantImage = ({ plant, ...props }) => {
   );
 };
 
-export default PlantImage;

@@ -22,13 +22,13 @@ export default async function handler(request, response) {
         .json({ error: "fileName and mimeType are required" });
     }
 
-    const { url, key } = await getSignedUploadUrl({
+    const uploadData = await getSignedUploadUrl({
       fileName,
       mimeType,
       folder,
     });
 
-    response.status(200).json({ url, key });
+    response.status(200).json(uploadData);
   } catch (error) {
     console.error("Error generating presigned URL:", error);
     response.status(500).json({ error: "Failed to generate presigned URL" });

@@ -1,51 +1,13 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-
+import { useFileUpload } from "@/hooks/useFileUpload";
 export default function PlantForm({ defaultData, onSubmit }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [useUpload, setUseUpload] = useState(true);
-  const [tempImagePath, setTempImagePath] = useState("");
   const isEdit = !!defaultData;
   const { data: session, status: sessionStatus } = useSession();
-  const router = useRouter();
-  //handleFileUpload with help from ChatGPT
-  async function handleFileUpload(file) {
-    try {
-      // 1. Get presignedURL from backend
-      const res = await fetch("/api/images/getPresignedUploadUrl", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fileName: file.name,
-          mimeType: file.type,
-          folder: "temp",
-        }),
-      });
-
-      if (!res.ok) throw new Error("Failed to get presigned URL");
-
-      const { url, key } = await res.json();
-
-      // 2. Upload file directly to s3 backend
-      const uploadRes = await fetch(url, {
-        method: "PUT",
-        body: file,
-        headers: {
-          "Content-Type": file.type,
-        },
-      });
-
-      if (!uploadRes.ok) throw new Error("Upload to S3 failed");
-
-      // 3. Save the key so API can find temp file and save it longterm
-      setTempImagePath(key);
-    } catch (error) {
-      console.error(error);
-      alert("Image upload failed.");
-    }
-  }
+  const { tempImagePath, isUploading, handleFileUpload } = useFileUpload();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -86,16 +48,16 @@ export default function PlantForm({ defaultData, onSubmit }) {
       {session.user.role === "admin" && (
         <Fieldset>
           <legend>Admin Settings</legend>
-            <CheckboxLabel>
-              <input
-                type="checkbox"
-                name="isPublic"
-                value="true"
-                defaultChecked={isEdit && defaultData.isPublic}
-                aria-label="Make public"
-              />
-              make public
-            </CheckboxLabel>
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="isPublic"
+              value="true"
+              defaultChecked={isEdit && defaultData.isPublic}
+              aria-label="Make public"
+            />
+            make public
+          </CheckboxLabel>
           {!isEdit && (
             <CheckboxLabel>
               <input
@@ -153,17 +115,17 @@ export default function PlantForm({ defaultData, onSubmit }) {
             accept="image/*"
             onChange={(event) => {
               const file = event.target.files[0];
-              if (file) {
-                if (file.size > 5 * 1024 * 1024) {
-                  // 5 MB in Bytes
-                  alert("File is too large! Max size is 5 MB.");
-                  event.target.value = ""; // reset input
-                  return;
-                }
-                handleFileUpload(file);
+              if (!file) return;
+              if (file.size > 5 * 1024 * 1024) {
+                // 5 MB in Bytes
+                alert("File is too large! Max size is 5 MB.");
+                event.target.value = ""; // reset input
+                return;
               }
+              handleFileUpload(file);
             }}
           />
+          {isUploading && <p>Uploading image...</p>}
         </Label>
       ) : (
         <Label>
