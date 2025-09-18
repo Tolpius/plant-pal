@@ -32,7 +32,7 @@ function groupReminders(reminders) {
     Later: [],
   };
 
-  if (reminders) {
+  if (Array.isArray(reminders)) {
     reminders.forEach((reminder) => {
       const due = new Date(reminder.dueDate);
       due.setHours(0, 0, 0, 0);
@@ -67,7 +67,7 @@ export default function Reminders() {
   } = useSWR(userId ? `/api/user/${userId}/owned` : null);
 
   const groupedReminders = useMemo(
-    () => (reminders ? groupReminders(reminders) : {}),
+    () => groupReminders(reminders ?? []),
     [reminders]
   );
 
