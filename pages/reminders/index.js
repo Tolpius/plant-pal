@@ -67,7 +67,7 @@ export default function Reminders() {
   } = useSWR(userId ? `/api/user/${userId}/owned` : null);
 
   const groupedReminders = useMemo(
-    () => (reminders ? groupReminders(reminders) : []),
+    () => (reminders ? groupReminders(reminders) : {}),
     [reminders]
   );
 
@@ -111,14 +111,14 @@ export default function Reminders() {
       );
 
       const serviceWorkerRegistration = await navigator.serviceWorker.ready;
-      const existingSubscription =
+      let subscription =
         await serviceWorkerRegistration.pushManager.getSubscription();
-      if (!existingSubscription) return;
-      const subscription =
-        await serviceWorkerRegistration.pushManager.subscribe({
+      if (!subscription) {
+        subscription = await serviceWorkerRegistration.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: publicKeyArray,
         });
+      }
       const response = await fetch("/api/push/subscribe", {
         method: "POST",
         headers: {
@@ -127,6 +127,8 @@ export default function Reminders() {
         body: JSON.stringify(subscription),
       });
     }
+
+
 
     requestNotificationPermission();
   });
