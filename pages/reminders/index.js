@@ -67,7 +67,7 @@ export default function Reminders() {
   } = useSWR(userId ? `/api/user/${userId}/owned` : null);
 
   const groupedReminders = useMemo(
-    () => (reminders ? groupReminders(reminders) : {}),
+    () => groupReminders(reminders ?? []),
     [reminders]
   );
 
