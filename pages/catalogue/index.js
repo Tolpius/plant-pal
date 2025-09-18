@@ -88,7 +88,7 @@ const StyledText = styled.p`
 const AddLink = styled(Link)`
   border: 1px solid #000000;
   border-radius: 10px;
-  background: var(--color-primary);
+  background: var(--color-primary-light);
   text-decoration: none;
   text-align: center;
   padding: var(--padding-small);

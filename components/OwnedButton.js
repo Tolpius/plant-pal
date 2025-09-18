@@ -14,7 +14,7 @@ export default function OwnedButton({ onAddOwned }) {
       onClick={onClick}
       aria-label={"Add to owned plants list"}
     >
-      <PlusSquareIcon color="darkgreen" />
+      <PlusSquareIcon color="black" />
       <span>Add</span>
     </StyledOwnedButton>
   );
