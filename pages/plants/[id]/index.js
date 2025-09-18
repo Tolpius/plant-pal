@@ -152,11 +152,11 @@ export default function DetailsPage() {
           ))}
         </StyledInfoRow>
       </Wrapper>
-        <OwnedButton
-          onAddOwned={handleAddOwned}
-          aria-label={`Add plant to owned for ${plant.name}`}
-        />
-        <OwnedCounter length={count || 0} /> 
+      <OwnedCounter length={count || 0} />
+      <OwnedButton
+        onAddOwned={handleAddOwned}
+        aria-label={`Add plant to owned for ${plant.name}`}
+      />
 
       {session?.user?.role === "admin" && (
         <StyledDeleteButton
@@ -206,7 +206,6 @@ const StyledDeleteButton = styled.button`
   color: var(--color-text-white);
   border-radius: var(--radius-sm);
   height: 30px;
-  margin-top: 30px;
 `;
 
 const StyledImage = styled(Image)`
@@ -236,6 +235,7 @@ const Wrapper = styled.div`
   padding: 10px;
   border-radius: var(--radius-bg-md);
   color: var(--color-text-base);
+  margin-bottom: 30px;
 `;
 
 const StyledSection = styled.h4`
