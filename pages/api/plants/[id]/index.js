@@ -1,6 +1,8 @@
 import dbConnect from "@/lib/db/dbConnect";
 import Plant from "@/lib/db/models/Plant";
 import { deleteFile, getSignedImageUrl, moveFile } from "@/lib/s3/s3Client";
+import OwnedPlant from "@/db/models/OwnedPlant";
+import Reminder from "@/db/models/Reminder";
 import { getToken } from "next-auth/jwt";
 export default async function handler(request, response) {
   try {
@@ -81,19 +83,51 @@ export default async function handler(request, response) {
             return response.status(200).json({ success: true, data: plant });
           }
           case "DELETE": {
-            const deleted = await Plant.findByIdAndDelete(id);
-            if (!deleted) {
-              return response
-                .status(404)
-                .json({ success: false, message: "Plant not found" });
+            try {
+              //Delete CataloguePlant
+              const deletedPlant = await Plant.findByIdAndDelete(id);
+
+              if (!deletedPlant) {
+                return response
+                  .status(404)
+                  .json({ success: false, message: "Plant not found" });
+              }
+              if (deletedPlant.imageStoragePath) {
+                await deleteFile(deleted.imageStoragePath);
+              }
+
+              const ownedPlants = await OwnedPlant.find({ cataloguePlant: id });
+              if (ownedPlants.length > 0) {
+                const ownedPlantIds = [];
+                const deletePromises = [];
+
+                ownedPlants.map((ownedPlant) => {
+                  ownedPlantIds.push(ownedPlant._id);
+                  if (ownedPlant.imageStoragePath) {
+                    deletePromises.push(deleteFile(ownedPlant.imageStoragePath));
+                  }
+                });
+
+                await Promise.all(deletePromises);
+                await Reminder.deleteMany({ plantId: { $in: ownedPlantIds } });
+                await OwnedPlant.deleteMany({ cataloguePlant: id });
+              }
+              return response.status(200).json({
+                success: true,
+                message:
+                  "Plant and all related owned plants + reminders deleted",
+                deletedPlant,
+              });
+            } catch (error) {
+              console.error("Error deleting plant cascade:", error);
+              return response.status(500).json({
+                success: false,
+                message: "Error while deleting plant and related data",
+                error: error.message,
+              });
             }
-            if (deleted.imageStoragePath) {
-              await deleteFile(deleted.imageStoragePath);
-            }
-            return response
-              .status(200)
-              .json({ success: true, message: "Plant deleted" });
           }
+
           //Use PATCH for toggle isPublic
           case "PATCH": {
             const updatedPlant = await Plant.findByIdAndUpdate(

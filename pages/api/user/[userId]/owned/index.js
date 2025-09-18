@@ -46,18 +46,21 @@ export default async function handler(request, response) {
         }
 
         const plant = await Plant.create(newPlant);
+
         //Admins can choose, wether the plant will be added to their own plants
         if (
           token.role === "user" ||
           (token.role === "admin" && addOwned === "true")
         ) {
           const ownedPlant = new OwnedPlant({
+            userId,
             cataloguePlant: plant._id,
-            userId: token.id,
           });
           await ownedPlant.save();
+
           return response.status(200).json(ownedPlant);
         }
+
         return response.status(200).json(plant);
       }
       default:
