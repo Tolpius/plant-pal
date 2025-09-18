@@ -107,7 +107,7 @@ const StyledNavlist = styled.nav`
   width: 100%;
   height: 55px;
   background: var(--color-primary);
-  border-bottom: 1px solid var(--color-neutral-highlight);
+  border-bottom: 1px solid var(--color-neutral-base);
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -50,7 +50,7 @@ export default function Navbar({
             </NavLink>
 
             <NavItem aria-label="Fun Facts">
-              <FunFactDisplay  />
+              <FunFactDisplay />
             </NavItem>
 
             <NavButton
@@ -77,7 +77,7 @@ const StyledNavbar = styled.nav`
   left: 0;
   width: 100%;
   background: var(--color-primary);
-  border-bottom: 1px solid var(--color-neutral-highlight);
+  border-bottom: 1px solid var(--color-primary);
   display: flex;
   justify-content: space-between;
   align-items: center;

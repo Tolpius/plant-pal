@@ -70,8 +70,7 @@ const ButtonContainer = styled.div`
 const FilterButton = styled.button`
   width: 100%;
   padding: 10px 20px;
-  background-color: var(--color-secondary);
-  color: var(--color-text-medium);
+  background-color: var(--color-primary-light);
   border-radius: var(--radius-bg-md);
   font-size: var(--font-size-md);
   ${(props) =>
