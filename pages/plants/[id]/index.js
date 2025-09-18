@@ -63,52 +63,67 @@ export default function DetailsPage() {
     <>
       <StyledHeadline>
         <BackButton href={from || undefined} />
+        <StyledHeadlinePlantName>
+          {plant.nickname || plant.name}
+        </StyledHeadlinePlantName>
         {session?.user?.role === "admin" && (
           <Link href={`/plants/${plant._id}/edit`} aria-label="Edit this plant">
             <GearIcon size={32} color="var(--color-text-base)" />
           </Link>
         )}
       </StyledHeadline>
+      <NameWrapper>
+        <StyledNameInfoWrapper>
+          <StyledPlantName aria-label={`Common name: ${plant.name}`}>
+            {plant.name}
+          </StyledPlantName>
+          <StyledBotanicalName
+            aria-label={`Botanical name: ${plant.botanicalName}`}
+          >
+            {plant.botanicalName}
+          </StyledBotanicalName>
+        </StyledNameInfoWrapper>
+        <StyledNameInfoWrapper>
+          <StyledCursive>Species</StyledCursive>
+          <StyledCursive>Botanical Name</StyledCursive>
+        </StyledNameInfoWrapper>
+      </NameWrapper>
+
       <StyledImage
         plant={plant}
         alt={plant.name}
         width={300}
         height={0}
       />
-      <NameWrapper>
-        <StyledPlantName aria-label={`Common name: ${plant.name}`}>
-          {plant.name}
-        </StyledPlantName>
-        <StyledBotanicalName
-          aria-label={`Botanical name: ${plant.botanicalName}`}
-        >
-          {plant.botanicalName}
-        </StyledBotanicalName>
-      </NameWrapper>
-      <p aria-label="Description of the plant">{plant.description}</p>
-      <StyledSection aria-label="Care Information">Care</StyledSection>
-      <StyledInfoRow>
-        <StyledCareInfo>Plant likes:</StyledCareInfo>
-        <StyledCareInfo>
-          {lightNeedMap[plant.lightNeed] ?? plant.lightNeed}
-        </StyledCareInfo>
-      </StyledInfoRow>
-      <StyledInfoRow>
-        <StyledCareInfo>Water need:</StyledCareInfo>
-        <StyledCareInfo>
-          {waterNeedMap[plant.waterNeed] ?? plant.waterNeed}
-        </StyledCareInfo>
-      </StyledInfoRow>
-      <StyledInfoRow>
-        <StyledCareInfo>Fertilise in:</StyledCareInfo>
-        {seasons.map((season) => (
-          <li key={season}>
-            <StyledCareInfo>
-              {seasonMap[season.toLowerCase()] ?? season}
-            </StyledCareInfo>
-          </li>
-        ))}
-      </StyledInfoRow>
+
+      <Wrapper>
+        <p aria-label="Description of the plant">{plant.description}</p>
+
+        <StyledSection aria-label="Care Information">Care</StyledSection>
+        <StyledInfoRow>
+          <StyledCareInfo>Plant likes:</StyledCareInfo>
+          <StyledCareInfo>
+            {lightNeedMap[plant.lightNeed] ?? plant.lightNeed}
+          </StyledCareInfo>
+        </StyledInfoRow>
+        <StyledInfoRow>
+          <StyledCareInfo>Water need:</StyledCareInfo>
+          <StyledCareInfo>
+            {waterNeedMap[plant.waterNeed] ?? plant.waterNeed}
+          </StyledCareInfo>
+        </StyledInfoRow>
+        <StyledInfoRow>
+          <StyledCareInfo>Fertilise in:</StyledCareInfo>
+          {seasons.map((season) => (
+            <li key={season}>
+              <StyledCareInfo>
+                {seasonMap[season.toLowerCase()] ?? season}
+              </StyledCareInfo>
+            </li>
+          ))}
+        </StyledInfoRow>
+      </Wrapper>
+
       {session?.user?.role === "admin" && (
         <StyledDeleteButton
           onClick={() => {
@@ -129,9 +144,27 @@ export default function DetailsPage() {
   );
 }
 
+const StyledHeadlinePlantName = styled.h2`
+  justify-self: center;
+`;
+
+const StyledNameInfoWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  color: var(--color-neutral-base);
+`;
+
+const StyledCursive = styled.p`
+  font-style: italic;
+  font-size: var(--font-size-sm);
+`;
+
 const StyledHeadline = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 40px 2fr 40px;
+  padding-top: 8px;
+  color: var(--color-text-base);
 `;
 
 const StyledDeleteButton = styled.button`
@@ -146,27 +179,35 @@ const StyledImage = styled(PlantImage)`
   width: 100%;
   height: auto;
   display: block;
+  border-radius: var(--radius-bg-md);
 `;
 
 const NameWrapper = styled.div`
-  font-family: var(--font-primary);
+  padding: 8px 0;
   text-align: center;
+  color: var(--color-text-base);
 `;
 
 const StyledPlantName = styled.h3`
-  font-size: var(--font-size-xl);
-  margin-bottom: 8px;
+  font-size: var(--font-size-lg);
 `;
 
 const StyledBotanicalName = styled.p`
-  margin-top: 8px;
-  font-style: italic;
-  color: var(--color-text-medium);
-  font-size: var(--font-size-sm);
+  color: var(--color-neutral-base);
+  font-size: var(--font-size-md);
+`;
+
+const Wrapper = styled.div`
+  border: 1px solid var(--color-neutral-base);
+  padding: 10px;
+  border-radius: var(--radius-bg-md);
+  color: var(--color-text-base);
 `;
 
 const StyledSection = styled.h4`
   font-size: var(--font-size-lg);
+  font-weight: bold;
+  padding-top: 12px;
 `;
 
 const StyledInfoRow = styled.div`

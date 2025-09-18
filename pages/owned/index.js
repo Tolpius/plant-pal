@@ -52,6 +52,7 @@ export default function Owned() {
   return (
     <>
       <StyledText>My owned Plants</StyledText>
+
       <PlantFilter
         onFilter={setFilters}
         withOwnedFilter={false}

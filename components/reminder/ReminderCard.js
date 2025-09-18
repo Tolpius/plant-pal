@@ -34,16 +34,16 @@ export default function ReminderCard({
     <Card>
       <StyledImage plant={plant} alt={plantName} />
       <Content>
-        <h3>{plant.nickname || plant.name}</h3>
-        <p>
+        <StyledName>{plant.nickname || plant.name}</StyledName>
+        <StyledInfo>
           <Label>Task:</Label> {reminder.title}
-        </p>
-        <p>
+        </StyledInfo>
+        <StyledInfo>
           <Label>Description:</Label> {reminder.description}
-        </p>
-        <p>
+        </StyledInfo>
+        <StyledInfo>
           <Label>Due:</Label> {new Date(reminder.dueDate).toLocaleDateString()}
-        </p>
+        </StyledInfo>
       </Content>
       {showCheckbox && (
         <CheckboxContainer>
@@ -65,7 +65,7 @@ const Card = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
-  background-color: var(--color-white);
+  background-color: var(--color-secondary-dark);
   position: relative;
 `;
 
@@ -78,6 +78,14 @@ const StyledImage = styled(PlantImage)`
 
 const Content = styled.div`
   flex: 1;
+`;
+
+const StyledName = styled.h3`
+  color: var(--color-neutral-base);
+`;
+
+const StyledInfo = styled.p`
+  color: var(--color-neutral-base);
 `;
 
 const Label = styled.span`

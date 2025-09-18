@@ -26,12 +26,10 @@ export default function AdminCatalogue() {
       } else {
         toast.error("Failed to remove Plant.");
       }
-
     } catch (error) {
       toast.error("Failed to remove Plant.");
       console.error(error);
-    }
-    finally {
+    } finally {
       mutate();
     }
   }
@@ -58,8 +56,7 @@ export default function AdminCatalogue() {
     } catch (error) {
       toast.error("Failed to toggle Plant.");
       console.error(error);
-    }
-    finally{
+    } finally {
       mutate();
     }
   }
@@ -84,11 +81,7 @@ export default function AdminCatalogue() {
     <>
       <StyledHeadline>Browse to find and select your plants. </StyledHeadline>
       <PlantFilter onFilter={setFilter} />
-      <AddLink
-        href={"/add"}
-      >
-        Add a new plant
-      </AddLink>
+      <AddLink href={"/add"}>Add a new plant</AddLink>
       <AdminPlantList
         plants={filteredPlantList}
         session={session}
@@ -103,15 +96,15 @@ const StyledHeadline = styled.h2`
   padding-top: 10px;
   text-align: center;
   font-size: var(--font-size-lg);
-  color: var(--color-text-base)
+  color: var(--color-text-base);
 `;
 
 const AddLink = styled(Link)`
   border: 1px solid #000000;
   border-radius: 10px;
-  background: var(--color-secondary-dark);
+  background-color: var(--color-primary-light);
   text-decoration: none;
   text-align: center;
   padding: var(--padding-small);
-  color: var(--color-text-base);
+  color: var(--color-black);
 `;

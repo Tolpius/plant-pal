@@ -20,9 +20,9 @@ export default function Navlist({
 }) {
   return (
     <>
-      <StyledNavlist>
+      <StyledNavlist onClick={() => onToggleNavlist()}>
         {/* The Navbar is empty except for the logo and the menu icon */}
-        <Logo href="/" aria-label="Home">
+        <Logo href="/owned" aria-label="Home">
           🌱 PlantPal
         </Logo>
         <NavlistButton
@@ -32,73 +32,82 @@ export default function Navlist({
           <ListIcon size={28} weight={"fill"} />
         </NavlistButton>
       </StyledNavlist>
+      <Overlay onClick={() => onToggleNavlist()}>
+        <ExtendedMenu>
+          <NavLink
+            onClick={() => onToggleNavlist()}
+            href="/owned"
+            aria-label="My Plants"
+          >
+            <StyledText>Home</StyledText>
+            <HouseIcon size={28} weight={"regular"} aria-label="My Plants" />
+          </NavLink>
 
-      <ExtendedMenu>
-        <NavLink
-          onClick={() => onToggleNavlist()}
-          href="/owned"
-          aria-label="My Plants"
-        >
-          <StyledText>Home</StyledText>
-          <HouseIcon size={28} weight={"regular"} aria-label="My Plants" />
-        </NavLink>
-
-        <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
-          <StyledText>Catalogue</StyledText>
-          <BookOpenTextIcon
-            size={28}
-            weight={"regular"}
-            aria-label="Catalogue"
-          />
-        </NavLink>
-
-        <NavFunFactWrapper>
-          <FunFactDisplay isExtendedNavList={isExtendedNavList} size={26} />
-        </NavFunFactWrapper>
-        <NavLink onClick={() => onToggleNavlist()} href="/reminders">
-          <StyledText>Reminders</StyledText>
-          <CalendarPlusIcon
-            size={28}
-            weight={currentPath === "/reminders" ? "fill" : "regular"}
-            aria-label="Reminders"
-          />
-        </NavLink>
-
-        {session.user.role === "admin" && (
-          <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
-            <StyledText>Admin Catalogue</StyledText>
-            <TicketIcon
+          <NavLink onClick={() => onToggleNavlist()} href="/catalogue">
+            <StyledText>Catalogue</StyledText>
+            <BookOpenTextIcon
               size={28}
-              weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
-              aria-label="Admin Catalogue"
+              weight={"regular"}
+              aria-label="Catalogue"
             />
           </NavLink>
-        )}
 
-        <NavButton
-          onClick={() => signOut({ callbackUrl: "/" })}
-          aria-label="Logout"
-        >
-          Log Out
-          <SignOutIcon size={26} weight="regular" aria-label="Logout" />
-        </NavButton>
-        <NavItem>
-          <DarkMode onToggleNavlist={onToggleNavlist} />
-        </NavItem>
-      </ExtendedMenu>
+          <NavFunFactWrapper>
+            <FunFactDisplay isExtendedNavList={isExtendedNavList} size={26} />
+          </NavFunFactWrapper>
+          <NavLink onClick={() => onToggleNavlist()} href="/reminders">
+            <StyledText>Reminders</StyledText>
+            <CalendarPlusIcon
+              size={28}
+              weight={currentPath === "/reminders" ? "fill" : "regular"}
+              aria-label="Reminders"
+            />
+          </NavLink>
+
+          {session.user.role === "admin" && (
+            <NavLink onClick={() => onToggleNavlist()} href="/admin/catalogue">
+              <StyledText>Admin Catalogue</StyledText>
+              <TicketIcon
+                size={28}
+                weight={currentPath === "/admin/catalogue" ? "fill" : "regular"}
+                aria-label="Admin Catalogue"
+              />
+            </NavLink>
+          )}
+
+          <NavButton
+            onClick={() => signOut({ callbackUrl: "/" })}
+            aria-label="Logout"
+          >
+            Log Out
+            <SignOutIcon size={26} weight="regular" aria-label="Logout" />
+          </NavButton>
+          <NavItem>
+            <DarkMode onToggleNavlist={onToggleNavlist} />
+          </NavItem>
+        </ExtendedMenu>
+      </Overlay>
     </>
   );
 }
 
 // ================= Styled Components ====================
 
+const Overlay = styled.button`
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 4;
+  border: none;
+`;
 const StyledNavlist = styled.nav`
   position: sticky;
   top: 0;
   left: 0;
   width: 100%;
+  height: 55px;
   background: var(--color-primary);
-  border-bottom: 1px solid var(--color-neutral-highlight);
+  border-bottom: 1px solid var(--color-neutral-base);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -110,12 +119,18 @@ const Logo = styled(Link)`
   font-weight: bold;
   font-size: 1.25rem;
   text-decoration: none;
+  font-family: var(--font-secondary);
   &:visited {
     color: inherit;
   }
 `;
 
 const ExtendedMenu = styled.div`
+  position: fixed;
+  top: 55px;
+  left: 0;
+  width: 100%;
+  z-index: 5;
   display: flex;
   padding: 12px 22px;
   gap: 1rem;

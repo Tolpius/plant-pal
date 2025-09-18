@@ -1,12 +1,12 @@
 import useSWR, { mutate } from "swr";
 import styled from "styled-components";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-
 import ReminderCard from "@/components/reminder/ReminderCard";
 import { PlusCircleIcon } from "@phosphor-icons/react";
 import Link from "next/link";
+import urlBase64ToUint8Array from "@/utils/urlBase64";
 
 function groupReminders(reminders) {
   const today = new Date();
@@ -51,18 +51,22 @@ function groupReminders(reminders) {
 
 export default function Reminders() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const userId = session?.user?.id;
-  const { data: reminders, error } = useSWR(
-    userId ? `/api/user/${userId}/reminders` : null
-  );
+  const {
+    data: reminders,
+    error,
+    isLoading: remindersIsLoading,
+  } = useSWR(userId ? `/api/user/${userId}/reminders` : null);
 
-  const { data: plants, error: plantsError } = useSWR(
-    userId ? `/api/user/${userId}/owned` : null
-  );
+  const {
+    data: plants,
+    error: plantsError,
+    isLoading: plantsIsLoading,
+  } = useSWR(userId ? `/api/user/${userId}/owned` : null);
 
   const groupedReminders = useMemo(
-    () => (reminders ? groupReminders(reminders) : {}),
+    () => (reminders ? groupReminders(reminders) : []),
     [reminders]
   );
 
@@ -81,6 +85,53 @@ export default function Reminders() {
     );
   };
 
+  useEffect(() => {
+    async function requestNotificationPermission() {
+      if (!window.Notification) {
+        return;
+      }
+
+      if (!navigator.serviceWorker || !window.PushManager) {
+        return;
+      }
+
+      if (Notification.permission !== "default") {
+        return;
+      }
+
+      await Notification.requestPermission();
+
+      if (Notification.permission !== "granted") {
+        console.log("Notifications are blocked by the user.");
+        return;
+      }
+      const publicKeyArray = urlBase64ToUint8Array(
+        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+      );
+
+      const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+      const existingSubscription =
+        await serviceWorkerRegistration.pushManager.getSubscription();
+      if (!existingSubscription) return;
+      const subscription =
+        await serviceWorkerRegistration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: publicKeyArray,
+        });
+      const response = await fetch("/api/push/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subscription),
+      });
+    }
+
+    requestNotificationPermission();
+  });
+
+  if (plantsIsLoading || remindersIsLoading || status === "loading")
+    return <p>Loading...</p>;
   if (error) return <div>Failed to load reminders: {error.message}</div>;
   if (plantsError) return <div>Failed to load plants</div>;
   if (!reminders) return <div>Loading...</div>;
@@ -106,7 +157,9 @@ export default function Reminders() {
           />
         ))
       ) : (
-        <p>No reminders for today</p>
+        <StyledNoReminderMessage>
+          No reminders for today
+        </StyledNoReminderMessage>
       )}
 
       <GroupTitle>Tomorrow</GroupTitle>
@@ -121,7 +174,9 @@ export default function Reminders() {
           />
         ))
       ) : (
-        <p>No reminders for tomorrow</p>
+        <StyledNoReminderMessage>
+          No reminders for tomorrow
+        </StyledNoReminderMessage>
       )}
 
       {Object.entries(otherReminders).map(([groupName, items]) =>
@@ -151,10 +206,11 @@ const Header = styled.div`
 
 const Title = styled.h1`
   text-align: center;
+  color: var(--color-neutral-base);
 `;
 
 const StyledLink = styled(Link)`
-  color: var(--color-black);
+  color: var(--color-neutral-base);
   cursor: pointer;
 `;
 
@@ -168,4 +224,9 @@ const AddIcon = styled(PlusCircleIcon)`
 const GroupTitle = styled.h2`
   margin-top: 20px;
   margin-bottom: 10px;
+  color: var(--color-neutral-base);
+`;
+
+const StyledNoReminderMessage = styled.p`
+  color: var(--color-neutral-base);
 `;
