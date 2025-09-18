@@ -24,18 +24,21 @@ export default function Catalogue() {
 
   const userId = session?.user.id;
   const swrUrl = session ? `/api/user/${userId}/owned` : null;
-  const { data: ownedPlantIds } = useSWR(swrUrl);
-
-  if (isLoading || sessionStatus === "loading") {
+  const { data: ownedPlants, isLoading: ownedPlantsIsLoading } = useSWR(swrUrl);
+  if (isLoading || ownedPlantsIsLoading || sessionStatus === "loading") {
     return <p>Loading...</p>;
   }
+  
+  const ownedPlantIds = new Set(
+    ownedPlants.map((plant) =>
+      String(plant.cataloguePlant?._id ?? plant.cataloguePlant)
+    )
+  );
 
   const normalisedList = data.map(normalisePlantData);
 
   const filteredPlantList = normalisedList.filter((plant) => {
-    const isOwned = ownedPlantIds?.some(
-      (blossum) => blossum.cataloguePlant.toString() === plant._id.toString()
-    );
+    const isOwned = ownedPlantIds.has(plant._id.toString())
     if (isOwned && filters.hideOwned) return false;
     const matchesLight =
       filters.lightNeed.length === 0 ||
