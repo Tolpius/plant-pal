@@ -32,7 +32,7 @@ export default function ReminderCard({
 
   return (
     <Card>
-      <StyledImage plant={plant} alt={plantName} />
+      <StyledImage plant={plant} alt={plant.name} />
       <Content>
         <StyledName>{plant.nickname || plant.name}</StyledName>
         <StyledInfo>
