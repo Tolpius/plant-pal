@@ -128,8 +128,6 @@ export default function Reminders() {
       });
     }
 
-
-
     requestNotificationPermission();
   });
 
