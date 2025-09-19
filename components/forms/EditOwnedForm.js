@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import PlantImage from "../PlantImage";
+import { useFileUpload } from "@/hooks/useFileUpload";
 
 export default function EditOwnedForm({ defaultData, onSubmit }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
