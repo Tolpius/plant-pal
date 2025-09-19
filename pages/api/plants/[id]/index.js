@@ -93,7 +93,7 @@ export default async function handler(request, response) {
                   .json({ success: false, message: "Plant not found" });
               }
               if (deletedPlant.imageStoragePath) {
-                await deleteFile(deleted.imageStoragePath);
+                await deleteFile(deletedPlant.imageStoragePath);
               }
 
               const ownedPlants = await OwnedPlant.find({ cataloguePlant: id });
