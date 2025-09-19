@@ -2,6 +2,8 @@ import dbConnect from "@/lib/db/dbConnect";
 import User from "@/lib/db/models/User";
 import Reminder from "@/lib/db/models/Reminder";
 import { getToken } from "next-auth/jwt";
+import { getSignedImageUrl } from "@/lib/s3/s3Client";
+import generateImageUrls from "@/lib/s3/generateImageUrls";
 
 export default async function handler(request, response) {
   const { userId: queryUserId } = request.query;
@@ -29,8 +31,8 @@ export default async function handler(request, response) {
           },
         })
         .sort({ dueDate: 1, createdAt: 1 });
-
-      return response.status(200).json(reminders);
+      const remindersWithImageUrl = await generateImageUrls(reminders);
+      return response.status(200).json(remindersWithImageUrl);
     }
 
     if (request.method === "POST") {

@@ -29,8 +29,9 @@ export default async function handler(request, response) {
             { botanicalName: { $regex: pattern, $options: "i" } },
           ],
         }).lean();
-        const plantsWithUrl = await generateImageUrls(plants);
-        return response.status(200).json(plantsWithUrl ?? []);
+        const publicPlants = plants.filter((plant) => plant.isPublic === true);
+        const publicPlantsWithUrls = await generateImageUrls(publicPlants);
+        return response.status(200).json(publicPlantsWithUrls ?? []);
       }
       default:
         return response
@@ -41,3 +42,4 @@ export default async function handler(request, response) {
     return response.status(500).json({ success: false, error: error.message });
   }
 }
+//TODO: Nur Public Plants!!

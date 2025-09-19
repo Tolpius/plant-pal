@@ -11,4 +11,3 @@ export function normalisePlantData(plant) {
       plant.cataloguePlant?.fertiliserSeasons || plant.fertiliserSeasons || ["plant not found"],
   };
 }
-//TODO: IMAGE PATH FÜR CATALOGUE PLANT NICHT ZU IMAGE PATH
