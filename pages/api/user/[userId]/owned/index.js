@@ -1,8 +1,9 @@
-import dbConnect from "@/db/dbConnect";
-import OwnedPlant from "@/db/models/OwnedPlant";
+import dbConnect from "@/lib/db/dbConnect";
+import OwnedPlant from "@/lib/db/models/OwnedPlant";
 import { getToken } from "next-auth/jwt";
-import Plant from "@/db/models/Plant";
-
+import Plant from "@/lib/db/models/Plant";
+import { moveFile } from "@/lib/s3/s3Client";
+import generateImageUrls from "@/lib/s3/generateImageUrls";
 export default async function handler(request, response) {
   const { userId } = request.query;
   const token = await getToken({
@@ -21,19 +22,27 @@ export default async function handler(request, response) {
     switch (request.method) {
       // GET: Get all ownedPlants belonging to the userId
       case "GET":
-        const plants = await OwnedPlant.find({ userId }).populate(
-          "cataloguePlant"
-        );
+        const plants = await OwnedPlant.find({ userId })
+          .populate("cataloguePlant")
+          .lean();
         if (!plants) {
           return response.status(404).json({ error: "ownedPlants not found" });
         }
-        return response.status(200).json(plants);
+        const plantsWithUrl = await generateImageUrls(plants);
+        return response.status(200).json(plantsWithUrl);
       // POST: Add a completely new plant to catalogue
       case "POST": {
-        const { addOwned, isPublic, ...newPlant } = request.body;
+        const { addOwned, isPublic, tempImageStoragePath, ...newPlant } =
+          request.body;
         //Admins can choose, if the plant will be public
         if (token.role === "admin" && isPublic === "true") {
           newPlant.isPublic = true;
+        }
+
+        if (tempImageStoragePath) {
+          const fileName = tempImageStoragePath.replace(/^temp\//, "");
+          newPlant.imageStoragePath = `plants/${fileName}`;
+          await moveFile(tempImageStoragePath, newPlant.imageStoragePath);
         }
 
         const plant = await Plant.create(newPlant);

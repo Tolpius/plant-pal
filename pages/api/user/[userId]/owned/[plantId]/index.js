@@ -1,9 +1,10 @@
-import dbConnect from "@/db/dbConnect";
-import User from "@/db/models/User";
+import dbConnect from "@/lib/db/dbConnect";
+import User from "@/lib/db/models/User";
 import { getToken } from "next-auth/jwt";
-import OwnedPlant from "@/db/models/OwnedPlant";
-import Reminder from "@/db/models/Reminder";
-import Plant from "@/db/models/Plant";
+import OwnedPlant from "@/lib/db/models/OwnedPlant";
+import Plant from "@/lib/db/models/Plant";
+import { deleteFile, getSignedImageUrl, moveFile } from "@/lib/s3/s3Client";
+import Reminder from "@/lib/db/models/Reminder";
 
 export default async function handler(request, response) {
   const { userId, plantId } = request.query;
@@ -27,12 +28,21 @@ export default async function handler(request, response) {
       // GET: returns the owned plant of userId and plantId
       // HERE THE PLANT ID OF THE OWNED PLANT IS USED
       case "GET": {
-        const ownedPlant = await OwnedPlant.findOne({
-          _id: plantId,
-          userId,
-        }).populate("cataloguePlant");
+        const ownedPlant = await OwnedPlant.findById(plantId)
+          .populate("cataloguePlant")
+          .lean();
         if (!ownedPlant)
           return response.status(404).json({ error: "Owned plant not found" });
+        if (ownedPlant.imageStoragePath) {
+          ownedPlant.storedImageUrl = await getSignedImageUrl(
+            ownedPlant.imageStoragePath
+          );
+        }
+        if (ownedPlant.cataloguePlant?.imageStoragePath) {
+          ownedPlant.cataloguePlant.storedImageUrl = await getSignedImageUrl(
+            ownedPlant.cataloguePlant.imageStoragePath
+          );
+        }
         return response.status(200).json(ownedPlant);
       }
       // POST: Add Plant from Catalogue to OwnedList
@@ -57,31 +67,51 @@ export default async function handler(request, response) {
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "PUT": {
-        const updatedOwnedPlant = await OwnedPlant.findOneAndUpdate(
-          { _id: plantId, userId },
-          request.body,
-          { new: true }
+        const { tempImageStoragePath, ...editedPlant } = request.body;
+
+        if (tempImageStoragePath) {
+          const fileName = tempImageStoragePath.replace(/^temp\//, "");
+          editedPlant.imageStoragePath = `plants/${fileName}`;
+          await moveFile(tempImageStoragePath, editedPlant.imageStoragePath);
+        }
+        
+        const updatedOwnedPlant = await OwnedPlant.findByIdAndUpdate(
+          plantId,
+          editedPlant,
+          { new: false }
         ).populate("cataloguePlant");
+        if (!updatedOwnedPlant) {
+          return response
+            .status(404)
+            .json({ success: false, message: "Plant not found" });
+        }
+        //If the image gets updated (either new s3 file or new URL) then delete the old s3 file
+        if (
+          (editedPlant.imageStoragePath && updatedOwnedPlant.imageStoragePath) ||
+          (editedPlant.userImageUrl && updatedOwnedPlant.imageStoragePath)
+        ) {
+          deleteFile(updatedOwnedPlant.imageStoragePath);
+        }
         return response.status(200).json(updatedOwnedPlant);
       }
       // HERE THE OWNED-PLANT ID OF THE OWNED LIST IS USED
       case "DELETE": {
         const ownedPlant = await OwnedPlant.findByIdAndDelete(plantId);
-
         if (!ownedPlant) {
           return response.status(404).json({ error: "Owned plant not found" });
         }
-
         await Reminder.deleteMany({
           userId,
           plantId: ownedPlant._id,
         });
+        if (ownedPlant.imageStoragePath) {
+          await deleteFile(ownedPlant.imageStoragePath);
+        }
 
         return response
           .status(200)
           .json({ success: true, deletedPlant: ownedPlant });
       }
-
       default:
         return response.status(405).json({ error: "Method not allowed" });
     }

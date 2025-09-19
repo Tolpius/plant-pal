@@ -1,9 +1,9 @@
-import dbConnect from "@/db/dbConnect";
-import Plant from "@/db/models/Plant";
-import OwnedPlant from "@/db/models/OwnedPlant";
-import Reminder from "@/db/models/Reminder";
+import dbConnect from "@/lib/db/dbConnect";
+import Plant from "@/lib/db/models/Plant";
+import { deleteFile, getSignedImageUrl, moveFile } from "@/lib/s3/s3Client";
+import OwnedPlant from "@/lib/db/models/OwnedPlant";
+import Reminder from "@/lib/db/models/Reminder";
 import { getToken } from "next-auth/jwt";
-
 export default async function handler(request, response) {
   try {
     await dbConnect();
@@ -14,11 +14,16 @@ export default async function handler(request, response) {
     });
     switch (request.method) {
       case "GET": {
-        const plant = await Plant.findById(id);
+        const plant = await Plant.findById(id).lean();
         if (!plant) {
           return response
             .status(404)
             .json({ success: false, message: "Plant not found" });
+        }
+        if (plant.imageStoragePath) {
+          plant.storedImageUrl = await getSignedImageUrl(
+            plant.imageStoragePath
+          );
         }
         //Private plants are only accessible by admins!
         if (!plant.isPublic && (!token || token?.role !== "admin")) {
@@ -37,22 +42,43 @@ export default async function handler(request, response) {
 
         switch (request.method) {
           //Use PUT for Edit Plant
+
           case "PUT": {
-            const { addOwned, isPublic, ...editedPlant } = request.body;
+            const { addOwned, isPublic, tempImageStoragePath, ...editedPlant } =
+              request.body;
             //Admins can choose, if the plant will be public
             if (isPublic === "true") {
               editedPlant.isPublic = true;
             } else {
               editedPlant.isPublic = false;
             }
+
+            if (tempImageStoragePath) {
+              const fileName = tempImageStoragePath.replace(/^temp\//, "");
+              editedPlant.imageStoragePath = `plants/${fileName}`;
+              await moveFile(
+                tempImageStoragePath,
+                editedPlant.imageStoragePath
+              );
+            }
+
             const plant = await Plant.findByIdAndUpdate(id, editedPlant, {
-              new: true,
+              new: false,
               runValidators: true,
             });
+
             if (!plant) {
               return response
                 .status(404)
                 .json({ success: false, message: "Plant not found" });
+            }
+
+            //If the image gets updated (either new s3 file or new URL) then delete the old s3 file
+            if (
+              (editedPlant.imageStoragePath && plant.imageStoragePath) ||
+              (editedPlant.imageUrl && plant.imageStoragePath)
+            ) {
+              deleteFile(plant.imageStoragePath);
             }
             return response.status(200).json({ success: true, data: plant });
           }
@@ -66,16 +92,26 @@ export default async function handler(request, response) {
                   .status(404)
                   .json({ success: false, message: "Plant not found" });
               }
+              if (deletedPlant.imageStoragePath) {
+                await deleteFile(deletedPlant.imageStoragePath);
+              }
 
               const ownedPlants = await OwnedPlant.find({ cataloguePlant: id });
               if (ownedPlants.length > 0) {
-                const ownedPlantIds = ownedPlants.map(
-                  (ownedPlant) => ownedPlant._id
-                );
+                const ownedPlantIds = [];
+                const deletePromises = [];
+
+                ownedPlants.map((ownedPlant) => {
+                  ownedPlantIds.push(ownedPlant._id);
+                  if (ownedPlant.imageStoragePath) {
+                    deletePromises.push(deleteFile(ownedPlant.imageStoragePath));
+                  }
+                });
+
+                await Promise.all(deletePromises);
                 await Reminder.deleteMany({ plantId: { $in: ownedPlantIds } });
                 await OwnedPlant.deleteMany({ cataloguePlant: id });
               }
-
               return response.status(200).json({
                 success: true,
                 message:
@@ -116,6 +152,7 @@ export default async function handler(request, response) {
       }
     }
   } catch (error) {
+    console.log(error);
     return response.status(500).json({ success: false, error: error.message });
   }
 }

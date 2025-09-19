@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import DeletePopUp from "@/components/DeletePopUp";
 import { useState } from "react";
+import PlantImage from "../PlantImage";
 export default function AdminCatalogueCard({
   plant,
   onDelete,
@@ -17,7 +18,7 @@ export default function AdminCatalogueCard({
           query: { id: plant._id, from: "/admin/catalogue" },
         }}
       >
-        <Image src={plant.imageUrl} alt={plant.name} />
+        <StyledImage plant={plant} alt={plant.name} height={"100"} width={"100"} />
         <NameContent>
           <h3>{plant.name}</h3>
           <p>{plant.isPublic ? "Public" : "Private"}</p>
@@ -78,7 +79,7 @@ const LinkWrapper = styled(Link)`
   }
 `;
 
-const Image = styled.img`
+const StyledImage = styled(PlantImage)`
   width: 80px;
   height: 80px;
   object-fit: cover;

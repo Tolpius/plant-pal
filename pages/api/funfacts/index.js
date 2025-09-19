@@ -1,5 +1,5 @@
-import dbConnect from "@/db/dbConnect";
-import Funfact from "@/db/models/Funfact";
+import dbConnect from "@/lib/db/dbConnect";
+import Funfact from "@/lib/db/models/Funfact";
 
 export default async function handler(request, response) {
   await dbConnect();

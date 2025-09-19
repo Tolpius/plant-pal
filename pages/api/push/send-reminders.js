@@ -1,8 +1,8 @@
-import dbConnect from "@/db/dbConnect";
-import Reminder from "@/db/models/Reminder";
-import Subscription from "@/db/models/Subscription";
-import OwnedPlant from "@/db/models/OwnedPlant";
-import Plant from "@/db/models/Plant";
+import dbConnect from "@/lib/db/dbConnect";
+import Reminder from "@/lib/db/models/Reminder";
+import Subscription from "@/lib/db/models/Subscription";
+import OwnedPlant from "@/lib/db/models/OwnedPlant";
+import Plant from "@/lib/db/models/Plant";
 import webpush from "web-push";
 import { DateTime } from "luxon";
 import { normalisePlantData } from "@/utils/plantHelpers";

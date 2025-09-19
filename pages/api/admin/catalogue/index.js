@@ -1,7 +1,7 @@
-import dbConnect from "@/db/dbConnect";
-import Plant from "@/db/models/Plant";
+import dbConnect from "@/lib/db/dbConnect";
+import Plant from "@/lib/db/models/Plant";
 import { getToken } from "next-auth/jwt";
-
+import generateImageUrls from "@/lib/s3/generateImageUrls";
 export default async function handler(request, response) {
   try {
     const token = await getToken({
@@ -17,13 +17,9 @@ export default async function handler(request, response) {
     await dbConnect();
     switch (request.method) {
       case "GET": {
-        const plants = await Plant.find();
-        return response.status(200).json(plants);
-      }
-      case "POST": {
-        const newPlant = { ...request.body, isPublic: true };
-        const plant = await Plant.create(newPlant);
-        return response.status(201).json({ success: true, data: plant });
+        const plants = await Plant.find().lean();
+        const plantsWithUrl = await generateImageUrls(plants);
+        return response.status(200).json(plantsWithUrl);
       }
       default:
         return response

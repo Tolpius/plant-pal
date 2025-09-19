@@ -1,5 +1,5 @@
 // CardCarousel.js
-import Image from "next/image";
+import PlantImage from "./PlantImage";
 import styled from "styled-components";
 import Link from "next/link";
 
@@ -15,11 +15,11 @@ export default function CardCarousel({ plant, grayScale }) {
     >
       <CardWrapper>
         <StyledImage
-          src={plant.imageUrl}
+          plant={plant}
           alt={plant.name ? `Image of ${plant.name}` : "Image of a plant"}
-          fill
+          fill={true}
           grayScale={grayScale}
-        />
+        />eigentl
       </CardWrapper>
     </StyledLink>
   );
@@ -40,7 +40,7 @@ const CardWrapper = styled.div`
   background-color: var(--color-neutral-highlight);
 `;
 
-const StyledImage = styled(Image)`
+const StyledImage = styled(PlantImage)`
   object-fit: cover;
   border-radius: var(--radius-lg);
   filter: ${(props) => `grayscale(${props.grayScale})`};

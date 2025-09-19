@@ -1,21 +1,25 @@
 import styled from "styled-components";
 import { useState } from "react";
+import PlantImage from "../PlantImage";
+import { useFileUpload } from "@/hooks/useFileUpload";
 
 export default function EditOwnedForm({ defaultData, onSubmit }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const isEdit = !!defaultData;
+  const [useUpload, setUseUpload] = useState(true);
+  const { tempImagePath, isUploading, handleFileUpload } = useFileUpload();
 
   async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
-    if (
-      data.userImageUrl &&
-      !data.userImageUrl.startsWith("https://images.unsplash.com")
-    ) {
-      alert("Image URL must start with https://images.unsplash.com/");
-      return;
+    if (useUpload) {
+      data.tempImageStoragePath = tempImagePath;
+    } else {
+      if (!data.userImageUrl.startsWith("https://images.unsplash.com")) {
+        alert("Image URL must start with https://images.unsplash.com/");
+        return;
+      }
     }
 
     setIsSubmitting(true);
@@ -29,8 +33,10 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
 
       <PlantInfo>
         <StyledImage
-          src={defaultData.userImageUrl || defaultData.cataloguePlant?.imageUrl}
+          plant={defaultData}
           alt={defaultData.cataloguePlant?.name}
+          height={"200"}
+          width={"200"}
         />
         <NameWrapper>
           <StyledPlantName>{defaultData.cataloguePlant?.name}</StyledPlantName>
@@ -45,7 +51,7 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
         <Input
           name="nickname"
           type="text"
-          defaultValue={isEdit ? defaultData.nickname : ""}
+          defaultValue={defaultData.nickname}
         />
       </Label>
 
@@ -54,35 +60,70 @@ export default function EditOwnedForm({ defaultData, onSubmit }) {
         <Input
           name="location"
           type="text"
-          defaultValue={isEdit ? defaultData.location : ""}
+          defaultValue={defaultData.location}
         />
       </Label>
 
       <Label>
-        Image URL
-        <Input
-          name="userImageUrl"
-          type="text"
-          defaultValue={isEdit ? defaultData.userImageUrl : ""}
-        />
+        Do you want to upload your own image or give us an URL?
+        <ToggleContainer>
+          <span>URL</span>
+          <SwitchLabel>
+            <SwitchCheckbox
+              type="checkbox"
+              checked={useUpload}
+              onChange={() => setUseUpload(!useUpload)}
+            />
+            <SwitchSlider />
+          </SwitchLabel>
+          <span>Upload</span>
+        </ToggleContainer>
       </Label>
+      {useUpload ? (
+        <Label>
+          Upload Image
+          <Input
+            type="file"
+            name="imageFile"
+            accept="image/*"
+            onChange={(event) => {
+              const file = event.target.files[0];
+              if (!file) return
+              if (file.size > 5 * 1024 * 1024) {
+                  // 5 MB in Bytes
+                  alert("File is too large! Max size is 5 MB.");
+                  event.target.value = ""; // reset input
+                  return;
+              }
+              handleFileUpload(file);             
+            }}
+          />
+          {isUploading && <p>Uploading image...</p>}
+        </Label>
+      ) : (
+        <Label>
+          Image URL
+          <Input
+            name="userImageUrl"
+            type="text"
+            required
+            defaultValue={defaultData.imageUrl}
+          />
+        </Label>
+      )}
 
       <Label>
         Acquired Date
         <Input
           name="acquiredDate"
           type="date"
-          defaultValue={isEdit ? defaultData.acquiredDate?.split("T")[0] : ""}
+          defaultValue={defaultData.acquiredDate?.split("T")[0]}
         />
       </Label>
 
       <Label>
         Notes
-        <Textarea
-          name="notes"
-          rows="4"
-          defaultValue={isEdit ? defaultData.notes : ""}
-        />
+        <Textarea name="notes" rows="4" defaultValue={defaultData.notes} />
       </Label>
 
       <Button type="submit" disabled={isSubmitting}>
@@ -154,7 +195,7 @@ const PlantInfo = styled.div`
   gap: 1rem;
 `;
 
-const StyledImage = styled.img`
+const StyledImage = styled(PlantImage)`
   width: 100px;
   height: 100px;
   object-fit: cover;
@@ -175,4 +216,58 @@ const StyledBotanicalName = styled.p`
   font-style: italic;
   margin: 0;
   color: var(--color-gray-600);
+`;
+
+const ToggleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+`;
+
+const SwitchLabel = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  margin: 0 0.5rem;
+`;
+
+const SwitchCheckbox = styled.input.attrs({ type: "checkbox" })`
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + span {
+    background-color: var(--color-primary);
+  }
+
+  &:checked + span:before {
+    transform: translateX(26px);
+  }
+`;
+
+const SwitchSlider = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-grey);
+  border-radius: 34px;
+  transition: 0.4s;
+
+  &:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+  }
 `;

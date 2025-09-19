@@ -2,9 +2,9 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import PlantImage from "@/components/PlantImage";
 import OwnedButton from "@/components/OwnedButton";
 import OwnedCounter from "@/components/counters/OwnedCounter";
 import { GearIcon } from "@phosphor-icons/react";
@@ -119,7 +119,7 @@ export default function DetailsPage() {
       </NameWrapper>
 
       <StyledImage
-        src={plant.imageUrl}
+        plant={plant}
         alt={plant.name}
         width={300}
         height={0}
@@ -208,7 +208,7 @@ const StyledDeleteButton = styled.button`
   height: 30px;
 `;
 
-const StyledImage = styled(Image)`
+const StyledImage = styled(PlantImage)`
   width: 100%;
   height: auto;
   display: block;

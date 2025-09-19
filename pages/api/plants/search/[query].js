@@ -1,8 +1,8 @@
-import dbConnect from "@/db/dbConnect";
-import Plant from "@/db/models/Plant";
+import dbConnect from "@/lib/db/dbConnect";
+import Plant from "@/lib/db/models/Plant";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-
+import generateImageUrls from "@/lib/s3/generateImageUrls";
 export default async function handler(request, response) {
   try {
     const session = await getServerSession(request, response, authOptions);
@@ -28,8 +28,10 @@ export default async function handler(request, response) {
             },
             { botanicalName: { $regex: pattern, $options: "i" } },
           ],
-        });
-        return response.status(200).json(plants ?? []);
+        }).lean();
+        const publicPlants = plants.filter((plant) => plant.isPublic === true);
+        const publicPlantsWithUrls = await generateImageUrls(publicPlants);
+        return response.status(200).json(publicPlantsWithUrls ?? []);
       }
       default:
         return response
@@ -40,3 +42,4 @@ export default async function handler(request, response) {
     return response.status(500).json({ success: false, error: error.message });
   }
 }
+//TODO: Nur Public Plants!!
