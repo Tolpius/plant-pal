@@ -6,31 +6,31 @@ import { getSignedImageUrl } from "@/lib/s3/s3Client";
 import generateImageUrls from "@/lib/s3/generateImageUrls";
 
 export default async function handler(request, response) {
-  const { userId: queryUserId } = request.query;
-
+  
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
   });
+  const { userId: queryUserId } = request.query;
   if (!token) return response.status(401).json({ error: "Not authenticated" });
   if (token.role !== "admin" && token.id !== queryUserId) {
     return response.status(403).json({ error: "Access denied" });
   }
-
+const userId = token.id
   try {
     await dbConnect();
-    const user = await User.findById(queryUserId);
+    const user = await User.findById(userId);
     if (!user) return response.status(404).json({ error: "User not found" });
 
     if (request.method === "GET") {
-      const reminders = await Reminder.find({ userId: queryUserId })
+      const reminders = await Reminder.find({ userId })
         .populate({
           path: "plantId",
           populate: {
             path: "cataloguePlant",
           },
         })
-        .sort({ dueDate: 1, createdAt: 1 });
+        .sort({ dueDate: 1, createdAt: 1 }).lean();
       const remindersWithImageUrl = await generateImageUrls(reminders);
       return response.status(200).json(remindersWithImageUrl);
     }
@@ -45,7 +45,7 @@ export default async function handler(request, response) {
       const due = time ? new Date(`${dueDate}T${time}`) : new Date(dueDate);
 
       const newReminder = await Reminder.create({
-        userId: queryUserId,
+        userId,
         plantId,
         title,
         description,
