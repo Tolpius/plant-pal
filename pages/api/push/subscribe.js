@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
-import dbConnect from "@/db/dbConnect";
-import Subscription from "@/db/models/Subscription";
+import dbConnect from "@/lib/db/dbConnect";
+import Subscription from "@/lib/db/models/Subscription";
 
 export default async function handler(request, response) {
   if (request.method !== "POST") return response.status(405).end();

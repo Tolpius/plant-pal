@@ -1,8 +1,8 @@
 import dbConnect from "@/lib/db/dbConnect";
 import Plant from "@/lib/db/models/Plant";
 import { deleteFile, getSignedImageUrl, moveFile } from "@/lib/s3/s3Client";
-import OwnedPlant from "@/db/models/OwnedPlant";
-import Reminder from "@/db/models/Reminder";
+import OwnedPlant from "@/lib/db/models/OwnedPlant";
+import Reminder from "@/lib/db/models/Reminder";
 import { getToken } from "next-auth/jwt";
 export default async function handler(request, response) {
   try {
